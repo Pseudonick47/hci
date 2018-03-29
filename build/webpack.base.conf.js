@@ -46,6 +46,7 @@ module.exports = {
       '@': resolve('src'),
       'Controllers': resolve('src/controllers'),
       'Components': resolve('src/components'),
+      'Constants': resolve('src/constants'),
       'Models': resolve('src/models'),
       'Store': resolve('src/store'),
       'Api': resolve('src/api-services'),
