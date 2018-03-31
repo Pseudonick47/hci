@@ -1,44 +1,101 @@
 <template>
-  <div class="wrapper">
-    <vue-draggable-resizable :w="100" :h="100" v-on:dragging="onDrag" v-on:resizing="onResize" :parent="true">
-      <p>Hello! I'm a flexible component. You can drag me around and you can resize me.<br>
-      X: {{ x }} / Y: {{ y }} - Width: {{ width }} / Height: {{ height }}</p>
-    </vue-draggable-resizable>
-    <v-btn color="success"
+  <div
+    id="main-component"
+    class="wrapper">
+    <wrapper
+      v-for="(component, index) in children"
+      :key="index"
+      :element="component"
+      @right-click="showContextMenu">
+    </wrapper>
+    <!-- <v-btn color="success"
            @click="getResults">
            Fetch
-    </v-btn>
+    </v-btn> -->
+    <v-menu
+      offset-y
+      v-model="showMenu"
+      absolute
+      :position-x="contextMenuX"
+      :position-y="contextMenuY">
+      <v-list>
+        <v-list-tile v-for="item in items" :key="item.title" @click="item.callback">
+          <v-list-tile-title>{{ item.title }}</v-list-tile-title>
+        </v-list-tile>
+      </v-list>
+      <v-select
+        :items="items2"
+        segmented
+        label="Select"
+        target="#main-component">
+      </v-select>
+    </v-menu>
   </div>
 </template>
 
 <script>
-import VueDraggableResizable from 'vue-draggable-resizable';
+import Vue from 'vue';
+import * as _ from 'lodash';
 import StocksService from 'Api/stocks.service';
+import Wrapper from 'Components/Wrapper.component.vue';
 
 export default {
   name: 'Main',
   components: {
-    VueDraggableResizable,
+    Wrapper,
   },
   data() {
     return {
-      width: 0,
-      height: 0,
-      x: 0,
-      y: 0,
+      clickedElementId: null,
+      contextMenuX: 0,
+      contextMenuY: 0,
+      showMenu: false,
+      items: [
+        { title: 'Split Horizontally', callback: () => this.splitWrapper('horizontal') },
+        { title: 'Split Vertically', callback: () => this.splitWrapper('vertical') },
+      ],
+      items2: [
+        'Graph',
+        'Table',
+      ],
+      currentId: 100,
+      children: [
+        {
+          id: 1,
+          componentType: 'wrapper',
+          orientation: 'horizontal',
+          children: [
+            {
+              id: 12,
+              componentType: 'wrapper',
+              orientation: 'vertical',
+              children: [],
+            },
+            {
+              id: 13,
+              componentType: 'wrapper',
+              orientation: 'vertical',
+              children: [
+                {
+                  id: 14,
+                  componentType: 'wrapper',
+                  children: [],
+                  orientation: 'vertical',
+                },
+                {
+                  id: 15,
+                  componentType: 'wrapper',
+                  children: [],
+                  orientation: 'vertical',
+                },
+              ],
+            },
+          ],
+        },
+      ],
     };
   },
   methods: {
-    onResize(x, y, width, height) {
-      this.x = x;
-      this.y = y;
-      this.width = width;
-      this.height = height;
-    },
-    onDrag(x, y) {
-      this.x = x;
-      this.y = y;
-    },
     getResults() {
       const parameters = {
         symbol: 'EUR',
@@ -48,6 +105,52 @@ export default {
       StocksService.fetchStockData(parameters).then((result) => {
         console.log(result.data);
       });
+    },
+    showContextMenu (data) {
+      const event = data.event;
+
+      this.clickedElementId = data.id;
+      this.showMenu = false;
+      this.contextMenuX = event.clientX;
+      this.contextMenuY = event.clientY;
+      this.$nextTick(() => {
+        this.showMenu = true;
+      });
+    },
+    getElementById(root, id) {
+      if (root.id === id) {
+        return root;
+      }
+
+      let element = null;
+      _.forEach(root.children, (child) => {
+        if (child.id === id) {
+          element = child;
+          return false;
+        }
+        element = this.getElementById(child, id);
+        if (element) {
+          return false;
+        }
+      });
+
+      return element;
+    },
+    splitWrapper(orientation) {
+      const element = this.getElementById(this.children[0], this.clickedElementId);
+      element.orientation = orientation;
+      element['children'].push({
+        id: this.currentId++,
+        children: [],
+        orientation: 'horizontal',
+        componentType: 'wrapper',
+       });
+       element['children'].push({
+        id: this.currentId++,
+        children: [],
+        componentType: 'wrapper',
+        orientation: 'horizontal',
+       });
     },
   },
 };

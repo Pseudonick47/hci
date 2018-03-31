@@ -2,25 +2,8 @@
   <v-app dark>
     <!-- <v-navigation-drawer app></v-navigation-drawer> -->
     <v-toolbar app>
-      <v-toolbar-title>Vue You Stocks</v-toolbar-title>
+      <v-toolbar-title>Vue Your Finances</v-toolbar-title>
       <v-spacer></v-spacer>
-      <!-- <v-toolbar-items class="hidden-sm-and-down">
-        <v-btn flat
-               v-if="admin"
-               v-for="item in toolbarItems['admin']"
-               :key="item.text"
-               :to="item.path">
-          <v-icon left>{{ item.icon }}</v-icon>
-          {{ item.text }}
-        </v-btn>
-        <v-btn flat
-               v-for="item in toolbarItems[authStatus]"
-               :key="item.text"
-               :to="item.path">
-          <v-icon left>{{ item.icon }}</v-icon>
-          {{ item.text }}
-        </v-btn>
-      </v-toolbar-items> -->
     </v-toolbar>
     <v-content>
       <v-container fluid fill-height>
