@@ -17,6 +17,7 @@
     "vee-validate": "^2.0.6",
     "vue": "^2.5.2",
     "vue-draggable-resizable": "^1.6.1",
+    "vue-grid-layout": "^2.1.12",
     "vue-router": "^3.0.1",
     "vuetify": "^1.0.8",
     "vuex": "^3.0.1"
