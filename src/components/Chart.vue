@@ -1,34 +1,60 @@
 <template>
-    <vue-chartist :data="podaci" :options="options" type="Line"></vue-chartist>
+  <div>
+    <line-chart
+      v-if="chartType === 'line'"
+      :download="true"
+      :data="chartData"
+    ></line-chart>
+
+    <pie-chart
+      v-else-if="chartType === 'pie'"
+      :data="chartData"
+    ></pie-chart>
+
+    <column-chart
+      v-else-if="chartType === 'column'"
+      :data="chartData"
+    ></column-chart>
+
+    <bar-chart
+      v-else-if="chartType === 'bar'"
+      :data="chartData"
+    ></bar-chart>
+
+    <scatter-chart
+      v-else-if="chartType === 'scatter'"
+      :data="chartData"
+      :xtitle="xTitle"
+      :ytitle="yTitle"
+    ></scatter-chart>
+  </div>
 </template>
 
 <script>
-import VueChartist from 'v-chartist'
 
 export default {
-    name: 'chart',
-    components: {
-        VueChartist
+  name: 'chart',
+  props: {
+    chartType: {
+      type: String,
+      required: true
     },
-    data: function () {
-        return {
-            podaci: {
-                labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
-                series: [
-                    [12, 9, 7, 8, 5],
-                    [2, 1, 3.5, 7, 3],
-                    [1, 3, 4, 5, 6]
-                ]
-            },
-            options: {
-                fullWidth: true,
-                chartPadding: {
-                    right: 40
-                },
-                strech: true
-            }
-        };
+    chartData: {
+      type: Array,
+      required: false,
+      default: () => []
+    },
+    xTitle: {
+      type: String,
+      required: false,
+      default: ''
+    },
+    yTitle: {
+      type: String,
+      required: false,
+      default: ''
     }
-}
+  }
+};
 
 </script>

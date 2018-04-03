@@ -2,13 +2,13 @@
 import Home from 'Components/Home.component';
 import Login from 'Components/Login.component';
 import Register from 'Components/Register.component';
-import Main from 'Components/Main.component';
+// import Main from 'Components/Main.component';
 
 export const routes = [
   {
     path: '/',
     name: 'main',
-    component: Main,
+    component: Home,
   },
   {
     path: '/login',

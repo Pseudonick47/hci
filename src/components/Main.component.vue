@@ -1,50 +1,39 @@
 <template>
   <div class="wrapper">
-    <vue-draggable-resizable :w="100" :h="100" v-on:dragging="onDrag" v-on:resizing="onResize" :parent="true">
-      <p>Hello! I'm a flexible component. You can drag me around and you can resize me.<br>
-      X: {{ x }} / Y: {{ y }} - Width: {{ width }} / Height: {{ height }}</p>
-    </vue-draggable-resizable>
-    <v-btn color="success"
-           @click="getResults">
-           Fetch
-    </v-btn>
-    <vue-draggable-resizable :w="100" :h="100" v-on:dragging="onDrag" v-on:resizing="onResize" :parent="true">
-      <p>Nova komponentica<br></p>
-      <chart></chart>
-    </vue-draggable-resizable>
+    <chart
+      :chart-type="'line'"
+    ></chart>
   </div>
 </template>
 
 <script>
-import VueDraggableResizable from 'vue-draggable-resizable';
 import StocksService from 'Api/stocks.service';
-import Chart from './../components/Chart.vue';
+import Chart from 'Components/Chart.vue';
 
 export default {
   name: 'Main',
   components: {
     VueDraggableResizable,
-    Chart
+    Chart,
   },
   data() {
     return {
-      width: 0,
-      height: 0,
-      x: 0,
-      y: 0,
+      clickedElementId: null,
+      contextMenuX: 0,
+      contextMenuY: 0,
+      showMenu: false,
+      items: [
+        { title: 'Split Horizontally', callback: () => this.splitWrapper('horizontal') },
+        { title: 'Split Vertically', callback: () => this.splitWrapper('vertical') },
+      ],
+      items2: [
+        'Graph',
+        'Table',
+      ],
+      currentId: 100,
     };
   },
   methods: {
-    onResize(x, y, width, height) {
-      this.x = x;
-      this.y = y;
-      this.width = width;
-      this.height = height;
-    },
-    onDrag(x, y) {
-      this.x = x;
-      this.y = y;
-    },
     getResults() {
       const parameters = {
         symbol: 'EUR',
@@ -55,6 +44,17 @@ export default {
         console.log(result.data);
       });
     },
+    showContextMenu (data) {
+      const event = data.event;
+
+      this.clickedElementId = data.id;
+      this.showMenu = false;
+      this.contextMenuX = event.clientX;
+      this.contextMenuY = event.clientY;
+      this.$nextTick(() => {
+        this.showMenu = true;
+      });
+    }
   },
 };
 </script>

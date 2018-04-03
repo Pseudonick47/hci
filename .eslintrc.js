@@ -17,8 +17,8 @@ module.exports = {
 		'accessor-pairs': 'error',
 		'array-bracket-newline': 'error',
 		'array-bracket-spacing': 'error',
-		'array-callback-return': 'error',
-		'array-element-newline': 'error',
+		'array-callback-return': 'off',
+		'array-element-newline': 'off',
 		'arrow-body-style': 'off',
 		'arrow-parens': ['error'],
 		'arrow-spacing': [
@@ -36,8 +36,7 @@ module.exports = {
 		'capitalized-comments': 'off',
 		'class-methods-use-this': 'off',
 		'comma-dangle': [
-			'error',
-			'always-multiline',
+			'off',
 		],
 		'comma-spacing': 'error',
 		'comma-style': [
@@ -118,7 +117,7 @@ module.exports = {
 		'no-implicit-globals': 'error',
 		'no-implied-eval': 'error',
 		'no-inline-comments': 'off',
-		'no-invalid-this': 'error',
+		'no-invalid-this': 'off',
 		'no-iterator': 'error',
 		'no-label-var': 'error',
 		'no-labels': 'error',
@@ -142,7 +141,7 @@ module.exports = {
 		'no-new-require': 'error',
 		'no-new-wrappers': 'error',
 		'no-octal-escape': 'error',
-		'no-param-reassign': 'error',
+		'no-param-reassign': 'off',
 		'no-path-concat': 'error',
 		'no-plusplus': 'off',
 		'no-process-env': 'error',
