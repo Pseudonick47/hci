@@ -4,6 +4,12 @@ import router from './router';
 import store from './store';
 import Vuetify from 'vuetify';
 import 'vuetify/dist/vuetify.min.css';
+import VueChartkick from 'vue-chartkick';
+// import Highcharts from 'highcharts';
+import Chart from 'chart.js';
+
+Vue.use(VueChartkick, { adapter: Chart });
+// Vue.use(VueChartkick, { adapter: Highcharts });
 
 Vue.config.productionTip = false;
 
@@ -16,5 +22,5 @@ new Vue({
   router,
   store,
   components: { App },
-  template: '<App/>',
+  template: '<App/>'
 });

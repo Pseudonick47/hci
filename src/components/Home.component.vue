@@ -10,7 +10,7 @@
           :is-resizable="resizable"
           :vertical-compact="true"
           :use-css-transforms="false"
-          >
+        >
           <grid-item
             v-for="item in layout"
             :key="item.i"
@@ -20,52 +20,83 @@
             :h="item.h"
             :i="item.i"
           >
-          <v-btn fab small color="indigo">
-            <v-icon >add</v-icon>
-          </v-btn>
-
-          </grid-item>
-        </grid-layout>
+            <!-- <v-btn
+              fab
+              small
+              color="indigo"
+              @click="addItem"
+            >
+              <v-icon >add</v-icon>
+            </v-btn> -->
+            <chart
+              :chartType="item.chartType"
+              :chartData="item.chartData"
+            ></chart>
+        </grid-item>
+      </grid-layout>
     </div>
   </div>
 </template>
 
 <script>
 import { GridLayout, GridItem } from 'vue-grid-layout';
+import Chart from 'Components/Chart.vue';
 
 export default {
   name: 'Home',
   components: {
     GridLayout,
     GridItem,
+    Chart
   },
   data: () => ({
     draggable: true,
     resizable: true,
-    index: 0,
-    layout: [
-      { 'x': 0, 'y': 0, 'w': 2, 'h': 2, 'i': '0' },
-    { 'x': 2, 'y': 0, 'w': 2, 'h': 4, 'i': '1' },
-    { 'x': 4, 'y': 0, 'w': 2, 'h': 5, 'i': '2' },
-    { 'x': 6, 'y': 0, 'w': 2, 'h': 3, 'i': '3' },
-    { 'x': 8, 'y': 0, 'w': 2, 'h': 3, 'i': '4' },
-    { 'x': 10, 'y': 0, 'w': 2, 'h': 3, 'i': '5' },
-    { 'x': 0, 'y': 5, 'w': 2, 'h': 5, 'i': '6' },
-    { 'x': 2, 'y': 5, 'w': 2, 'h': 5, 'i': '7' },
-    { 'x': 4, 'y': 5, 'w': 2, 'h': 5, 'i': '8' },
-    { 'x': 6, 'y': 4, 'w': 2, 'h': 4, 'i': '9' },
-    { 'x': 8, 'y': 4, 'w': 2, 'h': 4, 'i': '10' },
-    { 'x': 10, 'y': 4, 'w': 2, 'h': 4, 'i': '11' },
-    { 'x': 0, 'y': 10, 'w': 2, 'h': 5, 'i': '12' },
-    { 'x': 2, 'y': 10, 'w': 2, 'h': 5, 'i': '13' },
-    { 'x': 4, 'y': 8, 'w': 2, 'h': 4, 'i': '14' },
-    { 'x': 6, 'y': 8, 'w': 2, 'h': 4, 'i': '15' },
-    { 'x': 8, 'y': 10, 'w': 2, 'h': 5, 'i': '16' },
-    { 'x': 10, 'y': 4, 'w': 2, 'h': 2, 'i': '17' },
-    { 'x': 0, 'y': 9, 'w': 2, 'h': 3, 'i': '18' },
-    { 'x': 2, 'y': 6, 'w': 2, 'h': 2, 'i': '19' },
+    index: 20,
+    dummyData: [
+      { name: 'Workout', data: [['Jan', 4], ['Feb', 21], ['Mar', 13], ['Apr', 52], ['May', 33]] },
+      { name: 'Call parents', data: [['Jan', 4], ['Feb', 42], ['Mar', 23], ['Apr', 52], ['May', 33]] },
+      { name: 'Workout', data: [['Jan', 3], ['Feb', 122], ['Mar', 13], ['Apr', 52], ['May', 33]] },
+      { name: 'Call parents', data: [['Jan', 4], ['Feb', 72], ['Mar', 73], ['Apr', 52], ['May', 33]] },
+      { name: 'Workout', data: [['Jan', 2], ['Feb', 83], ['Mar', 13], ['Apr', 52], ['May', 33]] },
+      { name: 'Call parents', data: [['Jan', 4], ['Feb', 92], ['Mar', 23], ['Apr', 52], ['May', 33]] },
+      { name: 'Workout', data: [['Jan', 1], ['Feb', 23], ['Mar', 13], ['Apr', 52], ['May', 33]] },
+      { name: 'Call parents', data: [['Jan', 4], ['Feb', 92], ['Mar', 113], ['Apr', 52], ['May', 33]] },
     ],
+    chartData: [['Jan', 4], ['Feb', 2], ['Mar', 10], ['Apr', 5], ['May', 3]],
+    layout: []
   }),
+  methods: {
+    addItem() {
+      const item = { 'x': 0, 'y': 0, 'w': 2, 'h': 2, 'i': String(this.index), chartType: 'line', chartData: this.dummyData };
+      this.index++;
+      this.layout.push(item);
+    }
+  },
+  mounted() {
+    this.layout = [
+      { 'x': 0, 'y': 0, 'w': 2, 'h': 2, 'i': '0', chartType: 'line', chartData: this.dummyData },
+      { 'x': 2, 'y': 0, 'w': 2, 'h': 4, 'i': '1', chartType: 'line', chartData: this.chartData },
+      { 'x': 4, 'y': 0, 'w': 2, 'h': 5, 'i': '2', chartType: 'line', chartData: this.chartData },
+      { 'x': 6, 'y': 0, 'w': 2, 'h': 3, 'i': '3', chartType: 'line', chartData: this.dummyData },
+      { 'x': 8, 'y': 0, 'w': 2, 'h': 3, 'i': '4', chartType: 'line', chartData: this.chartData },
+      { 'x': 10, 'y': 0, 'w': 2, 'h': 3, 'i': '5', chartType: 'line', chartData: this.dummyData },
+      { 'x': 0, 'y': 5, 'w': 2, 'h': 5, 'i': '6', chartType: 'line', chartData: this.chartData },
+      { 'x': 2, 'y': 5, 'w': 2, 'h': 5, 'i': '7', chartType: 'line', chartData: this.dummyData },
+      { 'x': 4, 'y': 5, 'w': 2, 'h': 5, 'i': '8', chartType: 'line', chartData: this.chartData },
+      { 'x': 6, 'y': 4, 'w': 2, 'h': 4, 'i': '9', chartType: 'line', chartData: this.chartData },
+      { 'x': 8, 'y': 4, 'w': 2, 'h': 4, 'i': '10', chartType: 'line', chartData: this.dummyData },
+      { 'x': 10, 'y': 4, 'w': 2, 'h': 4, 'i': '11', chartType: 'line', chartData: this.chartData },
+      { 'x': 0, 'y': 10, 'w': 2, 'h': 5, 'i': '12', chartType: 'line', chartData: this.chartData },
+      { 'x': 2, 'y': 10, 'w': 2, 'h': 5, 'i': '13', chartType: 'line', chartData: this.dummyData },
+      { 'x': 4, 'y': 8, 'w': 2, 'h': 4, 'i': '14', chartType: 'line', chartData: this.chartData },
+      { 'x': 6, 'y': 8, 'w': 2, 'h': 4, 'i': '15', chartType: 'line', chartData: this.dummyData },
+      { 'x': 8, 'y': 10, 'w': 2, 'h': 5, 'i': '16', chartType: 'line', chartData: this.chartData },
+      { 'x': 10, 'y': 4, 'w': 2, 'h': 2, 'i': '17', chartType: 'line', chartData: this.chartData },
+      { 'x': 0, 'y': 9, 'w': 2, 'h': 3, 'i': '18', chartType: 'line', chartData: this.dummyData },
+      { 'x': 2, 'y': 6, 'w': 2, 'h': 2, 'i': '19', chartType: 'line', chartData: this.chartData },
+    ];
+  }
 };
 </script>
 <style>
@@ -77,6 +108,15 @@ export default {
   background: transparent;
 }
 
+/* scrollable content */
+.vue-grid-item {
+  overflow: scroll;
+}
+
+/* Hide scrollbars */
+::-webkit-scrollbar {
+    display: none;
+}
 .columns {
   -moz-columns: 120px;
   -webkit-columns: 120px;
