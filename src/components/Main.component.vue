@@ -8,17 +8,23 @@
            @click="getResults">
            Fetch
     </v-btn>
+    <vue-draggable-resizable :w="100" :h="100" v-on:dragging="onDrag" v-on:resizing="onResize" :parent="true">
+      <p>Nova komponentica<br></p>
+      <chart></chart>
+    </vue-draggable-resizable>
   </div>
 </template>
 
 <script>
 import VueDraggableResizable from 'vue-draggable-resizable';
 import StocksService from 'Api/stocks.service';
+import Chart from './../components/Chart.vue';
 
 export default {
   name: 'Main',
   components: {
     VueDraggableResizable,
+    Chart,
   },
   data() {
     return {

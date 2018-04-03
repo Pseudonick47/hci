@@ -12,8 +12,10 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
+    "chartist": "^0.11.0",
     "eslint-plugin-html": "^4.0.2",
     "lodash": "^4.17.5",
+    "v-chartist": "^0.1.6",
     "vee-validate": "^2.0.6",
     "vue": "^2.5.2",
     "vue-draggable-resizable": "^1.6.1",
