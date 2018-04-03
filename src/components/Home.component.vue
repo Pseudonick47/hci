@@ -39,8 +39,10 @@
 </template>
 
 <script>
+import * as _ from 'lodash';
 import { GridLayout, GridItem } from 'vue-grid-layout';
 import Chart from 'Components/Chart.vue';
+import StocksService from 'Api/stocks.service';
 
 export default {
   name: 'Home',
@@ -53,49 +55,55 @@ export default {
     draggable: true,
     resizable: true,
     index: 20,
-    dummyData: [
-      { name: 'Workout', data: [['Jan', 4], ['Feb', 21], ['Mar', 13], ['Apr', 52], ['May', 33]] },
-      { name: 'Call parents', data: [['Jan', 4], ['Feb', 42], ['Mar', 23], ['Apr', 52], ['May', 33]] },
-      { name: 'Workout', data: [['Jan', 3], ['Feb', 122], ['Mar', 13], ['Apr', 52], ['May', 33]] },
-      { name: 'Call parents', data: [['Jan', 4], ['Feb', 72], ['Mar', 73], ['Apr', 52], ['May', 33]] },
-      { name: 'Workout', data: [['Jan', 2], ['Feb', 83], ['Mar', 13], ['Apr', 52], ['May', 33]] },
-      { name: 'Call parents', data: [['Jan', 4], ['Feb', 92], ['Mar', 23], ['Apr', 52], ['May', 33]] },
-      { name: 'Workout', data: [['Jan', 1], ['Feb', 23], ['Mar', 13], ['Apr', 52], ['May', 33]] },
-      { name: 'Call parents', data: [['Jan', 4], ['Feb', 92], ['Mar', 113], ['Apr', 52], ['May', 33]] },
-    ],
-    chartData: [['Jan', 4], ['Feb', 2], ['Mar', 10], ['Apr', 5], ['May', 3]],
-    layout: []
+    layout: [],
+    chartData: []
   }),
   methods: {
     addItem() {
-      const item = { 'x': 0, 'y': 0, 'w': 2, 'h': 2, 'i': String(this.index), chartType: 'line', chartData: this.dummyData };
+      const item = { 'x': 0, 'y': 0, 'w': 2, 'h': 2, 'i': String(this.index), chartType: 'line', chartData: this.chartData };
       this.index++;
       this.layout.push(item);
+    },
+    initDummyGrid() {
+      this.layout = [
+        { 'x': 0, 'y': 0, 'w': 2, 'h': 2, 'i': '0', chartType: 'line', chartData: this.chartData },
+        { 'x': 2, 'y': 0, 'w': 2, 'h': 4, 'i': '1', chartType: 'line', chartData: this.chartData },
+        { 'x': 4, 'y': 0, 'w': 2, 'h': 5, 'i': '2', chartType: 'line', chartData: this.chartData },
+        { 'x': 6, 'y': 0, 'w': 2, 'h': 3, 'i': '3', chartType: 'line', chartData: this.chartData },
+        { 'x': 8, 'y': 0, 'w': 2, 'h': 3, 'i': '4', chartType: 'line', chartData: this.chartData },
+        { 'x': 10, 'y': 0, 'w': 2, 'h': 3, 'i': '5', chartType: 'line', chartData: this.chartData },
+        { 'x': 0, 'y': 5, 'w': 2, 'h': 5, 'i': '6', chartType: 'line', chartData: this.chartData },
+        { 'x': 2, 'y': 5, 'w': 2, 'h': 5, 'i': '7', chartType: 'line', chartData: this.chartData },
+        { 'x': 4, 'y': 5, 'w': 2, 'h': 5, 'i': '8', chartType: 'line', chartData: this.chartData },
+        { 'x': 6, 'y': 4, 'w': 2, 'h': 4, 'i': '9', chartType: 'line', chartData: this.chartData },
+        { 'x': 8, 'y': 4, 'w': 2, 'h': 4, 'i': '10', chartType: 'line', chartData: this.chartData },
+        { 'x': 10, 'y': 4, 'w': 2, 'h': 4, 'i': '11', chartType: 'line', chartData: this.chartData },
+        { 'x': 0, 'y': 10, 'w': 2, 'h': 5, 'i': '12', chartType: 'line', chartData: this.chartData },
+        { 'x': 2, 'y': 10, 'w': 2, 'h': 5, 'i': '13', chartType: 'line', chartData: this.chartData },
+        { 'x': 4, 'y': 8, 'w': 2, 'h': 4, 'i': '14', chartType: 'line', chartData: this.chartData },
+        { 'x': 6, 'y': 8, 'w': 2, 'h': 4, 'i': '15', chartType: 'line', chartData: this.chartData },
+        { 'x': 8, 'y': 10, 'w': 2, 'h': 5, 'i': '16', chartType: 'line', chartData: this.chartData },
+        { 'x': 10, 'y': 4, 'w': 2, 'h': 2, 'i': '17', chartType: 'line', chartData: this.chartData },
+        { 'x': 0, 'y': 9, 'w': 2, 'h': 3, 'i': '18', chartType: 'line', chartData: this.chartData },
+        { 'x': 2, 'y': 6, 'w': 2, 'h': 2, 'i': '19', chartType: 'line', chartData: this.chartData },
+      ];
     }
   },
   mounted() {
-    this.layout = [
-      { 'x': 0, 'y': 0, 'w': 2, 'h': 2, 'i': '0', chartType: 'line', chartData: this.dummyData },
-      { 'x': 2, 'y': 0, 'w': 2, 'h': 4, 'i': '1', chartType: 'line', chartData: this.chartData },
-      { 'x': 4, 'y': 0, 'w': 2, 'h': 5, 'i': '2', chartType: 'line', chartData: this.chartData },
-      { 'x': 6, 'y': 0, 'w': 2, 'h': 3, 'i': '3', chartType: 'line', chartData: this.dummyData },
-      { 'x': 8, 'y': 0, 'w': 2, 'h': 3, 'i': '4', chartType: 'line', chartData: this.chartData },
-      { 'x': 10, 'y': 0, 'w': 2, 'h': 3, 'i': '5', chartType: 'line', chartData: this.dummyData },
-      { 'x': 0, 'y': 5, 'w': 2, 'h': 5, 'i': '6', chartType: 'line', chartData: this.chartData },
-      { 'x': 2, 'y': 5, 'w': 2, 'h': 5, 'i': '7', chartType: 'line', chartData: this.dummyData },
-      { 'x': 4, 'y': 5, 'w': 2, 'h': 5, 'i': '8', chartType: 'line', chartData: this.chartData },
-      { 'x': 6, 'y': 4, 'w': 2, 'h': 4, 'i': '9', chartType: 'line', chartData: this.chartData },
-      { 'x': 8, 'y': 4, 'w': 2, 'h': 4, 'i': '10', chartType: 'line', chartData: this.dummyData },
-      { 'x': 10, 'y': 4, 'w': 2, 'h': 4, 'i': '11', chartType: 'line', chartData: this.chartData },
-      { 'x': 0, 'y': 10, 'w': 2, 'h': 5, 'i': '12', chartType: 'line', chartData: this.chartData },
-      { 'x': 2, 'y': 10, 'w': 2, 'h': 5, 'i': '13', chartType: 'line', chartData: this.dummyData },
-      { 'x': 4, 'y': 8, 'w': 2, 'h': 4, 'i': '14', chartType: 'line', chartData: this.chartData },
-      { 'x': 6, 'y': 8, 'w': 2, 'h': 4, 'i': '15', chartType: 'line', chartData: this.dummyData },
-      { 'x': 8, 'y': 10, 'w': 2, 'h': 5, 'i': '16', chartType: 'line', chartData: this.chartData },
-      { 'x': 10, 'y': 4, 'w': 2, 'h': 2, 'i': '17', chartType: 'line', chartData: this.chartData },
-      { 'x': 0, 'y': 9, 'w': 2, 'h': 3, 'i': '18', chartType: 'line', chartData: this.dummyData },
-      { 'x': 2, 'y': 6, 'w': 2, 'h': 2, 'i': '19', chartType: 'line', chartData: this.chartData },
-    ];
+    const parameters = {
+      symbol: 'EUR',
+      apiFunction: 'TIME_SERIES_DAILY',
+    };
+
+    StocksService.fetchStockData(parameters).then((result) => {
+      this.chartData = _.mapValues(result.data['Time Series (Daily)'], (data) => {
+        return data['1. open'];
+      });
+      this.chartData = _.flatMap(this.chartData, (value, key) => {
+        return [[key, value]];
+      });
+      this.initDummyGrid();
+    });
   }
 };
 </script>
