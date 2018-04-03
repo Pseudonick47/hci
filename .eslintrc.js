@@ -17,8 +17,8 @@ module.exports = {
 		'accessor-pairs': 'error',
 		'array-bracket-newline': 'error',
 		'array-bracket-spacing': 'error',
-		'array-callback-return': 'error',
-		'array-element-newline': 'error',
+		'array-callback-return': 'off',
+		'array-element-newline': 'off',
 		'arrow-body-style': 'off',
 		'arrow-parens': ['error'],
 		'arrow-spacing': [
@@ -36,8 +36,7 @@ module.exports = {
 		'capitalized-comments': 'off',
 		'class-methods-use-this': 'off',
 		'comma-dangle': [
-			'error',
-			'always-multiline',
+			'off',
 		],
 		'comma-spacing': 'error',
 		'comma-style': [

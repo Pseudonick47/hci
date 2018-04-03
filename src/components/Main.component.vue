@@ -1,17 +1,6 @@
 <template>
   <div class="wrapper">
-    <vue-draggable-resizable :w="100" :h="100" v-on:dragging="onDrag" v-on:resizing="onResize" :parent="true">
-      <p>Hello! I'm a flexible component. You can drag me around and you can resize me.<br>
-      X: {{ x }} / Y: {{ y }} - Width: {{ width }} / Height: {{ height }}</p>
-    </vue-draggable-resizable>
-    <v-btn color="success"
-           @click="getResults">
-           Fetch
-    </v-btn>
-    <vue-draggable-resizable :w="100" :h="100" v-on:dragging="onDrag" v-on:resizing="onResize" :parent="true">
-      <p>Nova komponentica<br></p>
-      <chart></chart>
-    </vue-draggable-resizable>
+    <chart></chart>
   </div>
 </template>
 
