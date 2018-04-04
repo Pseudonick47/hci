@@ -16,23 +16,6 @@
         <span>New window</span>
       </v-tooltip>
       <settings></settings>
-      <!-- <v-toolbar-items class="hidden-sm-and-down">
-        <v-btn flat
-               v-if="admin"
-               v-for="item in toolbarItems['admin']"
-               :key="item.text"
-               :to="item.path">
-          <v-icon left>{{ item.icon }}</v-icon>
-          {{ item.text }}
-        </v-btn>
-        <v-btn flat
-               v-for="item in toolbarItems[authStatus]"
-               :key="item.text"
-               :to="item.path">
-          <v-icon left>{{ item.icon }}</v-icon>
-          {{ item.text }}
-        </v-btn>
-      </v-toolbar-items> -->
     </v-toolbar>
     <v-content id="content">
       <v-tabs
@@ -47,19 +30,23 @@
             small
             color="green"
             slot="activator"
-            v-on:click="numOfTabs += 1"
+            @click="addNewTab"
           >
             <v-icon dark>add</v-icon>
           </v-btn>
           <span>New tab</span>
         </v-tooltip>
-        <v-tab v-for="i in numOfTabs" :key="i" :href="'#tab-' + i">
-            Tab {{ i }}
+        <v-tab v-for="(tab, id) in tabs" :key="id" :href="'#tab-' + id">
+            {{ tab.name }}
         </v-tab>
         <v-tabs-items>
-          <v-tab-item v-for="i in numOfTabs" :key="i" :id="'tab-' + i">
+          <v-tab-item
+            v-for="(tab, id) in tabs"
+            :key="id"
+            :id="'tab-' + id"
+          >
             <v-container fluid fill-height>
-              <router-view></router-view>
+              <home :tabId="id"></home>
             </v-container>
           </v-tab-item>
         </v-tabs-items>
@@ -72,9 +59,14 @@
 <script>
 import { mapGetters } from 'vuex';
 import Settings from 'Components/Settings.component';
+import Home from 'Components/Home.component';
 
 export default {
   name: 'App',
+  components: {
+    Settings,
+    Home
+  },
   data() {
     return {
       toolbarItems: {
@@ -91,14 +83,22 @@ export default {
   computed: {
     ...mapGetters([
       'activeUser',
+      'tabs',
       'admin',
     ]),
     authStatus() {
       return this.activeUser ? 'loggedIn' : 'loggedOut';
     },
   },
-  components: {
-    Settings
+  methods: {
+    addNewTab() {
+      this.$store.commit('addTab');
+    }
   }
 };
 </script>
+<style>
+#content {
+  height: 100%;
+}
+</style>
