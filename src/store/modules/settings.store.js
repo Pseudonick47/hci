@@ -3,12 +3,8 @@ const state = {
     draggable: true,
     resizable: true,
     currencyValue: 'EUR',
-<<<<<<< HEAD
     currencyDialog: false,
     darkTheme: true
-=======
-    currencyDialog: false
->>>>>>> 9dbe9ff37edbaf119e1147e3b4d15aad40a085fb
 };
 
 const getters = {
