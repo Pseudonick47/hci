@@ -13,7 +13,6 @@ import Chart from 'Components/Chart.vue';
 export default {
   name: 'Main',
   components: {
-    VueDraggableResizable,
     Chart,
   },
   data() {

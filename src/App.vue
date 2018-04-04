@@ -85,21 +85,7 @@ export default {
         ],
         'admin': [{ icon: 'lock', text: 'AdminPanel', path: '/home' }],
       },
-      numOfTabs: 1,
-      companies: [
-        {
-          id: "fb",
-          name: "facebook"
-        },
-        {
-          id: "msft",
-          name: "microsoft"
-        },
-        {
-          id: "yt",
-          name: "youtube"
-        }
-      ]
+      numOfTabs: 1
     };
   },
   computed: {

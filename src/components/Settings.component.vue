@@ -65,5 +65,5 @@
       resizable: true,
       draggable: false
     })
-  }
+  };
 </script>
