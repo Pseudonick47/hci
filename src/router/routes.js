@@ -2,12 +2,11 @@
 import Home from 'Components/Home.component';
 import Login from 'Components/Login.component';
 import Register from 'Components/Register.component';
-// import Main from 'Components/Main.component';
 
 export const routes = [
   {
     path: '/',
-    name: 'main',
+    name: 'home',
     component: Home,
   },
   {
@@ -22,14 +21,6 @@ export const routes = [
     path: '/register',
     name: 'register',
     component: Register,
-    meta: {
-      logged: true,
-    },
-  },
-  {
-    path: '/home',
-    name: 'home',
-    component: Home,
     meta: {
       logged: true,
     },
