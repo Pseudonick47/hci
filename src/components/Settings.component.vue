@@ -8,7 +8,8 @@
     >
       <v-btn
         color="grey"
-        dark slot="activator"
+        dark
+        slot="activator"
       >Settings</v-btn>
       <v-card>
         <v-list>
@@ -23,6 +24,15 @@
                 ></v-text-field>
               </v-layout>
             </v-list-tile-action>
+          </v-list-tile>
+          <v-divider></v-divider>
+          <v-list-tile>
+            <v-subheader>Change currency</v-subheader>
+            <v-btn
+              color="blue"
+              dark
+              @click="showCurrencyDialog"
+            >{{ currencyValue }}</v-btn>
           </v-list-tile>
           <v-divider></v-divider>
           <v-list-tile>
@@ -60,11 +70,6 @@
             flat
             @click="menu = false"
           >Cancel</v-btn>
-          <v-btn
-            color="yellow"
-            flat
-            @click="menu = false"
-            >Save</v-btn>
         </v-card-actions>
       </v-card>
     </v-menu>
@@ -110,13 +115,8 @@ export default {
       get() {
         return this.$store.getters.currencyValue;
       },
-      resizable: {
-        get() {
-          return this.$store.getters.resizable;
-        },
-        set() {
-          this.$store.commit('changeResizable');
-        }
+      set(value) {
+        this.$store.commit('changeCurrency', value);
       }
     }
   }
