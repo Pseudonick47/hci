@@ -2,14 +2,18 @@
   <div style="width:100%; height:100%">
     <div id="content">
       <br/>
-      <v-btn
-        fab
-        small
-        color="indigo"
-        @click="addItem"
-      >
-        <v-icon >add</v-icon>
-      </v-btn>
+        <v-tooltip right>
+          <v-btn
+            fab
+            small
+            color="indigo"
+            @click="addComponent"
+            slot="activator"
+          >
+            <v-icon>add</v-icon>
+          </v-btn>
+          <span>New component</span>
+        </v-tooltip>
       <grid-layout
         :layout="layout"
         :col-num="12"
@@ -28,6 +32,14 @@
           :h="item.h"
           :i="item.i"
         >
+          <v-btn
+            fab
+            small
+            color="red"
+            @click="removeComponent(item.i)"
+          >
+            <v-icon dark>remove</v-icon>
+          </v-btn>
           <chart
             :chartType="item.chartType"
             :chartData="item.chartData"
@@ -39,6 +51,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import { GridLayout, GridItem } from 'vue-grid-layout';
 import Chart from 'Components/Chart.component';
 
@@ -55,21 +68,26 @@ export default {
     }
   },
   data: () => ({
-    draggable: true,
-    resizable: true,
     index: 20,
     chartData: []
   }),
   computed: {
+    ...mapGetters([
+      'draggable',
+      'resizable',
+    ]),
     layout() {
       return this.$store.getters.layout(this.tabId);
     }
   },
   methods: {
-    addItem() {
+    addComponent() {
       // ovde ide i modal za biranje tipa ili sta vec
       this.$store.commit('addComponent', this.tabId);
     },
+    removeComponent(id) {
+      this.$store.commit('removeComponent', { tabId: this.tabId, id });
+    }
   }
 };
 </script>
