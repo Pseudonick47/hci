@@ -25,6 +25,9 @@ const mutations = {
   // },
   removeComponent(state, data) {
     const index = _.findIndex(state.tabs[data.tabId].layout, { i: data.id });
+    if (index < 0) {
+      return;
+    }
     state.tabs[data.tabId].layout.splice(index, 1);
   },
   addComponent(state, tabId) {

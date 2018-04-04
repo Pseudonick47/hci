@@ -5,12 +5,8 @@ const state = {
 };
 
 const getters = {
-    draggable: (state) => {
-        return state.draggable;
-    },
-    resizable: (state) => {
-        return state.resizable;
-    }
+    draggable: (state) => state.draggable,
+    resizable: (state) => state.resizable
 };
 
 const mutations = {

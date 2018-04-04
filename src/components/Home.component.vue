@@ -51,6 +51,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import { GridLayout, GridItem } from 'vue-grid-layout';
 import Chart from 'Components/Chart.component';
 
@@ -71,14 +72,12 @@ export default {
     chartData: []
   }),
   computed: {
+    ...mapGetters([
+      'draggable',
+      'resizable',
+    ]),
     layout() {
       return this.$store.getters.layout(this.tabId);
-    },
-    draggable() {
-      return this.$store.getters.draggable;
-    },
-    resizable() {
-      return this.$store.getters.resizable;
     }
   },
   methods: {

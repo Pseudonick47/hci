@@ -66,14 +66,6 @@
     data: () => ({
       menu: false
     }),
-    methods: {
-      changeResizable() {
-        this.$store.commit('changeResizable');
-      },
-      changeDraggable() {
-        this.$store.commit('changeDraggable');
-      }
-    },
     computed: {
       draggable: {
         get() {
