@@ -46,9 +46,12 @@
         </v-list>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn flat @click="menu = false">Cancel</v-btn>
           <v-btn
-            color="primary"
+            flat
+            @click="menu = false"
+          >Cancel</v-btn>
+          <v-btn
+            color="yellow"
             flat
             @click="menu = false"
             >Save</v-btn>
@@ -61,9 +64,33 @@
 <script>
   export default {
     data: () => ({
-      menu: false,
-      resizable: true,
-      draggable: false
-    })
+      menu: false
+    }),
+    methods: {
+      changeResizable() {
+        this.$store.commit('changeResizable');
+      },
+      changeDraggable() {
+        this.$store.commit('changeDraggable');
+      }
+    },
+    computed: {
+      draggable: {
+        get() {
+          return this.$store.getters.draggable;
+        },
+        set() {
+          this.$store.commit('changeDraggable');
+        }
+      },
+      resizable: {
+        get() {
+          return this.$store.getters.resizable;
+        },
+        set() {
+          this.$store.commit('changeResizable');
+        }
+      }
+    }
   };
 </script>

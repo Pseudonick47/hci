@@ -4,17 +4,6 @@
     <v-toolbar app>
       <v-toolbar-title>Vue Your Finances</v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-tooltip bottom>
-        <v-btn
-          fab
-          small
-          color="red"
-          slot="activator"
-        >
-          <v-icon dark>add</v-icon>
-        </v-btn>
-        <span>New window</span>
-      </v-tooltip>
       <settings></settings>
     </v-toolbar>
     <v-content id="content">

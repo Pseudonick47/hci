@@ -23,9 +23,9 @@ const mutations = {
   // updateLocalStorage(state) {
     // localStorage.setItem('user', JSON.stringify(userData));   za layout. proveriti da li je sinhrono!
   // },
-  removeComponent(state, tabId, id) {
-    const index = _.findIndex(state.tabs[tabId].layout, { id });
-    state.tabs[tabId].layout.splice(index, 1);
+  removeComponent(state, data) {
+    const index = _.findIndex(state.tabs[data.tabId].layout, { i: data.id });
+    state.tabs[data.tabId].layout.splice(index, 1);
   },
   addComponent(state, tabId) {
     const tab = state.tabs[tabId];
