@@ -43,6 +43,16 @@
             </v-list-tile-action>
             <v-list-tile-title>Draggable windows</v-list-tile-title>
           </v-list-tile>
+          <v-list-tile>
+            <v-list-tile-action>
+              <v-switch
+                v-model="darkTheme"
+                color="green"
+              ></v-switch>
+            </v-list-tile-action>
+            <v-list-tile-title>Dark theme</v-list-tile-title>
+          </v-list-tile>
+          <v-divider></v-divider>
         </v-list>
         <v-card-actions>
           <v-spacer></v-spacer>
@@ -62,18 +72,43 @@
 </template>
 
 <script>
-  export default {
-    data: () => ({
-      menu: false
-    }),
-    computed: {
-      draggable: {
-        get() {
-          return this.$store.getters.draggable;
-        },
-        set() {
-          this.$store.commit('changeDraggable');
-        }
+export default {
+  data: () => ({
+    menu: false
+  }),
+  methods: {
+    showCurrencyDialog() {
+      this.$store.commit('changeVisibilityCurrencyDialog', true);
+    }
+  },
+  computed: {
+    darkTheme: {
+      get() {
+        return this.$store.getters.darkTheme;
+      },
+      set() {
+        this.$store.commit('changeTheme');
+      }
+    },
+    draggable: {
+      get() {
+        return this.$store.getters.draggable;
+      },
+      set() {
+        this.$store.commit('changeDraggable');
+      }
+    },
+    resizable: {
+      get() {
+        return this.$store.getters.resizable;
+      },
+      set() {
+        this.$store.commit('changeResizable');
+      }
+    },
+    currencyValue: {
+      get() {
+        return this.$store.getters.currencyValue;
       },
       resizable: {
         get() {
@@ -84,5 +119,6 @@
         }
       }
     }
-  };
+  }
+};
 </script>
