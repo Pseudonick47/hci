@@ -2,11 +2,15 @@
 const state = {
     draggable: true,
     resizable: true,
+    currencyValue: 'EUR',
+    currencyDialog: false
 };
 
 const getters = {
     draggable: (state) => state.draggable,
-    resizable: (state) => state.resizable
+    resizable: (state) => state.resizable,
+    currencyValue: (state) => state.currencyValue,
+    currencyDialog: (state) => state.currencyDialog
 };
 
 const mutations = {
@@ -16,6 +20,12 @@ const mutations = {
     changeResizable(state) {
         state.resizable = !state.resizable;
     },
+    changeCurrency(state, value) {
+        state.currencyValue = value;
+    },
+    changeVisibilityCurrencyDialog(state, value) {
+        state.currencyDialog = value;
+    }
 };
 
 export {

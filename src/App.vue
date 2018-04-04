@@ -5,8 +5,10 @@
       <v-toolbar-title>Vue Your Finances</v-toolbar-title>
       <v-spacer></v-spacer>
       <settings></settings>
+      <help></help>
     </v-toolbar>
     <v-content id="content">
+      <currencies v-show="currencyDialog"></currencies>
       <v-tabs
         dark
         color="grey"
@@ -49,12 +51,16 @@
 import { mapGetters } from 'vuex';
 import Settings from 'Components/Settings.component';
 import Home from 'Components/Home.component';
+import Help from 'Components/Help.component';
+import Currencies from 'Components/Currencies.component';
 
 export default {
   name: 'App',
   components: {
     Settings,
-    Home
+    Home,
+    Help,
+    Currencies
   },
   data() {
     return {
@@ -74,6 +80,7 @@ export default {
       'activeUser',
       'tabs',
       'admin',
+      'currencyDialog'
     ]),
     authStatus() {
       return this.activeUser ? 'loggedIn' : 'loggedOut';
