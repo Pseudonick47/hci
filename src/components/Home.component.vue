@@ -3,35 +3,35 @@
     <div id="content">
       <br/>
       <v-btn
-              fab
-              small
-              color="indigo"
-              @click="addItem"
-            >
-              <v-icon >add</v-icon>
-            </v-btn>
-        <grid-layout
-          :layout="layout"
-          :col-num="12"
-          :row-height="30"
-          :is-draggable="draggable"
-          :is-resizable="resizable"
-          :vertical-compact="true"
-          :use-css-transforms="false"
+        fab
+        small
+        color="indigo"
+        @click="addItem"
+      >
+        <v-icon >add</v-icon>
+      </v-btn>
+      <grid-layout
+        :layout="layout"
+        :col-num="12"
+        :row-height="30"
+        :is-draggable="draggable"
+        :is-resizable="resizable"
+        :vertical-compact="true"
+        :use-css-transforms="false"
+      >
+        <grid-item
+          v-for="item in layout"
+          :key="item.i"
+          :x="item.x"
+          :y="item.y"
+          :w="item.w"
+          :h="item.h"
+          :i="item.i"
         >
-          <grid-item
-            v-for="item in layout"
-            :key="item.i"
-            :x="item.x"
-            :y="item.y"
-            :w="item.w"
-            :h="item.h"
-            :i="item.i"
-          >
-            <chart
-              :chartType="item.chartType"
-              :chartData="item.chartData"
-            ></chart>
+          <chart
+            :chartType="item.chartType"
+            :chartData="item.chartData"
+          ></chart>
         </grid-item>
       </grid-layout>
     </div>
