@@ -51,7 +51,7 @@
           <v-btn
             color="white"
             flat
-            @click.native="closeCurrencyDialog"
+            @click="closeCurrencyDialog"
           >OK</v-btn>
         </v-card-actions>
       </v-card>

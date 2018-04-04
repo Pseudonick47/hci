@@ -24,9 +24,7 @@ const mutations = {
         state.currencyValue = value;
     },
     changeVisibilityCurrencyDialog(state, value) {
-        if (value === true || value === false) {
-            state.currencyDialog = value;
-        }
+        state.currencyDialog = value;
     }
 };
 
