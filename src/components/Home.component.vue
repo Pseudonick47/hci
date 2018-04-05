@@ -5,8 +5,11 @@
         <v-tooltip right>
           <v-btn
             fab
-            small
-            color="indigo"
+            large
+            bottom
+            right
+            fixed
+            color="cyan"
             @click="addComponent"
             slot="activator"
           >
