@@ -29,6 +29,7 @@
         <grid-item
           v-for="item in layout"
           :key="item.i"
+          class="hide-scrollbar-outer"
           :x="item.x"
           :y="item.y"
           :w="item.w"
@@ -46,6 +47,7 @@
           <chart
             :chartType="item.chartType"
             :chartData="item.chartData"
+            class="hide-scrollbar-inner"
           ></chart>
         </grid-item>
       </grid-layout>
@@ -103,15 +105,19 @@ export default {
   background: transparent;
 }
 
-/* scrollable content */
-.vue-grid-item {
-  overflow: scroll;
+/* Hide scrollbars */
+
+.hide-scrollbar-outer {
+ overflow: hidden;
+}
+.hide-scrollbar-inner {
+  margin-right: -16px;
+  margin-bottom: -16px;
+  overflow-y: scroll;
+  overflow-x: scroll;
+  height: 100%;
 }
 
-/* Hide scrollbars */
-::-webkit-scrollbar {
-    display: none;
-}
 .columns {
   -moz-columns: 120px;
   -webkit-columns: 120px;
