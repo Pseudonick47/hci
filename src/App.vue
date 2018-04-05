@@ -19,7 +19,10 @@
         >
             {{ tab.name }}
         </v-tab>
-        <v-tooltip bottom>
+        <v-tooltip
+          bottom
+          class="my-auto"
+        >
           <v-btn
             fab
             small
@@ -104,6 +107,12 @@ export default {
 .show-overflow {
   overflow: visible;
 }
+
+.my-auto{
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
 #content {
   height: 100%;
 }

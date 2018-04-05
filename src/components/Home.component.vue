@@ -1,22 +1,51 @@
 <template>
   <div style="width:100%; height:100%">
     <div id="content">
-      <br/>
-        <v-tooltip right>
-          <v-btn
-            fab
-            large
-            bottom
-            right
-            fixed
-            color="cyan"
-            @click="addComponent"
-            slot="activator"
-          >
-            <v-icon>add</v-icon>
-          </v-btn>
-          <span>New component</span>
-        </v-tooltip>
+      <v-speed-dial
+        v-model="menu"
+        bottom
+        right
+        large
+        fixed
+        direction="top"
+        :open-on-hover="true"
+        transition="slide-y-reverse-transition"
+      >
+        <v-btn
+          slot="activator"
+          color="blue darken-2"
+          dark
+          fab
+          hover
+        >
+          <v-icon>settings</v-icon>
+        </v-btn>
+        <v-btn
+          fab
+          dark
+          small
+          color="green"
+        >
+          <v-icon>edit</v-icon>
+        </v-btn>
+        <v-btn
+          fab
+          dark
+          small
+          color="indigo"
+          @click="addComponent"
+        >
+          <v-icon>add</v-icon>
+        </v-btn>
+        <v-btn
+          fab
+          dark
+          small
+          color="red"
+        >
+          <v-icon>delete</v-icon>
+        </v-btn>
+      </v-speed-dial>
       <grid-layout
         :layout="layout"
         :col-num="12"
@@ -73,6 +102,7 @@ export default {
     }
   },
   data: () => ({
+    menu: false,
     index: 20,
     chartData: []
   }),
