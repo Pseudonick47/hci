@@ -39,10 +39,14 @@ export default {
       type: String,
       required: true
     },
-    chartData: {
-      type: Array,
+    entity: {
+      type: String,
+      required: true
+    },
+    interval: {
+      type: Number,
       required: false,
-      default: () => []
+      default: 6000
     },
     xTitle: {
       type: String,
@@ -53,6 +57,11 @@ export default {
       type: String,
       required: false,
       default: ''
+    }
+  },
+  computed: {
+    chartData() {
+      return this.$store.getters.openData(`${this.entity}-${this.interval}`);
     }
   }
 };

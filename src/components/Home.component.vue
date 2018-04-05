@@ -42,7 +42,8 @@
           </v-btn>
           <chart
             :chartType="item.chartType"
-            :chartData="item.chartData"
+            :entity="'AMD'"
+            :interval="5000"
           ></chart>
         </grid-item>
       </grid-layout>
@@ -54,6 +55,7 @@
 import { mapGetters } from 'vuex';
 import { GridLayout, GridItem } from 'vue-grid-layout';
 import Chart from 'Components/Chart.component';
+import StocksController from 'Controllers/stocks.controller';
 
 export default {
   name: 'Home',
@@ -84,6 +86,11 @@ export default {
     addComponent() {
       // ovde ide i modal za biranje tipa ili sta vec
       this.$store.commit('addComponent', this.tabId);
+      StocksController.monitorStocks({
+        apiFunction: 'TIME_SERIES_DAILY',
+        symbol: 'AMD',
+        // interval: '1min'
+      }, 5000);
     },
     removeComponent(id) {
       this.$store.commit('removeComponent', { tabId: this.tabId, id });

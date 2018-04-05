@@ -1,6 +1,7 @@
 const ACTIONS = {
-    TIME_SERIES_DAILY: 'Time Series Daily',
-    TIME_SERIES_WEEKLY: 'Time Series Weekly',
+    TIME_SERIES_INTRADAY: 'Time Series (1min)',
+    TIME_SERIES_DAILY: 'Time Series (Daily)',
+    TIME_SERIES_WEEKLY: 'Time Series (Weekly)',
 };
 
 const PARAMETER_KEYS = {

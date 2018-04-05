@@ -12,7 +12,6 @@ export default {
                 query += `&${PARAMETER_KEYS[key]}=${value}`;
             }
         });
-
         return `https://www.alphavantage.co/query?apikey=${API_KEY}${query}`;
     },
 
