@@ -4,7 +4,8 @@ const state = {
     resizable: true,
     currencyValue: 'EUR',
     currencyDialog: false,
-    darkTheme: true
+    darkTheme: true,
+    defaultWindowHeight: 100
 };
 
 const getters = {
@@ -12,7 +13,8 @@ const getters = {
     resizable: (state) => state.resizable,
     currencyValue: (state) => state.currencyValue,
     currencyDialog: (state) => state.currencyDialog,
-    darkTheme: (state) => state.darkTheme
+    darkTheme: (state) => state.darkTheme,
+    defaultWindowHeight: (state) => state.defaultWindowHeight
 };
 
 const mutations = {
@@ -30,6 +32,9 @@ const mutations = {
     },
     changeTheme(state) {
         state.darkTheme = !state.darkTheme;
+    },
+    changeDefaultWindowHeight(state, value) {
+        state.defaultWindowHeight = value;
     }
 };
 

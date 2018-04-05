@@ -28,15 +28,19 @@
         >
           <v-icon>edit</v-icon>
         </v-btn>
-        <v-btn
-          fab
-          dark
-          small
-          color="indigo"
-          @click="addComponent"
-        >
-          <v-icon>add</v-icon>
-        </v-btn>
+        <v-tooltip left>
+          <v-btn
+            fab
+            dark
+            small
+            color="indigo"
+            slot="activator"
+            @click="addComponent"
+          >
+            <v-icon>add</v-icon>
+          </v-btn>
+          <span>New component</span>
+        </v-tooltip>
         <v-btn
           fab
           dark
@@ -48,8 +52,8 @@
       </v-speed-dial>
       <grid-layout
         :layout="layout"
-        :col-num="12"
-        :row-height="30"
+        :col-num="8"
+        :row-height="defaultWindowHeight"
         :is-draggable="draggable"
         :is-resizable="resizable"
         :vertical-compact="true"
@@ -110,6 +114,7 @@ export default {
     ...mapGetters([
       'draggable',
       'resizable',
+      'defaultWindowHeight',
     ]),
     layout() {
       return this.$store.getters.layout(this.tabId);
