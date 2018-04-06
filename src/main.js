@@ -8,6 +8,7 @@ import VueChartkick from 'vue-chartkick';
 import Chart from 'chart.js';
 
 import StorageController from 'Controllers/storage.controller';
+import StocksController from 'Controllers/stocks.controller';
 
 Vue.config.productionTip = false;
 
@@ -17,6 +18,7 @@ Vue.prototype.router = router;
 
 StorageController.initStore();
 StorageController.keepLocalStorageSynced();
+// StocksController.startRequestListener();
 
 /* eslint-disable no-new */
 new Vue({
