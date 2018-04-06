@@ -1,40 +1,51 @@
 <template>
-  <v-app dark>
-    <!-- <v-navigation-drawer app></v-navigation-drawer> -->
+  <v-app :dark="darkTheme">
     <v-toolbar app>
       <v-toolbar-title>Vue Your Finances</v-toolbar-title>
       <v-spacer></v-spacer>
       <settings></settings>
+      <help></help>
     </v-toolbar>
     <v-content id="content">
+      <currencies v-show="currencyDialog"></currencies>
       <v-tabs
-        dark
-        color="grey"
         show-arrows
+        slider-color="cyan"
       >
-        <v-tabs-slider color="white"></v-tabs-slider>
-        <v-tooltip bottom>
+        <v-tab
+          v-for="(tab, id) in tabs"
+          :key="id"
+          :href="'#tab-' + id"
+        >
+            {{ tab.name }}
+        </v-tab>
+        <v-tooltip
+          bottom
+          class="my-auto"
+        >
           <v-btn
             fab
             small
-            color="green"
+            outline
+            color="cyan"
             slot="activator"
             @click="addNewTab"
           >
-            <v-icon dark>add</v-icon>
+            <v-icon>add</v-icon>
           </v-btn>
           <span>New tab</span>
         </v-tooltip>
-        <v-tab v-for="(tab, id) in tabs" :key="id" :href="'#tab-' + id">
-            {{ tab.name }}
-        </v-tab>
-        <v-tabs-items>
+        <v-tabs-items class="show-overflow">
           <v-tab-item
             v-for="(tab, id) in tabs"
             :key="id"
             :id="'tab-' + id"
+            class="pa-0"
           >
-            <v-container fluid fill-height>
+            <v-container
+              fluid
+              class="pa-0"
+            >
               <home :tabId="id"></home>
             </v-container>
           </v-tab-item>
@@ -49,12 +60,16 @@
 import { mapGetters } from 'vuex';
 import Settings from 'Components/Settings.component';
 import Home from 'Components/Home.component';
+import Help from 'Components/Help.component';
+import Currencies from 'Components/Currencies.component';
 
 export default {
   name: 'App',
   components: {
     Settings,
-    Home
+    Home,
+    Help,
+    Currencies
   },
   data() {
     return {
@@ -74,6 +89,8 @@ export default {
       'activeUser',
       'tabs',
       'admin',
+      'currencyDialog',
+      'darkTheme'
     ]),
     authStatus() {
       return this.activeUser ? 'loggedIn' : 'loggedOut';
@@ -87,6 +104,15 @@ export default {
 };
 </script>
 <style>
+.show-overflow {
+  overflow: visible;
+}
+
+.my-auto{
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
 #content {
   height: 100%;
 }

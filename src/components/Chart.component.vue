@@ -31,6 +31,7 @@
 </template>
 
 <script>
+import { POINTS } from 'Constants/stocks.constants.js';
 
 export default {
   name: 'chart',
@@ -48,6 +49,11 @@ export default {
       required: false,
       default: 6000
     },
+    points: {
+      type: Array,
+      required: false,
+      default: () => [POINTS.OPEN, POINTS.CLOSE, POINTS.HIGH, POINTS.LOW]
+    },
     xTitle: {
       type: String,
       required: false,
@@ -61,7 +67,7 @@ export default {
   },
   computed: {
     chartData() {
-      return this.$store.getters.openData(`${this.entity}-${this.interval}`);
+      return this.$store.getters.points(`${this.entity}-${this.interval}`, this.points);
     }
   }
 };

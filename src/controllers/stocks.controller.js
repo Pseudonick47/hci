@@ -1,23 +1,25 @@
 import store from 'Store';
-import StocksApiService from 'Api/stocks.service.js';
-import { ACTIONS } from 'Constants/stocks.constants.js';
-
 
 export default {
-  extractData(parameters, response) {
-    return response.data[ACTIONS[parameters.apiFunction]];
-  },
+  monitorStocks(parameters = {}, interval = 60000) {
+    const id = `${parameters.symbol}-${interval}`;
 
-  monitorStocks(parameters = {}, interval = 6000) {
-    if (!store.getters.hasSource(`${parameters.symbol}-${interval}`)) {
+    if (!store.getters.hasSource(id)) {
       store.commit('addSource', { entity: parameters.symbol, interval });
 
-      setInterval(() => {
-        StocksApiService.fetchStockData(parameters).then((response) => {
-          const data = this.extractData(parameters, response);
-          store.commit('updateSource', { id: `${parameters.symbol}-${interval}`, data });
-        });
+      store.dispatch('fetchSource', { api: parameters, interval });
+      const intervalId = window.setInterval(() => {
+        store.dispatch('fetchSource', { api: parameters, interval });
       }, interval);
+
+      store.commit('setIntervalId', { id, intervalId });
     }
+
+    store.commit('addObserver', id);
   },
+
+  stopMonitoring(symbol, interval = 60000) {
+    const id = `${symbol}-${interval}`;
+    store.commit('removeObserver', id);
+  }
 };

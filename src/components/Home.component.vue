@@ -1,19 +1,51 @@
 <template>
   <div style="width:100%; height:100%">
     <div id="content">
-      <br/>
-        <v-tooltip right>
-          <v-btn
-            fab
-            small
-            color="indigo"
-            @click="addComponent"
-            slot="activator"
-          >
-            <v-icon>add</v-icon>
-          </v-btn>
-          <span>New component</span>
-        </v-tooltip>
+      <v-speed-dial
+        v-model="menu"
+        bottom
+        right
+        large
+        fixed
+        direction="top"
+        :open-on-hover="true"
+        transition="slide-y-reverse-transition"
+      >
+        <v-btn
+          slot="activator"
+          color="blue darken-2"
+          dark
+          fab
+          hover
+        >
+          <v-icon>settings</v-icon>
+        </v-btn>
+        <v-btn
+          fab
+          dark
+          small
+          color="green"
+        >
+          <v-icon>edit</v-icon>
+        </v-btn>
+        <v-btn
+          fab
+          dark
+          small
+          color="indigo"
+          @click="addComponent"
+        >
+          <v-icon>add</v-icon>
+        </v-btn>
+        <v-btn
+          fab
+          dark
+          small
+          color="red"
+        >
+          <v-icon>delete</v-icon>
+        </v-btn>
+      </v-speed-dial>
       <grid-layout
         :layout="layout"
         :col-num="12"
@@ -26,6 +58,7 @@
         <grid-item
           v-for="item in layout"
           :key="item.i"
+          class="hide-scrollbar-outer"
           :x="item.x"
           :y="item.y"
           :w="item.w"
@@ -44,6 +77,7 @@
             :chartType="item.chartType"
             :entity="'AMD'"
             :interval="5000"
+            class="hide-scrollbar-inner"
           ></chart>
         </grid-item>
       </grid-layout>
@@ -70,6 +104,7 @@ export default {
     }
   },
   data: () => ({
+    menu: false,
     index: 20,
     chartData: []
   }),
@@ -94,6 +129,7 @@ export default {
     },
     removeComponent(id) {
       this.$store.commit('removeComponent', { tabId: this.tabId, id });
+      StocksController.stopMonitoring('AMD', 5000);
     }
   }
 };
@@ -107,15 +143,19 @@ export default {
   background: transparent;
 }
 
-/* scrollable content */
-.vue-grid-item {
-  overflow: scroll;
+/* Hide scrollbars */
+
+.hide-scrollbar-outer {
+ overflow: hidden;
+}
+.hide-scrollbar-inner {
+  margin-right: -16px;
+  margin-bottom: -16px;
+  overflow-y: scroll;
+  overflow-x: scroll;
+  height: 100%;
 }
 
-/* Hide scrollbars */
-::-webkit-scrollbar {
-    display: none;
-}
 .columns {
   -moz-columns: 120px;
   -webkit-columns: 120px;

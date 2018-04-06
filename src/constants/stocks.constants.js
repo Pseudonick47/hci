@@ -15,8 +15,16 @@ const PARAMETER_KEYS = {
     toCurrency: 'to_currency',
 };
 
+const POINTS = {
+    OPEN: 'open',
+    CLOSE: 'close',
+    HIGH: 'high',
+    LOW: 'low',
+    VOLUME: 'volume'
+};
 
 export {
     ACTIONS,
     PARAMETER_KEYS,
+    POINTS,
 };
