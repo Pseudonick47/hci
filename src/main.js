@@ -5,16 +5,18 @@ import store from './store';
 import Vuetify from 'vuetify';
 import 'vuetify/dist/vuetify.min.css';
 import VueChartkick from 'vue-chartkick';
-// import Highcharts from 'highcharts';
 import Chart from 'chart.js';
 
-Vue.use(VueChartkick, { adapter: Chart });
-// Vue.use(VueChartkick, { adapter: Highcharts });
+import StorageController from 'Controllers/storage.controller';
 
 Vue.config.productionTip = false;
 
+Vue.use(VueChartkick, { adapter: Chart });
 Vue.use(Vuetify);
 Vue.prototype.router = router;
+
+StorageController.initStore();
+StorageController.keepLocalStorageSynced();
 
 /* eslint-disable no-new */
 new Vue({
