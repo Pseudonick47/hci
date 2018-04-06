@@ -1,42 +1,9 @@
 import * as _ from 'lodash';
 import Vue from 'vue';
 
-import StocksApiService from 'Api/stocks.service.js';
-import { ACTIONS } from 'Constants/stocks.constants.js';
-
-const helpers = {
-  extractData(parameters, response) {
-    return response.data[ACTIONS[parameters.apiFunction]];
-  },
-
-  extractProperty(collection, prop) {
-    const data = {};
-    _.forOwn(collection, (value, key) => {
-      data[key] = value[prop];
-    });
-    return data;
-  },
-
-  stripOrdinal(data) {
-    const processed = {};
-
-    _.forOwn(data, (value, key) => {
-      processed[key] = {
-        open: value['1. open'],
-        high: value['2. high'],
-        low: value['3. low'],
-        close: value['4. close'],
-        volume: value['5. volume']
-      };
-    });
-
-    return processed;
-  },
-
-  capitalize(string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
-  }
-};
+import StocksApiService from 'Api/stocks.service';
+import StocksUtil from 'Util/stocks.util';
+import GeneralUtil from 'Util/general.util';
 
 const state = {
   sources: {},
@@ -51,8 +18,8 @@ const getters = {
     const data = [];
     _.forEach(params, (param) => {
       data.push({
-        name: helpers.capitalize(param),
-        data: helpers.extractProperty(state.sources[id].data, param)
+        name: GeneralUtil.capitalize(param),
+        data: StocksUtil.extractProperty(state.sources[id].data, param)
       });
     });
     return data;
@@ -66,7 +33,9 @@ const mutations = {
   },
 
   updateSource(state, payload) {
-    state.sources[payload.id].data = payload.data;
+    if (state.sources[payload.id]) {
+      state.sources[payload.id].data = payload.data;
+    }
   },
 
   addObserver(state, id) {
@@ -89,8 +58,8 @@ const mutations = {
 const actions = {
   fetchSource({ commit }, params) {
     StocksApiService.fetchStockData(params.api).then((response) => {
-      let data = helpers.extractData(params.api, response);
-      data = helpers.stripOrdinal(data);
+      let data = StocksUtil.extractData(params.api, response);
+      data = StocksUtil.stripOrdinal(data);
       commit('updateSource', { id: `${params.api.symbol}-${params.interval}`, data });
     });
   }

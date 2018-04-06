@@ -4,6 +4,7 @@
       v-if="chartType === 'line'"
       :download="true"
       :data="chartData"
+      legend="bottom"
     ></line-chart>
 
     <pie-chart
@@ -31,7 +32,7 @@
 </template>
 
 <script>
-import { POINTS } from 'Constants/stocks.constants.js';
+import { POINTS } from 'Constants/stocks.constants';
 
 export default {
   name: 'chart',

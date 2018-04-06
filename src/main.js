@@ -18,7 +18,7 @@ Vue.prototype.router = router;
 
 StorageController.initStore();
 StorageController.keepLocalStorageSynced();
-// StocksController.startRequestListener();
+StocksController.startRequestListener();
 
 /* eslint-disable no-new */
 new Vue({
