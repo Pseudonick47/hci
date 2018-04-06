@@ -20,9 +20,14 @@ const getters = {
 };
 
 const mutations = {
-  // updateLocalStorage(state) {
-    // localStorage.setItem('user', JSON.stringify(userData));   za layout. proveriti da li je sinhrono!
-  // },
+  updateLayoutStorage(state) {
+    localStorage.setItem('tabId', JSON.stringify(state.tabId));
+    localStorage.setItem('tabs', JSON.stringify(state.tabs));
+  },
+  setTabs(state, data) {
+    state.tabId = data.tabId || 0;
+    Vue.set(state, 'tabs', _.isEmpty(data.tabs) ? state.tabs : data.tabs);
+  },
   removeComponent(state, data) {
     const index = _.findIndex(state.tabs[data.tabId].layout, { i: data.id });
     if (index < 0) {
