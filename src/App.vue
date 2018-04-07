@@ -53,6 +53,7 @@
       </v-tabs>
     </v-content>
     <v-footer app></v-footer>
+    <wizard></wizard>
   </v-app>
 </template>
 
@@ -62,6 +63,7 @@ import Settings from 'Components/Settings.component';
 import Home from 'Components/Home.component';
 import Help from 'Components/Help.component';
 import Currencies from 'Components/Currencies.component';
+import Wizard from 'Components/Wizard.component';
 
 export default {
   name: 'App',
@@ -69,7 +71,8 @@ export default {
     Settings,
     Home,
     Help,
-    Currencies
+    Currencies,
+    Wizard
   },
   data() {
     return {

@@ -16,5 +16,13 @@ export default {
       store.commit('updateLayoutStorage');
       store.commit('updateSettingsStorage');
     }, 10000);
+  },
+
+  isFirstVisit() {
+    return Boolean(localStorage.getItem('isVisited'));
+  },
+
+  markAsVisited() {
+    localStorage.setItem('isVisited', true);
   }
 };
