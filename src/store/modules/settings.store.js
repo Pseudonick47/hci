@@ -4,18 +4,16 @@ const state = {
   draggable: true,
   resizable: true,
   currencyValue: 'EUR',
-  currencyDialog: false,
   darkTheme: true,
-  defaultWindowHeight: 100
+  // defaultWindowHeight: 100
 };
 
 const getters = {
   draggable: (state) => state.draggable,
   resizable: (state) => state.resizable,
   currencyValue: (state) => state.currencyValue,
-  currencyDialog: (state) => state.currencyDialog,
   darkTheme: (state) => state.darkTheme,
-  defaultWindowHeight: (state) => state.defaultWindowHeight
+  // defaultWindowHeight: (state) => state.defaultWindowHeight
 };
 
 const mutations = {
@@ -34,15 +32,12 @@ const mutations = {
   changeCurrency(state, value) {
     state.currencyValue = value;
   },
-  changeVisibilityCurrencyDialog(state, value) {
-    state.currencyDialog = value;
-  },
   changeTheme(state) {
     state.darkTheme = !state.darkTheme;
   },
-  changeDefaultWindowHeight(state, value) {
+  /* changeDefaultWindowHeight(state, value) {
     state.defaultWindowHeight = value;
-  }
+  } */
 };
 
 export {

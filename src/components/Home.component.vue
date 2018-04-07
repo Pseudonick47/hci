@@ -41,19 +41,24 @@
           </v-btn>
           <span>New component</span>
         </v-tooltip>
-        <v-btn
-          fab
-          dark
-          small
-          color="red"
-        >
-          <v-icon>delete</v-icon>
-        </v-btn>
+        <v-tooltip left>
+          <v-btn
+            fab
+            dark
+            small
+            color="red"
+            slot="activator"
+            @click="removeTab"
+          >
+            <v-icon>delete</v-icon>
+          </v-btn>
+          <span>Delete tab</span>
+        </v-tooltip>
       </v-speed-dial>
       <grid-layout
         :layout="layout"
         :col-num="8"
-        :row-height="defaultWindowHeight"
+        :row-height="100"
         :is-draggable="draggable"
         :is-resizable="resizable"
         :vertical-compact="true"
@@ -127,6 +132,9 @@ export default {
     },
     removeComponent(id) {
       this.$store.commit('removeComponent', { tabId: this.tabId, id });
+    },
+    removeTab() {
+      this.$store.commit('removeTab', this.tabId);
     }
   }
 };

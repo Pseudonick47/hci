@@ -4,7 +4,7 @@ import Vue from 'vue';
 const state = {
   // tabs: { id: { componentId: 0, layout: [{chartData, chartType, x, y , w, h, i }], name, }, id: .... }
   tabs: { '0': { componentId: 0, name: 'Tab 0', layout: [] } },
-  tabId: 0,
+  tabId: 0
 };
 
 const getters = {
@@ -41,11 +41,14 @@ const mutations = {
     tab.componentId++;
     tab.layout.push({ x: 0, y: 0, w: 2, h: 2, i: String(tab.componentId), chartData: [], chartType: 'line' });
   },
-  addTab(state) {
+  addTab(state, value) {
     state.tabId++;
-    const newTab = { componentId: 0, layout: [], name: `Tab ${state.tabId}` };
+    const newTab = { componentId: 0, layout: [], name: value };
     Vue.set(state.tabs, `${state.tabId}`, newTab);
   },
+  removeTab(state, tabId) {
+    Vue.delete(state.tabs, tabId);
+  }
 };
 
 export {
