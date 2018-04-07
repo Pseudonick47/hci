@@ -16,10 +16,23 @@
           color="blue darken-2"
           dark
           fab
-          hover
+          open-on-hover
         >
           <v-icon>settings</v-icon>
         </v-btn>
+        <v-tooltip left>
+          <v-btn
+            fab
+            dark
+            small
+            color="red"
+            slot="activator"
+            @click="removeTab"
+          >
+            <v-icon>delete</v-icon>
+          </v-btn>
+          <span>Delete tab</span>
+        </v-tooltip>
         <v-tooltip left>
           <v-btn
             fab
@@ -46,34 +59,22 @@
           </v-btn>
           <span>New component</span>
         </v-tooltip>
-        <v-tooltip left>
-          <v-btn
-            fab
-            dark
-            small
-            color="red"
-            slot="activator"
-            @click="removeTab"
-          >
-            <v-icon>delete</v-icon>
-          </v-btn>
-          <span>Delete tab</span>
-        </v-tooltip>
       </v-speed-dial>
       <v-dialog
-          v-model="renameDialog"
-          persistent
-          max-width="300"
-        >
-          <v-text-field
-            autofocus
-            v-model="newTabName"
-            label="Tab name:"
-            required
-          ></v-text-field>
-          <v-btn @click="renameDialog = false">cancel</v-btn>
-          <v-btn @click="renameTab">ok</v-btn>
-        </v-dialog>
+        v-model="renameDialog"
+        persistent
+        max-width="300"
+      >
+        <v-text-field
+          autofocus
+          v-model="newTabName"
+          label="Tab name:"
+          required
+          color="indigo"
+        ></v-text-field>
+        <v-btn @click="renameDialog = false">cancel</v-btn>
+        <v-btn @click="renameTab">ok</v-btn>
+      </v-dialog>
       <grid-layout
         :layout="layout"
         :col-num="8"
