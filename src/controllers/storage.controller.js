@@ -13,7 +13,6 @@ export default {
 
   keepLocalStorageSynced() {
     setInterval(() => {
-      console.log('store => localstorage');
       store.commit('updateLayoutStorage');
       store.commit('updateSettingsStorage');
     }, 10000);
