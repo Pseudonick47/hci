@@ -34,8 +34,17 @@
           </v-btn>
           <span>New tab</span>
         </v-tooltip>
-        <v-dialog v-model="dialog" persistent max-width="300">
-          <v-text-field autofocus v-model="newTabName" label="Tab name:" required></v-text-field>
+        <v-dialog
+          v-model="dialog"
+          persistent
+          max-width="300"
+        >
+          <v-text-field
+            autofocus
+            v-model="newTabName"
+            label="Tab name:"
+            required
+          ></v-text-field>
           <v-btn @click="dialog = false">cancel</v-btn>
           <v-btn @click="renameNewTab">ok</v-btn>
         </v-dialog>
