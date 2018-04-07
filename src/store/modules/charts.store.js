@@ -48,6 +48,10 @@ const mutations = {
   },
   removeTab(state, tabId) {
     Vue.delete(state.tabs, tabId);
+  },
+  renameTab(state, data) {
+    const tab = state.tabs[data.tabId];
+    tab.name = data.name;
   }
 };
 
