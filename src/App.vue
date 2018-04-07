@@ -7,7 +7,6 @@
       <help></help>
     </v-toolbar>
     <v-content id="content">
-      <currencies v-show="currencyDialog"></currencies>
       <v-tabs
         show-arrows
         slider-color="cyan"
@@ -35,6 +34,20 @@
           </v-btn>
           <span>New tab</span>
         </v-tooltip>
+        <v-dialog
+          v-model="dialog"
+          persistent
+          max-width="300"
+        >
+          <v-text-field
+            autofocus
+            v-model="newTabName"
+            label="Tab name:"
+            required
+          ></v-text-field>
+          <v-btn @click="dialog = false">cancel</v-btn>
+          <v-btn @click="renameNewTab">ok</v-btn>
+        </v-dialog>
         <v-tabs-items class="show-overflow">
           <v-tab-item
             v-for="(tab, id) in tabs"
@@ -61,15 +74,13 @@ import { mapGetters } from 'vuex';
 import Settings from 'Components/Settings.component';
 import Home from 'Components/Home.component';
 import Help from 'Components/Help.component';
-import Currencies from 'Components/Currencies.component';
 
 export default {
   name: 'App',
   components: {
     Settings,
     Home,
-    Help,
-    Currencies
+    Help
   },
   data() {
     return {
@@ -81,7 +92,9 @@ export default {
         ],
         'admin': [{ icon: 'lock', text: 'AdminPanel', path: '/home' }],
       },
-      numOfTabs: 1
+      numOfTabs: 1,
+      dialog: false,
+      newTabName: ''
     };
   },
   computed: {
@@ -89,7 +102,6 @@ export default {
       'activeUser',
       'tabs',
       'admin',
-      'currencyDialog',
       'darkTheme'
     ]),
     authStatus() {
@@ -98,7 +110,12 @@ export default {
   },
   methods: {
     addNewTab() {
-      this.$store.commit('addTab');
+      this.dialog = true;
+      this.newTabName = '';
+    },
+    renameNewTab() {
+      this.dialog = false;
+      this.$store.commit('addTab', this.newTabName);
     }
   }
 };

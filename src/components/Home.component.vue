@@ -16,18 +16,36 @@
           color="blue darken-2"
           dark
           fab
-          hover
+          open-on-hover
         >
           <v-icon>settings</v-icon>
         </v-btn>
-        <v-btn
-          fab
-          dark
-          small
-          color="green"
-        >
-          <v-icon>edit</v-icon>
-        </v-btn>
+        <v-tooltip left>
+          <v-btn
+            fab
+            dark
+            small
+            color="red"
+            slot="activator"
+            @click="removeTab"
+          >
+            <v-icon>delete</v-icon>
+          </v-btn>
+          <span>Delete tab</span>
+        </v-tooltip>
+        <v-tooltip left>
+          <v-btn
+            fab
+            dark
+            small
+            slot="activator"
+            color="green"
+            @click="renameDialog = true"
+          >
+            <v-icon>edit</v-icon>
+          </v-btn>
+          <span>Rename tab</span>
+        </v-tooltip>
         <v-tooltip left>
           <v-btn
             fab
@@ -41,19 +59,26 @@
           </v-btn>
           <span>New component</span>
         </v-tooltip>
-        <v-btn
-          fab
-          dark
-          small
-          color="red"
-        >
-          <v-icon>delete</v-icon>
-        </v-btn>
       </v-speed-dial>
+      <v-dialog
+        v-model="renameDialog"
+        persistent
+        max-width="300"
+      >
+        <v-text-field
+          autofocus
+          v-model="newTabName"
+          label="Tab name:"
+          required
+          color="indigo"
+        ></v-text-field>
+        <v-btn @click="renameDialog = false">cancel</v-btn>
+        <v-btn @click="renameTab">ok</v-btn>
+      </v-dialog>
       <grid-layout
         :layout="layout"
         :col-num="8"
-        :row-height="defaultWindowHeight"
+        :row-height="100"
         :is-draggable="draggable"
         :is-resizable="resizable"
         :vertical-compact="true"
@@ -108,7 +133,9 @@ export default {
   data: () => ({
     menu: false,
     index: 20,
-    chartData: []
+    chartData: [],
+    renameDialog: false,
+    newTabName: ''
   }),
   computed: {
     ...mapGetters([
@@ -127,6 +154,13 @@ export default {
     },
     removeComponent(id) {
       this.$store.commit('removeComponent', { tabId: this.tabId, id });
+    },
+    removeTab() {
+      this.$store.commit('removeTab', this.tabId);
+    },
+    renameTab() {
+      this.$store.commit('renameTab', { tabId: this.tabId, name: this.newTabName });
+      this.renameDialog = false;
     }
   }
 };
