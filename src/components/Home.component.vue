@@ -65,15 +65,25 @@
         persistent
         max-width="300"
       >
-        <v-text-field
-          autofocus
-          v-model="newTabName"
-          label="Tab name:"
-          required
-          color="indigo"
-        ></v-text-field>
-        <v-btn @click="renameDialog = false">cancel</v-btn>
-        <v-btn @click="renameTab">ok</v-btn>
+        <v-card>
+            <v-card-title>
+              <span class="headline">New Tab Name</span>
+            </v-card-title>
+            <v-card-text>
+              <v-text-field
+                autofocus
+                ref="tabNameInput"
+                v-model="newTabName"
+                label="Tab name:"
+                required
+              ></v-text-field>
+            </v-card-text>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn @click="renameDialog = false">cancel</v-btn>
+              <v-btn @click="renameTab">ok</v-btn>
+            </v-card-actions>
+          </v-card>
       </v-dialog>
       <grid-layout
         :layout="layout"
@@ -128,6 +138,13 @@ export default {
   props: {
     tabId: {
       required: true
+    }
+  },
+  watch: {
+    renameDialog() {
+      this.$nextTick(() => {
+        this.$refs.tabNameInput.focus();
+      });
     }
   },
   data: () => ({

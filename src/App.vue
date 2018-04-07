@@ -39,14 +39,25 @@
           persistent
           max-width="300"
         >
-          <v-text-field
-            autofocus
-            v-model="newTabName"
-            label="Tab name:"
-            required
-          ></v-text-field>
-          <v-btn @click="dialog = false">cancel</v-btn>
-          <v-btn @click="renameNewTab">ok</v-btn>
+          <v-card>
+            <v-card-title>
+              <span class="headline">New Tab Name</span>
+            </v-card-title>
+            <v-card-text>
+              <v-text-field
+                autofocus
+                ref="tabNameInput"
+                v-model="newTabName"
+                label="Tab name:"
+                required
+              ></v-text-field>
+            </v-card-text>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn @click="dialog = false">cancel</v-btn>
+              <v-btn @click="renameNewTab">ok</v-btn>
+            </v-card-actions>
+          </v-card>
         </v-dialog>
         <v-tabs-items class="show-overflow">
           <v-tab-item
@@ -112,6 +123,9 @@ export default {
     addNewTab() {
       this.dialog = true;
       this.newTabName = '';
+      this.$nextTick(() => {
+        this.$refs.tabNameInput.focus();
+      });
     },
     renameNewTab() {
       this.dialog = false;
