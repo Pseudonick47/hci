@@ -77,6 +77,7 @@
       </v-tabs>
     </v-content>
     <v-footer app></v-footer>
+    <wizard></wizard>
   </v-app>
 </template>
 
