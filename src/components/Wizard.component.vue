@@ -265,7 +265,7 @@ export default {
     }
   },
   mounted() {
-    this.showWizard = StorageController.isFirstVisit;
+    this.showWizard = StorageController.isFirstVisit();
   }
 };
 </script>
