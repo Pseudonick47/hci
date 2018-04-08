@@ -1,11 +1,17 @@
 <template>
   <div>
-    <line-chart
-      v-if="chartType === 'line'"
-      :download="true"
+    <app-table
+      v-if="chartType === 'table'"
       :data="data"
-      legend="bottom"
-    ></line-chart>
+      :points="points"
+    ></app-table>
+
+      <line-chart
+        v-if="chartType === 'line'"
+        :download="true"
+        :data="data"
+        legend="bottom"
+      ></line-chart>
 
     <pie-chart
       v-else-if="chartType === 'pie'"
@@ -33,9 +39,13 @@
 
 <script>
 import DataUtil from 'Util/data.util';
+import AppTable from 'Components/Table.component';
 
 export default {
   name: 'chart',
+  components: {
+    AppTable
+  },
   props: {
     chartType: {
       type: String,

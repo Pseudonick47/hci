@@ -205,6 +205,7 @@ export default {
 }
 
 /* Hide scrollbars */
+::-webkit-scrollbar { width: 0 !important }
 
 .hide-scrollbar-outer {
  overflow: hidden;
