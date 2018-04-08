@@ -1,5 +1,6 @@
 import * as _ from 'lodash';
 import Vue from 'vue';
+import DataController from 'Controllers/data.controller';
 
 const state = {
   // tabs: { id: { componentId: 0, layout: [{chartData, chartType, x, y , w, h, i }], name, }, id: .... }
@@ -26,6 +27,13 @@ const mutations = {
   },
   setTabs(state, data) {
     state.tabId = data.tabId || 0;
+
+    _.forEach(data.tabs, (tab) => {
+      _.forEach(tab.layout, (component) => {
+        DataController.monitorSource(component.props.params);
+      });
+    });
+
     Vue.set(state, 'tabs', _.isEmpty(data.tabs) ? state.tabs : data.tabs);
   },
   removeComponent(state, data) {
@@ -39,7 +47,22 @@ const mutations = {
     const tab = state.tabs[tabId];
 
     tab.componentId++;
-    tab.layout.push({ x: 0, y: 0, w: 2, h: 2, i: String(tab.componentId), chartData: [], chartType: 'line' });
+    tab.layout.push({
+      x: 0,
+      y: 0,
+      w: 2,
+      h: 2,
+      i: String(tab.componentId),
+      type: 'chart',
+      props: {
+        type: 'line',
+        params: {
+          function: 'TIME_SERIES_DAILY',
+          symbol: 'AMD',
+        },
+        points: ['high', 'low'],
+      }
+    });
   },
   addTab(state) {
     state.tabId++;

@@ -78,9 +78,9 @@
             <v-icon dark>remove</v-icon>
           </v-btn>
           <chart
-            :chartType="item.chartType"
-            :entity="'AMD'"
-            :interval="5000"
+            :type="item.props.type"
+            :params="item.props.params"
+            :points="item.props.points"
             class="hide-scrollbar-inner"
           ></chart>
         </grid-item>
@@ -93,7 +93,8 @@
 import { mapGetters } from 'vuex';
 import { GridLayout, GridItem } from 'vue-grid-layout';
 import Chart from 'Components/Chart.component';
-import StocksController from 'Controllers/stocks.controller';
+import DataController from 'Controllers/data.controller';
+import { FUNCTIONS } from 'Constants/data.constants';
 
 export default {
   name: 'Home',
@@ -125,16 +126,23 @@ export default {
   methods: {
     addComponent() {
       // ovde ide i modal za biranje tipa ili sta vec
-      this.$store.commit('addComponent', this.tabId);
-      StocksController.monitorStocks({
-        apiFunction: 'TIME_SERIES_DAILY',
+      DataController.monitorSource({
+        function: FUNCTIONS.TIME_SERIES_DAILY,
         symbol: 'AMD',
-        // interval: '1min'
-      }, 5000);
+      });
+
+      this.$store.commit('addComponent', this.tabId);
     },
     removeComponent(id) {
+      try {
+        DataController.stopSourceMonitoring({
+          function: FUNCTIONS.TIME_SERIES_DAILY,
+          symbol: 'AMD',
+        });
+      } catch (error) {
+        console.log(error);
+      }
       this.$store.commit('removeComponent', { tabId: this.tabId, id });
-      StocksController.stopMonitoring('AMD', 5000);
     }
   }
 };

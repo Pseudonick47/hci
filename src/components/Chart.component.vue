@@ -1,30 +1,30 @@
 <template>
   <div>
     <line-chart
-      v-if="chartType === 'line'"
+      v-if="type === 'line'"
       :download="true"
-      :data="chartData"
+      :data="data"
       legend="bottom"
     ></line-chart>
 
     <pie-chart
-      v-else-if="chartType === 'pie'"
-      :data="chartData"
+      v-else-if="type === 'pie'"
+      :data="data"
     ></pie-chart>
 
     <column-chart
-      v-else-if="chartType === 'column'"
-      :data="chartData"
+      v-else-if="type === 'column'"
+      :data="data"
     ></column-chart>
 
     <bar-chart
-      v-else-if="chartType === 'bar'"
-      :data="chartData"
+      v-else-if="type === 'bar'"
+      :data="data"
     ></bar-chart>
 
     <scatter-chart
-      v-else-if="chartType === 'scatter'"
-      :data="chartData"
+      v-else-if="type === 'scatter'"
+      :data="data"
       :xtitle="xTitle"
       :ytitle="yTitle"
     ></scatter-chart>
@@ -32,28 +32,23 @@
 </template>
 
 <script>
-import { POINTS } from 'Constants/stocks.constants';
+import DataUtil from 'Util/data.util';
 
 export default {
   name: 'chart',
   props: {
-    chartType: {
+    type: {
       type: String,
       required: true
     },
-    entity: {
-      type: String,
+    params: {
+      type: Object,
       required: true
-    },
-    interval: {
-      type: Number,
-      required: false,
-      default: 6000
     },
     points: {
       type: Array,
       required: false,
-      default: () => [POINTS.OPEN, POINTS.CLOSE, POINTS.HIGH, POINTS.LOW]
+      default: () => []
     },
     xTitle: {
       type: String,
@@ -67,8 +62,8 @@ export default {
     }
   },
   computed: {
-    chartData() {
-      return this.$store.getters.points(`${this.entity}-${this.interval}`, this.points);
+    data() {
+      return this.$store.getters.points(DataUtil.computeId(this.params), this.points);
     }
   }
 };
