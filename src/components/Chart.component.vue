@@ -1,29 +1,29 @@
 <template>
   <div>
     <line-chart
-      v-if="type === 'line'"
+      v-if="chartType === 'line'"
       :download="true"
       :data="data"
       legend="bottom"
     ></line-chart>
 
     <pie-chart
-      v-else-if="type === 'pie'"
+      v-else-if="chartType === 'pie'"
       :data="data"
     ></pie-chart>
 
     <column-chart
-      v-else-if="type === 'column'"
+      v-else-if="chartType === 'column'"
       :data="data"
     ></column-chart>
 
     <bar-chart
-      v-else-if="type === 'bar'"
+      v-else-if="chartType === 'bar'"
       :data="data"
     ></bar-chart>
 
     <scatter-chart
-      v-else-if="type === 'scatter'"
+      v-else-if="chartType === 'scatter'"
       :data="data"
       :xtitle="xTitle"
       :ytitle="yTitle"
@@ -37,7 +37,7 @@ import DataUtil from 'Util/data.util';
 export default {
   name: 'chart',
   props: {
-    type: {
+    chartType: {
       type: String,
       required: true
     },

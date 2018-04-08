@@ -78,7 +78,7 @@
             <v-icon dark>remove</v-icon>
           </v-btn>
           <chart
-            :type="item.props.type"
+            :chartType="item.props.type"
             :params="item.props.params"
             :points="item.props.points"
             class="hide-scrollbar-inner"
