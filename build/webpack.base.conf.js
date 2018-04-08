@@ -50,6 +50,7 @@ module.exports = {
       'Models': resolve('src/models'),
       'Store': resolve('src/store'),
       'Api': resolve('src/api-services'),
+      'Util': resolve('src/utils'),
     },
   },
   module: {

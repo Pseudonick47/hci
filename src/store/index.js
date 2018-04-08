@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 
-import { auth, charts, settings } from './modules';
+import { auth, charts, settings, data } from './modules';
 
 Vue.use(Vuex);
 
@@ -9,7 +9,8 @@ const storeData = {
   modules: {
     auth,
     charts,
-    settings
+    settings,
+    data,
   },
 };
 
