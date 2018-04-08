@@ -134,14 +134,11 @@ export default {
       this.$store.commit('addComponent', this.tabId);
     },
     removeComponent(id) {
-      try {
-        DataController.stopSourceMonitoring({
-          function: FUNCTIONS.TIME_SERIES_DAILY,
-          symbol: 'AMD',
-        });
-      } catch (error) {
-        console.log(error);
-      }
+      DataController.stopSourceMonitoring({
+        function: FUNCTIONS.TIME_SERIES_DAILY,
+        symbol: 'AMD',
+      });
+
       this.$store.commit('removeComponent', { tabId: this.tabId, id });
     }
   }

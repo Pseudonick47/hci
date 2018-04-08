@@ -37,7 +37,7 @@ const getters = {
     const data = [];
     _.forEach(params, (param) => {
       data.push({
-        name: GeneralUtil.capitalize(param),
+        name: _.capitalize(param),
         data: DataUtil.extractProperty(state.sources[id].data, param)
       });
     });

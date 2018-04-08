@@ -15,8 +15,6 @@ import {
   MAP_PROPERTIES
 } from 'Constants/data.constants.js';
 
-import store from 'Store';
-
 
 export default {
 
@@ -109,7 +107,7 @@ export default {
           // crypto has a parameterized response
           if (prop.indexOf('*') > -1) {
             // grab user defined currency from settings store
-            prop = prop.replace('*', store.getters.currencyValue);
+            prop = prop.replace('*', params.market);
           }
 
           el[el_key] = value[prop];
