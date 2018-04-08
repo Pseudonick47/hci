@@ -86,7 +86,6 @@ import { mapGetters } from 'vuex';
 import Settings from 'Components/Settings.component';
 import Home from 'Components/Home.component';
 import Help from 'Components/Help.component';
-import Currencies from 'Components/Currencies.component';
 import Wizard from 'Components/Wizard.component';
 
 export default {
@@ -95,7 +94,6 @@ export default {
     Settings,
     Home,
     Help,
-    Currencies,
     Wizard
   },
   data() {

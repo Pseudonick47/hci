@@ -248,7 +248,8 @@ export default {
       selectedCurrencies: [],
       companies: [
         { name: 'Facebook', id: 'FB' },
-        { name: 'Microsoft', id: 'MSFT' }],
+        { name: 'Microsoft', id: 'MSFT' }
+        ],
       currencies: [
         { name: 'Euro(EUR)', id: 'EUR' },
         { name: 'United States dollar(USD)', id: 'USD' },
@@ -256,7 +257,8 @@ export default {
         { name: 'Australian dollar(AUD)', id: 'AUD' },
         { name: 'Japanese yen(JPY)', id: 'JPY' },
         { name: 'Pound sterling(GBP)', id: 'GBP' },
-        { name: 'Swiss franc(CHF)', id: 'CHF' }]
+        { name: 'Swiss franc(CHF)', id: 'CHF' }
+        ]
     };
   },
   methods: {
