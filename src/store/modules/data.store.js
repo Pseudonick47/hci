@@ -9,7 +9,6 @@ import Vue from 'vue';
 
 import DataApiService from 'Api/data.service';
 import DataUtil from 'Util/data.util';
-import GeneralUtil from 'Util/general.util';
 
 const state = {
   sources: {},
