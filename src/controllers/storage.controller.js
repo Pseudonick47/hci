@@ -19,7 +19,7 @@ export default {
   },
 
   isFirstVisit() {
-    return Boolean(localStorage.getItem('isVisited'));
+    return Boolean(!localStorage.getItem('isVisited'));
   },
 
   markAsVisited() {

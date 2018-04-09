@@ -33,26 +33,51 @@
       </v-stepper-header>
       <v-stepper-items>
         <v-stepper-content step="1">
-          <v-card class="card">
-            <div class="wiz-div">
-              <img
-              class="wiz-img"
-              src="./../assets/app-ss.jpg"
-              >
-            </div>
+          <v-card>
+            <br><br>
+          </v-card>
+          <v-layout row>
+            <v-card class="card-app-photo">
+              <div class="wiz-div">
+                <img
+                class="wiz-img"
+                src="./../assets/app.png"
+                >
+              </div>
+            </v-card>
+            <v-card class="card-app-info">
+              <p class="wiz-info">
+                <br><br>
+                <b>General settings</b> - Here you can change theme, currency, resize/drag option for components etc.
+                <br><br>
+                <b>Help</b> - If you need any help(basic information, types of view...), you can click on question mark!
+              </p>
+            </v-card>
+          </v-layout>
+          <v-card>
+            <br><br>
           </v-card>
           <v-footer>
-            <v-tooltip right>
-              <v-btn
-                flat
-                @click="closeWizard"
-                left
-                slot="activator"
+            <v-btn
+              @mouseover="alertMessage(true)"
+              @mouseout="alertMessage(false)"
+              @click="closeWizard"
+              left
+              color="red"
+            >
+              <v-icon left>remove_circle</v-icon>skip wizard
+            </v-btn>
+            <div class="alert">
+              <v-alert
+                color="orange"
+                v-model="alert"
+                transition="scale-transition"
+                icon="warning"
               >
-                <v-icon left>remove_circle</v-icon>skip wizard
-              </v-btn>
-              <span>Not recommended!<br>If you skip this, we will choose default layout, companies and currenices.<br>You can change it later.</span>
-            </v-tooltip>
+                Not recommended!<br>If you skip this, we will choose default layout, companies and currencies.<br>You can change it later.
+                <br>
+              </v-alert>
+            </div>
             <v-btn
               color="primary"
               @click="step = 2"
@@ -210,6 +235,15 @@
               </div>
             </v-card>
           </v-layout>
+          <v-card>
+            <v-tooltip right>
+              <v-icon
+                large
+                slot="activator"
+              >info</v-icon>
+              <span>You can change this later!</span>
+            </v-tooltip>
+          </v-card>
           <v-footer>
             <v-btn
               color="success"
@@ -241,7 +275,8 @@ export default {
   name: 'Wizard',
   data() {
     return {
-      showWizard: true,
+      showWizard: false,
+      alert: false,
       step: 1,
       layout: 'default-layout',
       selectedCompanies: [],
@@ -264,15 +299,28 @@ export default {
   methods: {
     closeWizard() {
       this.showWizard = false;
+      StorageController.markAsVisited();
+    },
+    alertMessage(value) {
+      this.alert = value;
     }
   },
   mounted() {
-    this.showWizard = StorageController.isFirstVisit;
+    this.showWizard = StorageController.isFirstVisit();
   }
 };
 </script>
 
 <style scoped>
+
+.alert {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  margin-top: -100px;
+  margin-left: -200px;
+  border: 10px outset white;
+}
 
 .container {
   border: 1px outset white;
@@ -289,12 +337,13 @@ export default {
 }
 
 .wiz-img {
-  width: 50%;
-  height: 50%;
+  width: 100%;
+  height: 100%;
+  align-content: left;
 }
 
 .wiz-div {
-  text-align: center;
+  height: 500px;
 }
 
 #left, #middle, #right, #left-half, #right-half {
@@ -322,6 +371,11 @@ p {
   text-align: center;
 }
 
+p.wiz-info {
+  font-size: large;
+  text-align: left;
+}
+
 .mini-title {
   font-size: 28px;
   text-align: center;
@@ -335,6 +389,17 @@ div img {
 
 .card {
   width: 100%;
+  height: 100%;
+}
+
+.card-app-photo {
+  width: 80%;
+  height: 100%;
+}
+
+.card-app-info {
+  padding: 10px;
+  width: 30%;
   height: 100%;
 }
 
