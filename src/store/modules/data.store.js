@@ -20,7 +20,7 @@ const getters = {
    *
    * @param {Object} state Store state.
    * @param {string} id    Source ID.
-   * @return {bool}       True if source exists, false otherwise.
+   * @return {bool}        True if source exists, false otherwise.
    */
   hasSource: (state) => (id) => _.has(state.sources, id),
 
@@ -30,7 +30,7 @@ const getters = {
    * @param {Object} state  Store state.
    * @param {string} id     Source id.
    * @param {Array}  params Array of parameters of interest.
-   * @return {Array}       Array of extracted points grouped by parameter.
+   * @return {Array}        Array of extracted points grouped by parameter.
    */
   points: (state) => (id, params) => {
     const data = [];

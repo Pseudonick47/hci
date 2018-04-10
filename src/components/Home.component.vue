@@ -53,7 +53,7 @@
             small
             color="indigo"
             slot="activator"
-            @click="addComponent"
+            @click="dataSourceDialog = true"
           >
             <v-icon>add</v-icon>
           </v-btn>
@@ -85,6 +85,12 @@
             </v-card-actions>
           </v-card>
       </v-dialog>
+      <data-source-dialog
+        :model="dataSourceDialog"
+        @closeDataSourceDialog="dataSourceDialog = false"
+        @dataSourceSelected="addComponent"
+      >
+      </data-source-dialog>
       <grid-layout
         :layout="layout"
         :col-num="8"
@@ -127,16 +133,22 @@
 <script>
 import { mapGetters } from 'vuex';
 import { GridLayout, GridItem } from 'vue-grid-layout';
+
 import Chart from 'Components/Chart.component';
+import DataSourceDialog from 'Components/DataSource.component';
+
 import DataController from 'Controllers/data.controller';
+
 import { FUNCTIONS } from 'Constants/data.constants';
+
 
 export default {
   name: 'Home',
   components: {
     GridLayout,
     GridItem,
-    Chart
+    Chart,
+    DataSourceDialog,
   },
   props: {
     tabId: {
@@ -155,6 +167,7 @@ export default {
     index: 20,
     chartData: [],
     renameDialog: false,
+    dataSourceDialog: false,
     newTabName: ''
   }),
   computed: {
@@ -168,14 +181,14 @@ export default {
     }
   },
   methods: {
-    addComponent() {
+    addComponent(params) {
+      console.log('Params', params);
+      const id = this.tabId;
+      const { dataSource, dataView } = params;
       // ovde ide i modal za biranje tipa ili sta vec
-      DataController.monitorSource({
-        function: FUNCTIONS.TIME_SERIES_DAILY,
-        symbol: 'AMD',
-      });
-
-      this.$store.commit('addComponent', this.tabId);
+      DataController.monitorSource(dataSource.apiParams);
+      this.$store.commit('addComponent', { tabId: id, dataSource, dataView });
+      this.$store.commit('updateLayoutStorage');
     },
     removeComponent(id) {
       DataController.stopSourceMonitoring({
@@ -184,6 +197,7 @@ export default {
       });
 
       this.$store.commit('removeComponent', { tabId: this.tabId, id });
+      this.$store.commit('updateLayoutStorage');
     },
     removeTab() {
       this.$store.commit('removeTab', this.tabId);

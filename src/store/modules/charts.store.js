@@ -43,9 +43,9 @@ const mutations = {
     }
     state.tabs[data.tabId].layout.splice(index, 1);
   },
-  addComponent(state, tabId) {
-    const tab = state.tabs[tabId];
-
+  addComponent(state, payload) {
+    const tab = state.tabs[payload.tabId];
+    console.log(payload);
     tab.componentId++;
     tab.layout.push({
       x: 0,
@@ -53,14 +53,11 @@ const mutations = {
       w: 2,
       h: 2,
       i: String(tab.componentId),
-      type: 'chart',
+      type: payload.dataView.type,
       props: {
-        type: 'line',
-        params: {
-          function: 'TIME_SERIES_DAILY',
-          symbol: 'AMD',
-        },
-        points: ['high', 'low'],
+        type: payload.dataView.subtype,
+        params: payload.dataSource.apiParams,
+        points: payload.dataSource.points,
       }
     });
   },
