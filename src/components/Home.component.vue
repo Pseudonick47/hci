@@ -27,7 +27,7 @@
             small
             color="red"
             slot="activator"
-            @click="removeTab"
+            @click="sureDeleteTabDialog = true"
           >
             <v-icon>delete</v-icon>
           </v-btn>
@@ -61,6 +61,22 @@
         </v-tooltip>
       </v-speed-dial>
       <v-dialog
+        v-model="sureDeleteTabDialog"
+        persistent
+        max-width="300px"
+      >
+        <v-card>
+          <v-card-text>
+            Delete this tab?
+          </v-card-text>
+        </v-card>
+        <v-card-actions>
+          <v-btn @click="removeTab">yes</v-btn>
+          <v-spacer></v-spacer>
+          <v-btn @click="sureDeleteTabDialog = false">no</v-btn>
+        </v-card-actions>
+      </v-dialog>
+      <v-dialog
         v-model="renameDialog"
         persistent
         max-width="300"
@@ -76,6 +92,8 @@
                 v-model="newTabName"
                 label="Tab name:"
                 required
+                @keyup.enter="renameTab"
+                @keyup.esc="renameDialog = false"
               ></v-text-field>
             </v-card-text>
             <v-card-actions>
@@ -108,10 +126,26 @@
             fab
             small
             color="red"
-            @click="removeComponent(item.i)"
+            @click="sureDeleteComponentDialog = true"
           >
             <v-icon dark>remove</v-icon>
           </v-btn>
+          <v-dialog
+            v-model="sureDeleteComponentDialog"
+            persistent
+            max-width="300px"
+          >
+            <v-card>
+              <v-card-text>
+                Delete this component?
+              </v-card-text>
+            </v-card>
+            <v-card-actions>
+              <v-btn @click="removeComponent(item.i)">yes</v-btn>
+              <v-spacer></v-spacer>
+              <v-btn @click="sureDeleteComponentDialog = false">no</v-btn>
+            </v-card-actions>
+          </v-dialog>
           <chart
             :chartType="item.props.type"
             :params="item.props.params"
@@ -155,6 +189,8 @@ export default {
     index: 20,
     chartData: [],
     renameDialog: false,
+    sureDeleteTabDialog: false,
+    sureDeleteComponentDialog: false,
     newTabName: ''
   }),
   computed: {

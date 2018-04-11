@@ -141,14 +141,23 @@
         </v-stepper-content>
         <v-stepper-content step="3">
           <v-card class="card">
-            <div id="left-half">
+            <p class="layoutChosen">Layout chosen: {{ layout }}</p>
+            <div
+              id="left-half"
+              v-ripple
+              @click="layout = 'default-layout'"
+            >
               <p class="mini-title">Default layout</p>
               <hr>
               <p height="5px"></p>
               <p><img src="./../assets/default-layout.jpg"></p>
               <p>Can I help you? Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce facilisis, nulla tristique lobortis imperdiet, libero ipsum consequat ligula, non congue nisl augue nec turpis. Mauris rhoncus tristique arcu nec consequat.</p>
             </div>
-            <div id="right-half">
+            <div
+              id="right-half"
+              v-ripple
+              @click="layout = 'advanced-layout'"
+            >
               <p class="mini-title">Advanced layout</p>
               <hr>
               <p height="5px"></p>
@@ -159,22 +168,6 @@
           <v-card height="20px"></v-card>
           <hr>
           <v-card>
-            <p class="text">Please, choose layout:</p>
-            <v-radio-group
-              v-model="layout"
-              row
-            >
-              <v-radio
-                label="Default layout"
-                value="default-layout"
-                color="orange"
-              ></v-radio>
-              <v-radio
-                label="Advanced layout"
-                value="advanced-layout"
-                color="orange">
-              </v-radio>
-            </v-radio-group>
             <v-tooltip right>
               <v-icon
                 large
@@ -194,7 +187,7 @@
             </v-btn>
             <v-btn
               color="primary"
-              @click="step = 4"
+              @click="companiesCurrenciesStep"
               right
               absolute
             >next</v-btn>
@@ -303,6 +296,13 @@ export default {
     },
     alertMessage(value) {
       this.alert = value;
+    },
+    companiesCurrenciesStep() {
+      if (this.layout === 'default-layout') {
+        this.step = 4;
+      } else {
+        this.closeWizard();
+      }
     }
   },
   mounted() {
@@ -312,6 +312,11 @@ export default {
 </script>
 
 <style scoped>
+.layoutChosen {
+  font-size: 25px;
+  text-align: center;
+  border: 3px outset cornflowerblue;
+}
 
 .alert {
   position: fixed;
@@ -364,6 +369,10 @@ export default {
 
 #left-half, #right-half {
   width: 47%;
+}
+
+#left-half:hover, #right-half:hover {
+  background-color: #43A047;
 }
 
 p {

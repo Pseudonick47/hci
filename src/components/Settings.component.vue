@@ -11,22 +11,10 @@
           slot="activator"
         >Settings</v-btn>
         <v-card>
+          <v-toolbar color="light-blue lighten-2">
+            <v-toolbar-title>General settings</v-toolbar-title>
+          </v-toolbar>
           <v-list>
-            <v-subheader>Data options</v-subheader>
-            <v-list-tile>
-              <v-list-tile-action>
-                <v-text-field
-                  label="Refresh frequency"
-                  value="00:01:00"
-                  box
-                  type="time-with-seconds"
-                  color="black"
-                ></v-text-field>
-              </v-list-tile-action>
-            </v-list-tile>
-            <v-list-tile>
-            </v-list-tile>
-            <v-divider></v-divider>
             <v-list-tile>
               <v-subheader>Change currency</v-subheader>
               <v-btn
@@ -55,23 +43,6 @@
               </v-list-tile-action>
               <v-list-tile-title>Resizable windows</v-list-tile-title>
             </v-list-tile>
-            <!--
-            <v-list-tile>
-              <v-layout row>
-                <v-list-tile-action>
-                  <v-text-field
-                    label="Default height"
-                    v-model="defaultWindowHeight"
-                    box
-                    type="number"
-                    color="black"
-                  ></v-text-field>
-                </v-list-tile-action>
-              </v-layout>
-            </v-list-tile>
-            -->
-            <v-list-tile>
-            </v-list-tile>
             <v-divider></v-divider>
             <v-subheader>Theme options</v-subheader>
             <v-list-tile>
@@ -88,7 +59,7 @@
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn
-                flat
+                color="primary"
                 @click="settingsDialog = false"
               >OK</v-btn>
             </v-card-actions>
@@ -107,7 +78,9 @@
           <v-card>
             <v-card-title>Select Currency</v-card-title>
             <v-divider></v-divider>
-            <v-card-text style="height: 300px;">
+            <v-card-text
+              style="height: 300px;"
+              @keyup.enter="currencyDialog = false">
               <v-radio-group
                 v-model="currencyValue"
                 column
@@ -166,14 +139,6 @@ export default {
     };
   },
   computed: {
-    /* defaultWindowHeight: {
-      get() {
-        return this.$store.getters.defaultWindowHeight;
-      },
-      set(value) {
-        this.$store.commit('changeDefaultWindowHeight', value);
-      }
-    }, */
     darkTheme: {
       get() {
         return this.$store.getters.darkTheme;

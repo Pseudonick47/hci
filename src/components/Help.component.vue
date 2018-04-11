@@ -74,14 +74,14 @@
 						<v-layout column>
 							<v-layout row>
 								<v-btn
-									medium
+									fab
+									small
 									color="primary"
 									@click="backOnHelpWindow"
 								>
-									<v-icon left>
+									<v-icon>
 										arrow_back
 									</v-icon>
-									back
 								</v-btn>
 								<h3	class="display-1">Basic information</h3>
 								<v-btn
@@ -163,14 +163,14 @@
 						<v-layout column>
 							<v-layout row>
 								<v-btn
-									medium
+									small
+									fab
 									color="primary"
 									@click="backOnHelpWindow"
 								>
-									<v-icon left>
+									<v-icon>
 										arrow_back
 									</v-icon>
-									back
 								</v-btn>
 								<h3 class="display-1">Types of view</h3>
 								<v-btn
