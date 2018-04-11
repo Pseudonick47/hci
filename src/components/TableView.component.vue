@@ -22,7 +22,7 @@
 import * as _ from 'lodash';
 
 export default {
-  name: 'app-table',
+  name: 'table-view',
   props: {
     data: {
       required: true

@@ -45,7 +45,6 @@ const mutations = {
   },
   addComponent(state, payload) {
     const tab = state.tabs[payload.tabId];
-    console.log(payload);
     tab.componentId++;
     tab.layout.push({
       x: 0,

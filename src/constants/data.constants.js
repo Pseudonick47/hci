@@ -7,22 +7,82 @@
 
 const API_KEY = 'P7S43A98HP26MCVF';
 
-const COMPANIES = {
-    AMD: 'AMD',
-    INTEL: 'INTL',
-    APPLE: 'AAPL',
-    MICROSOFT: 'MSFT',
-    ALPHABET: 'GOOG',
-    SONY: 'SNE'
-};
+const COMPANIES = [
+    {
+        name: 'Advanced Micro Devices, Inc.',
+        symbol: 'AMD',
+    },
+    {
+        name: 'Intel Corporation',
+        symbol: 'INTC',
+    },
+    {
+        name: 'Apple Inc.',
+        symbol: 'AAPL',
+    },
+    {
+        name: 'Microsoft Corporation',
+        symbol: 'MSFT',
+    },
+    {
+        name: 'Alphabet Inc.',
+        symbol: 'GOOG',
+    },
+];
 
-const DIGITAL_CURRENCIES = {
-    BITCOIN: 'BTC',
-    ETHEREUM: 'ETH',
-    RIPPLE: 'XRP',
-    BITCOIN_CASH: 'BTC',
-    LITECOIN: 'LTC',
-};
+const DIGITAL_CURRENCIES = [
+    {
+        name: 'Bitcoin',
+        symbol: 'BTC',
+    },
+    {
+        name: 'Ethereum',
+        symbol: 'ETH',
+    },
+    {
+        name: 'Ripple',
+        symbol: 'XRP',
+    },
+    {
+        name: 'Bitcoin Cash',
+        symbol: 'BCH',
+    },
+    {
+        name: 'Litecoin',
+        symbol: 'LTC',
+    },
+];
+
+const PHYSICAL_CURRENCIES = [
+    {
+        name: 'United States Dollar',
+        symbol: 'USD',
+    },
+    {
+        name: 'Euro',
+        symbol: 'EUR',
+    },
+    {
+        name: 'Serbian Dinar',
+        symbol: 'RSD',
+    },
+    {
+        name: 'Australian Dollar',
+        symbol: 'AUD',
+    },
+    {
+        name: 'Japanese yen',
+        symbol: 'JPY',
+    },
+    {
+        name: 'British Pound Sterling',
+        symbol: 'GBP',
+    },
+    {
+        name: 'Swiss Franc',
+        symbol: 'CHF',
+    },
+];
 
 const FUNCTIONS = {
     TIME_SERIES_INTRADAY: 'TIME_SERIES_INTRADAY',
@@ -168,6 +228,7 @@ export {
     API_KEY,
     COMPANIES,
     DIGITAL_CURRENCIES,
+    PHYSICAL_CURRENCIES,
     FUNCTIONS,
     PARAMETERS,
     REQUIRED_PARAMS,

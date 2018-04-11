@@ -1,35 +1,35 @@
 <template>
   <div>
-    <app-table
-      v-if="chartType === 'table'"
+    <table-view
+      v-if="view === 'table-view'"
       :data="data"
       :points="points"
-    ></app-table>
+    ></table-view>
 
-      <line-chart
-        v-if="chartType === 'line'"
-        :download="true"
-        :data="data"
-        legend="bottom"
-      ></line-chart>
+    <line-chart
+      v-if="view === 'line-chart'"
+      :download="true"
+      :data="data"
+      legend="bottom"
+    ></line-chart>
 
     <pie-chart
-      v-else-if="chartType === 'pie'"
+      v-else-if="view === 'pie-chart'"
       :data="data"
     ></pie-chart>
 
     <column-chart
-      v-else-if="chartType === 'column'"
+      v-else-if="view === 'column-chart'"
       :data="data"
     ></column-chart>
 
     <bar-chart
-      v-else-if="chartType === 'bar'"
+      v-else-if="view === 'bar-chart'"
       :data="data"
     ></bar-chart>
 
     <scatter-chart
-      v-else-if="chartType === 'scatter'"
+      v-else-if="view === 'scatter-chart'"
       :data="data"
       :xtitle="xTitle"
       :ytitle="yTitle"
@@ -39,15 +39,15 @@
 
 <script>
 import DataUtil from 'Util/data.util';
-import AppTable from 'Components/Table.component';
+import TableView from 'Components/TableView.component';
 
 export default {
-  name: 'chart',
+  name: 'data-frame',
   components: {
-    AppTable
+    TableView
   },
   props: {
-    chartType: {
+    view: {
       type: String,
       required: true
     },

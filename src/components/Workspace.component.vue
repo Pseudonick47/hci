@@ -118,12 +118,12 @@
           >
             <v-icon dark>remove</v-icon>
           </v-btn>
-          <chart
-            :chartType="item.props.type"
+          <data-frame
+            :view="item.props.type"
             :params="item.props.params"
             :points="item.props.points"
             class="hide-scrollbar-inner"
-          ></chart>
+          ></data-frame>
         </grid-item>
       </grid-layout>
     </div>
@@ -134,20 +134,17 @@
 import { mapGetters } from 'vuex';
 import { GridLayout, GridItem } from 'vue-grid-layout';
 
-import Chart from 'Components/Chart.component';
-import DataSourceDialog from 'Components/DataSource.component';
+import DataFrame from 'Components/DataFrame.component';
+import DataSourceDialog from 'Components/DataSourceDialog.component';
 
 import DataController from 'Controllers/data.controller';
 
-import { FUNCTIONS } from 'Constants/data.constants';
-
-
 export default {
-  name: 'Home',
+  name: 'Workspace',
   components: {
     GridLayout,
     GridItem,
-    Chart,
+    DataFrame,
     DataSourceDialog,
   },
   props: {
@@ -182,19 +179,17 @@ export default {
   },
   methods: {
     addComponent(params) {
-      console.log('Params', params);
-      const id = this.tabId;
       const { dataSource, dataView } = params;
       // ovde ide i modal za biranje tipa ili sta vec
       DataController.monitorSource(dataSource.apiParams);
-      this.$store.commit('addComponent', { tabId: id, dataSource, dataView });
+      this.$store.commit('addComponent', { tabId: this.tabId, dataSource, dataView });
       this.$store.commit('updateLayoutStorage');
     },
     removeComponent(id) {
-      DataController.stopSourceMonitoring({
-        function: FUNCTIONS.TIME_SERIES_DAILY,
-        symbol: 'AMD',
-      });
+      // DataController.stopSourceMonitoring({
+      //   function: FUNCTIONS.TIME_SERIES_DAILY,
+      //   symbol: 'AMD',
+      // });
 
       this.$store.commit('removeComponent', { tabId: this.tabId, id });
       this.$store.commit('updateLayoutStorage');
