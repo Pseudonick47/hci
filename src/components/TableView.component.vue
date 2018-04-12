@@ -27,9 +27,6 @@ export default {
     data: {
       required: true
     },
-    points: {
-      required: true
-    }
   },
   computed: {
     headers() {
@@ -39,30 +36,32 @@ export default {
         text: 'Date',
         value: 'date'
       });
-      _.forEach(this.points, (point) => {
+      _.forEach(this.data, (source) => {
         headers.push({
-          text: _.upperFirst(point),
-          value: point
+          text: source.name,
+          value: _.snakeCase(source.name),
         });
       });
 
       return headers;
     },
     items() {
-      const mappedData = [];
+      if (_.isEmpty(this.data)) {
+        return [];
+      }
 
-      _.forOwn(this.data[0].data, (val, date) => {
-        const row = {};
+      // extract columns and convert them into snake case
+      const cols = _.concat(_.map(this.data, (e) => _.snakeCase(e.name)), 'date');
 
-        row['date'] = date;
-        _.forEach(this.data, (nesto) => {
-          row[_.toLower(nesto.name)] = nesto.data[date];
-        });
+      const dates = _.keys(this.data[0].data);
+      const values = _.zip(..._.map(this.data, (e) => _.toArray(e.data)));
 
-        mappedData.push(row);
-      });
+      // data is now grouped by date
+      const combinedData = _.map(_.zip(values, dates), (e) => _.flatten(e));
 
-      return mappedData;
+      // create rows as objects where key is a column name and values is the
+      // data
+      return _.map(combinedData, (e) => _.zipObject(cols, e));
     }
   },
   data: () => ({

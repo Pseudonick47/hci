@@ -45,7 +45,7 @@
                 <v-select
                   :items="updateFrequencies"
                   v-model="updateFrequencyModel"
-                  label="How often would you like us to update values?"
+                  label="How often would you like us to update stock values?"
                 ></v-select>
               </v-layout>
               <v-layout row>
@@ -54,10 +54,52 @@
                   v-model="viewModel"
                   item-text="name"
                   item-value="view"
-                  label="How would you like to see values?"
+                  label="How would you like to see them?"
                   return-object
                 ></v-select>
               </v-layout>
+
+              <v-layout row>
+                <v-expansion-panel
+                  class="elevation-0"
+                  expand
+                  popup
+                >
+                  <v-expansion-panel-content
+                    :value="true"
+                    hide-actions
+                  >
+                    <div
+                      slot="header"
+                    >
+                      <v-radio-group
+                        v-model="companyPointTypeModel"
+                        label="What would you like to see?"
+                        row
+                        @click.native="expandStockPoints($event)"
+                      >
+                        <v-radio label="Values" value="values" ></v-radio>
+                        <v-radio label="Volume" value="volume"></v-radio>
+                      </v-radio-group>
+                    </div>
+                    <v-container fluid py-0 my-0>
+                      <v-layout row wrap px-3>
+                        <v-flex
+                          v-for="(point, i) in companyPoints"
+                          :key="i"
+                          xs6 sm3
+                        >
+                          <v-checkbox
+                            v-model="companyPointsModel[point]"
+                            :label="point"
+                          ></v-checkbox>
+                        </v-flex>
+                      </v-layout>
+                    </v-container>
+                  </v-expansion-panel-content>
+                </v-expansion-panel>
+              </v-layout>
+
               <v-layout row mt-3 justify-space-between>
                 <v-flex xs5 sm4 md3 lg3 xl3>
                   <v-btn
@@ -202,55 +244,13 @@ import {
   DIGITAL_CURRENCIES,
   PHYSICAL_CURRENCIES,
   FUNCTIONS,
+  DATA_VIEWS,
+  UPDATE_FREQUENCIES,
+  FREQUENCY_TO_STOCK_FUNCTION,
+  FREQUENCY_TO_DC_FUNCTION
 } from 'Constants/data.constants';
 
-const UPDATE_FREQUENCIES = {
-  REALTIME: 'Real-time (approx. 1 min)',
-  DAILY: 'Daily',
-  WEEKLY: 'Weekly',
-  MONTHLY: 'Monthly',
-};
-
-const FREQUENCY_TO_STOCK_FUNCTION = {};
-
-FREQUENCY_TO_STOCK_FUNCTION[UPDATE_FREQUENCIES.REALTIME] = FUNCTIONS.TIME_SERIES_INTRADAY;
-FREQUENCY_TO_STOCK_FUNCTION[UPDATE_FREQUENCIES.DAILY] = FUNCTIONS.TIME_SERIES_DAILY;
-FREQUENCY_TO_STOCK_FUNCTION[UPDATE_FREQUENCIES.WEEKLY] = FUNCTIONS.TIME_SERIES_WEEKLY;
-FREQUENCY_TO_STOCK_FUNCTION[UPDATE_FREQUENCIES.MONTHLY] = FUNCTIONS.TIME_SERIES_MONTHLY;
-
-const FREQUENCY_TO_DC_FUNCTION = {};
-
-FREQUENCY_TO_DC_FUNCTION[UPDATE_FREQUENCIES.REALTIME] = FUNCTIONS.DIGITAL_CURRENCY_INTRADAY;
-FREQUENCY_TO_DC_FUNCTION[UPDATE_FREQUENCIES.DAILY] = FUNCTIONS.DIGITAL_CURRENCY_DAILY;
-FREQUENCY_TO_DC_FUNCTION[UPDATE_FREQUENCIES.WEEKLY] = FUNCTIONS.DIGITAL_CURRENCY_WEEKLY;
-FREQUENCY_TO_DC_FUNCTION[UPDATE_FREQUENCIES.MONTHLY] = FUNCTIONS.DIGITAL_CURRENCY_MONTHLY;
-
-const DATA_VIEWS = [
-  {
-    name: 'Line chart',
-    view: 'line-chart',
-  },
-  {
-    name: 'Pie chart',
-    view: 'pie-chart',
-  },
-  {
-    name: 'Column chart',
-    view: 'column-chart',
-  },
-  {
-    name: 'Bar chart',
-    view: 'bar-chart',
-  },
-  {
-    name: 'Scatter chart',
-    view: 'scatter-chart',
-  },
-  {
-    name: 'Table',
-    view: 'table-view',
-  },
-];
+const COMPANY_POINTS = ['Open', 'Close', 'High', 'Low'].sort();
 
 export default {
   name: 'data-source-dialog',
@@ -269,13 +269,17 @@ export default {
       companyModel: [],
       companyFirstInput: true,
       companyButtonDisabled: true,
+      companyPointTypeModel: 'values',
+      companyPoints: COMPANY_POINTS,
+      companyPointsModel: _.fromPairs(_.map(COMPANY_POINTS, (e) => [e, true])),
+      companyPointsExpanded: true,
 
       digitalCurrencies: DIGITAL_CURRENCIES,
       digitalCurrencyModel: [],
       digitalCurrencyFirstInput: true,
       digitalCurrencyButtonDisabled: true,
 
-      exchangeCurrencies: _.union(DIGITAL_CURRENCIES, PHYSICAL_CURRENCIES),
+      exchangeCurrencies: _.concat(DIGITAL_CURRENCIES, PHYSICAL_CURRENCIES),
       exchangeFromCurrencyModel: null,
       exchangeToCurrencyModel: null,
       exchangeFromCurrencyFirstInput: true,
@@ -304,6 +308,8 @@ export default {
       this.companyModel = [];
       this.companyFirstInput = true;
       this.compayButtonDisabled = true;
+      this.companyPoints = COMPANY_POINTS;
+      this.companyPointsModel = _.fromPairs(_.map(COMPANY_POINTS, (e) => [e, true]));
 
       this.digitalCurrencyModel = [];
       this.digitalCurrencyFirstInput = true;
@@ -325,12 +331,39 @@ export default {
     },
 
     companySelected() {
-      console.log('Companies', {
-        view: this.viewModel.view,
-        source: {
-          function: FREQUENCY_TO_STOCK_FUNCTION[this.updateFrequencyModel],
-          symbols: _.map(this.companyModel, (el) => el.symbol),
+      const func = FREQUENCY_TO_STOCK_FUNCTION[this.updateFrequencyModel];
+
+      const requests = [];
+
+      _.forEach(this.companyModel, (company) => {
+        const request = {
+          function: func,
+          symbol: company.symbol,
+        };
+
+        if (func === FUNCTIONS.TIME_SERIES_INTRADAY) {
+          request.interval = '1min';
+        }
+
+        requests.push(request);
+      });
+
+      let points = [];
+
+      if (this.companyPointTypeModel === 'volume') {
+        points.push('Volume');
+      } else {
+        points = _.filter(_.flatMap(this.companyPointsModel, (v, k) => {
+          return v ? k : null;
+        }));
+      }
+
+      this.$emit('dataSourceSelected', {
+        view: {
+          name: this.viewModel.view,
+          points
         },
+        requests
       });
     },
 
@@ -354,7 +387,20 @@ export default {
         },
       });
     },
-
+    expandStockPoints(e) {
+      if (this.companyPointTypeModel === 'values' && this.companyPointsExpanded) {
+        e.stopPropagation();
+      } else if (this.companyPointTypeModel === 'values' && !this.companyPointsExpanded) {
+        this.companyPointsExpanded = true;
+      } else if (this.companyPointTypeModel === 'volume' && this.companyPointsExpanded) {
+        this.companyPointsExpanded = false;
+      } else {
+        e.stopPropagation();
+      }
+    },
+    test(e) {
+      e.preventDefault();
+    },
   },
   computed: {
     companyRules() {
@@ -366,4 +412,3 @@ export default {
   },
 };
 </script>
-

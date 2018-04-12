@@ -119,9 +119,9 @@
             <v-icon dark>remove</v-icon>
           </v-btn>
           <data-frame
-            :view="item.props.type"
-            :params="item.props.params"
-            :points="item.props.points"
+            :view="item.view.name"
+            :sources="getSources(item.requests)"
+            :points="item.view.points"
             class="hide-scrollbar-inner"
           ></data-frame>
         </grid-item>
@@ -134,13 +134,18 @@
 import { mapGetters } from 'vuex';
 import { GridLayout, GridItem } from 'vue-grid-layout';
 
+import * as _ from 'lodash';
+
 import DataFrame from 'Components/DataFrame.component';
 import DataSourceDialog from 'Components/DataSourceDialog.component';
 
 import DataController from 'Controllers/data.controller';
 
+import DataUtil from 'Util/data.util';
+
+
 export default {
-  name: 'Workspace',
+  name: 'workspace',
   components: {
     GridLayout,
     GridItem,
@@ -178,19 +183,16 @@ export default {
     }
   },
   methods: {
-    addComponent(params) {
-      const { dataSource, dataView } = params;
-      // ovde ide i modal za biranje tipa ili sta vec
-      DataController.monitorSource(dataSource.apiParams);
-      this.$store.commit('addComponent', { tabId: this.tabId, dataSource, dataView });
+    addComponent(payload) {
+      const { view, requests } = payload;
+
+      DataController.startMonitoring(requests);
+
+      this.$store.commit('addComponent', { tabId: this.tabId, requests, view });
       this.$store.commit('updateLayoutStorage');
     },
-    removeComponent(id) {
-      // DataController.stopSourceMonitoring({
-      //   function: FUNCTIONS.TIME_SERIES_DAILY,
-      //   symbol: 'AMD',
-      // });
 
+    removeComponent(id) {
       this.$store.commit('removeComponent', { tabId: this.tabId, id });
       this.$store.commit('updateLayoutStorage');
     },
@@ -200,6 +202,9 @@ export default {
     renameTab() {
       this.$store.commit('renameTab', { tabId: this.tabId, name: this.newTabName });
       this.renameDialog = false;
+    },
+    getSources(requests) {
+      return _.map(requests, DataUtil.computeSourceId);
     }
   }
 };

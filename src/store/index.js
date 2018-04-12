@@ -1,14 +1,14 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 
-import { auth, charts, settings, data } from './modules';
+import { auth, workspaces, settings, data } from './modules';
 
 Vue.use(Vuex);
 
 const storeData = {
   modules: {
     auth,
-    charts,
+    workspaces,
     settings,
     data,
   },

@@ -3,7 +3,6 @@
     <table-view
       v-if="view === 'table-view'"
       :data="data"
-      :points="points"
     ></table-view>
 
     <line-chart
@@ -38,7 +37,7 @@
 </template>
 
 <script>
-import DataUtil from 'Util/data.util';
+
 import TableView from 'Components/TableView.component';
 
 export default {
@@ -51,8 +50,8 @@ export default {
       type: String,
       required: true
     },
-    params: {
-      type: Object,
+    sources: {
+      type: Array,
       required: true
     },
     points: {
@@ -73,7 +72,7 @@ export default {
   },
   computed: {
     data() {
-      return this.$store.getters.points(DataUtil.computeId(this.params), this.points);
+      return this.$store.getters.data(this.sources, this.points);
     }
   }
 };

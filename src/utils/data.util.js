@@ -35,19 +35,19 @@ export default {
   /**
    * Checks if all required parameters for data acquisition are present.
    *
-   * @param {Object} params Parameters used for data acquisition.
-   * @return {bool}         True if parameters are valid, false otherwise.
+   * @param {Object} request  API request used for data acquisition.
+   * @return {bool}           True if parameters are valid, false otherwise.
    */
-  validateParams(params) {
+  validateRequest(request) {
     // function is mandatory for all params
-    if (!_.has(params, 'function')) {
+    if (!_.has(request, 'function')) {
       return false;
     }
 
     let valid = true;
     // check if all required params in respect to function are present
-    _.forEach(REQUIRED_PARAMS[params.function], (param) => {
-      if (!_.has(params, param)) {
+    _.forEach(REQUIRED_PARAMS[request.function], (param) => {
+      if (!_.has(request, param)) {
         valid = false;
         // exit loop
         return false;
@@ -66,7 +66,7 @@ export default {
    * @param {Object} params Parameters used for data acquisition.
    * @return {string}       Generated ID.
    */
-  computeId(params) {
+  computeSourceId(params) {
     let id = '';
 
     // grab what parameters to use for ID generation
@@ -146,9 +146,10 @@ export default {
    * @return {Object}           Collection of extracted properties.
    */
   extractProperty(collection, prop) {
+    const p = _.toLower(prop);
     const data = {};
     _.forOwn(collection, (value, key) => {
-      data[key] = value[prop];
+      data[key] = value[p];
     });
     return data;
   },
