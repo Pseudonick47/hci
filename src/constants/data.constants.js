@@ -224,7 +224,7 @@ const CRYPTO_POINTS = {
     HIGH: 'high',
     LOW: 'low',
     VOLUME: 'volume',
-    MARKET_CAP: 'market cap',
+    MARKET_CAP: 'market_cap',
     PRICE: 'price',
 };
 

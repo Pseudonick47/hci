@@ -78,7 +78,7 @@ export default {
   },
 
   /**
-   * Remaps properties acquired from Aplha Vantage API to properties that we
+   * Remaps properties acquired from Alpha Vantage API to properties that we
    * use.
    *
    * Properties are remaped in respect to function used.
@@ -146,7 +146,7 @@ export default {
    * @return {Object}           Collection of extracted properties.
    */
   extractProperty(collection, prop) {
-    const p = _.toLower(prop);
+    const p = _.snakeCase(prop);
     const data = {};
     _.forOwn(collection, (value, key) => {
       data[key] = value[p];

@@ -3,6 +3,7 @@
     <table-view
       v-if="view === 'table-view'"
       :data="data"
+      style="height:100%;width:100%"
     ></table-view>
 
     <line-chart
@@ -10,6 +11,7 @@
       :download="true"
       :data="data"
       legend="bottom"
+      height="85%"
     ></line-chart>
 
     <pie-chart

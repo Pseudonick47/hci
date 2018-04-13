@@ -146,6 +146,7 @@
                   :items="updateFrequencies"
                   v-model="updateFrequencyModel"
                   label="How often would you like us to update values?"
+                  @input="replaceDigitalCurrencyPoints"
                 ></v-select>
               </v-layout>
               <v-layout row>
@@ -158,6 +159,49 @@
                   return-object
                 ></v-select>
               </v-layout>
+
+              <v-layout row>
+                <v-expansion-panel
+                  class="elevation-0"
+                  expand
+                  popup
+                >
+                  <v-expansion-panel-content
+                    :value="true"
+                    hide-actions
+                  >
+                    <div
+                      slot="header"
+                    >
+                      <v-radio-group
+                        v-model="digitalCurrencyPointTypeModel"
+                        label="What would you like to see?"
+                        row
+                        @click.native="expandDigitalCurrencyPoints($event)"
+                      >
+                        <v-radio label="Values" value="values" ></v-radio>
+                        <v-radio label="Volume" value="volume"></v-radio>
+                        <v-radio label="Market Cap" value="market_cap"></v-radio>
+                      </v-radio-group>
+                    </div>
+                    <v-container fluid py-0 my-0>
+                      <v-layout row wrap px-3>
+                        <v-flex
+                          v-for="(point, i) in digitalCurrencyPoints"
+                          :key="i"
+                          xs6 sm3
+                        >
+                          <v-checkbox
+                            v-model="digitalCurrencyPointsModel[point]"
+                            :label="point"
+                          ></v-checkbox>
+                        </v-flex>
+                      </v-layout>
+                    </v-container>
+                  </v-expansion-panel-content>
+                </v-expansion-panel>
+              </v-layout>
+
               <v-layout row mt-3 justify-space-between>
                 <v-flex xs5 sm4 md3 lg3 xl3>
                   <v-btn
@@ -250,7 +294,7 @@ import {
   FREQUENCY_TO_DC_FUNCTION
 } from 'Constants/data.constants';
 
-const COMPANY_POINTS = ['Open', 'Close', 'High', 'Low'].sort();
+const POINTS = ['Open', 'Close', 'High', 'Low'].sort();
 
 export default {
   name: 'data-source-dialog',
@@ -270,14 +314,18 @@ export default {
       companyFirstInput: true,
       companyButtonDisabled: true,
       companyPointTypeModel: 'values',
-      companyPoints: COMPANY_POINTS,
-      companyPointsModel: _.fromPairs(_.map(COMPANY_POINTS, (e) => [e, true])),
+      companyPoints: POINTS,
+      companyPointsModel: _.fromPairs(_.map(POINTS, (e) => [e, true])),
       companyPointsExpanded: true,
 
       digitalCurrencies: DIGITAL_CURRENCIES,
       digitalCurrencyModel: [],
       digitalCurrencyFirstInput: true,
       digitalCurrencyButtonDisabled: true,
+      digitalCurrencyPointTypeModel: 'values',
+      digitalCurrencyPoints: POINTS,
+      digitalCurrencyPointsModel: _.fromPairs(_.map(POINTS, (e) => [e, true])),
+      digitalCurrencyPointsExpanded: true,
 
       exchangeCurrencies: _.concat(DIGITAL_CURRENCIES, PHYSICAL_CURRENCIES),
       exchangeFromCurrencyModel: null,
@@ -308,12 +356,18 @@ export default {
       this.companyModel = [];
       this.companyFirstInput = true;
       this.compayButtonDisabled = true;
-      this.companyPoints = COMPANY_POINTS;
-      this.companyPointsModel = _.fromPairs(_.map(COMPANY_POINTS, (e) => [e, true]));
+      this.companyPointTypeModel = 'values';
+      this.companyPoints = POINTS;
+      this.companyPointsModel = _.fromPairs(_.map(POINTS, (e) => [e, true]));
+      this.companyPointsExpanded = true;
 
       this.digitalCurrencyModel = [];
       this.digitalCurrencyFirstInput = true;
       this.digitalCurrencyButtonDisabled = true;
+      this.digitalCurrencyPoints = POINTS;
+      this.digitalCurrencyPointTypeModel = 'values';
+      this.digitalCurrencyPointsModel = _.fromPairs(_.map(POINTS, (e) => [e, true]));
+      this.digitalCurrencyPointsExpanded = true;
 
       this.exchangeFromCurrencyModel = null;
       this.exchangeToCurrencyModel = null;
@@ -368,12 +422,41 @@ export default {
     },
 
     digitalCurrencySelected() {
-      console.log('Digital currencies', {
-        view: this.viewModel.view,
-        source: {
-          function: FREQUENCY_TO_DC_FUNCTION[this.updateFrequencyModel],
-          symbols: _.map(this.digitalCurrencyModel, (el) => el.symbol),
+      const func = FREQUENCY_TO_DC_FUNCTION[this.updateFrequencyModel];
+
+      const requests = [];
+
+      _.forEach(this.digitalCurrencyModel, (digitalCurrency) => {
+        requests.push({
+          function: func,
+          symbol: digitalCurrency.symbol,
+          market: this.$store.getters.currencyValue,
+        });
+      });
+
+      let points = [];
+
+      if (this.digitalCurrencyPointTypeModel === 'volume') {
+        points.push('Volume');
+      } else if (this.digitalCurrencyPointTypeModel === 'market_cap') {
+        points.push('Market Cap');
+      } else {
+        if (func === FUNCTIONS.DIGITAL_CURRENCY_INTRADAY) {
+          points.push('Price');
+        } else {
+          points = _.filter(_.flatMap(this.digitalCurrencyPointsModel, (v, k) => {
+            return v ? k : null;
+          }));
+        }
+        console.log('');
+      }
+
+      this.$emit('dataSourceSelected', {
+        view: {
+          name: this.viewModel.view,
+          points
         },
+        requests
       });
     },
 
@@ -398,8 +481,31 @@ export default {
         e.stopPropagation();
       }
     },
-    test(e) {
-      e.preventDefault();
+    expandDigitalCurrencyPoints(e) {
+      if (this.digitalCurrencyPointTypeModel === 'values' && this.digitalCurrencyPointsExpanded) {
+        e.stopPropagation();
+      } else if (this.digitalCurrencyPointTypeModel === 'values' && !this.digitalCurrencyPointsExpanded) {
+        this.digitalCurrencyPointsExpanded = true;
+      } else if (this.digitalCurrencyPointTypeModel === 'volume' && this.digitalCurrencyPointsExpanded) {
+        this.digitalCurrencyPointsExpanded = false;
+      } else if (this.digitalCurrencyPointTypeModel === 'volume' && !this.digitalCurrencyPointsExpanded) {
+        e.stopPropagation();
+      } else if (this.digitalCurrencyPointTypeModel === 'market_cap' && this.digitalCurrencyPointsExpanded) {
+        this.digitalCurrencyPointsExpanded = false;
+      } else {
+        e.stopPropagation();
+      }
+    },
+    replaceDigitalCurrencyPoints() {
+      if (this.updateFrequencyModel === UPDATE_FREQUENCIES.REALTIME) {
+        console.log('Realtime');
+        this.digitalCurrencyPoints = [];
+        this.digitalCurrencyPointsModel = null;
+      } else {
+        console.log('Other');
+        this.digitalCurrencyPoints = POINTS;
+        this.digitalCurrencyPointsModel = _.fromPairs(_.map(POINTS, (e) => [e, true]));
+      }
     },
   },
   computed: {
