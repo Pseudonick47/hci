@@ -3,7 +3,6 @@
     <v-dialog v-model="show" max-width="650">
       <v-card>
         <v-card-title class="headline">What should we present to you?</v-card-title>
-        <!-- <v-card-text>Let Google help apps determine location. This means sending anonymous location data to Google, even when no apps are running.</v-card-text> -->
         <v-tabs
           v-model="tabs"
           fixed-tabs
@@ -18,7 +17,6 @@
 
         <v-tabs-items v-model="tabs" class="elevation-1">
 
-
           <v-tab-item
             key="tab-stocks"
             id="tabs-stocks"
@@ -26,8 +24,8 @@
             <v-container mt-4 mb-2 py-1>
               <v-layout row>
                 <v-select
-                  :items="companies"
-                  v-model="companyModel"
+                  :items="stocks.companies"
+                  v-model="stocks.selectedCompanies"
                   label="Companies that you are interested in"
                   item-text="name"
                   item-value="symbol"
@@ -37,21 +35,21 @@
                   multiple
                   clearable
                   :rules="companyRules"
-                  @change="companyFirstInput = false, companyButtonDisabled = false"
-                  @update:error="(err) => err ? companyButtonDisabled = err : null"
+                  @change="stocks.firstInput = false,stocks.addDisabled = false"
+                  @update:error="(err) => err ? stocks.addDisabled = err : null"
                 ></v-select>
               </v-layout>
               <v-layout row>
                 <v-select
-                  :items="updateFrequencies"
-                  v-model="updateFrequencyModel"
+                  :items="stocks.frequencies"
+                  v-model="stocks.selectedFrequency"
                   label="How often would you like us to update stock values?"
                 ></v-select>
               </v-layout>
               <v-layout row>
                 <v-select
-                  :items="views"
-                  v-model="viewModel"
+                  :items="stocks.views"
+                  v-model="stocks.selectedView"
                   item-text="name"
                   item-value="view"
                   label="How would you like to see them?"
@@ -73,7 +71,7 @@
                       slot="header"
                     >
                       <v-radio-group
-                        v-model="companyPointTypeModel"
+                        v-model="stocks.values"
                         label="What would you like to see?"
                         row
                         @click.native="expandStockPoints($event)"
@@ -85,12 +83,12 @@
                     <v-container fluid py-0 my-0>
                       <v-layout row wrap px-3>
                         <v-flex
-                          v-for="(point, i) in companyPoints"
+                          v-for="(point, i) in stocks.points"
                           :key="i"
                           xs6 sm3
                         >
                           <v-checkbox
-                            v-model="companyPointsModel[point]"
+                            v-model="stocks.selectedPoints[point]"
                             :label="point"
                           ></v-checkbox>
                         </v-flex>
@@ -110,8 +108,8 @@
                 <v-flex xs5 sm4 md3 lg3 xl3>
                   <v-btn
                     :block="true"
-                    :disabled="companyButtonDisabled"
-                    @click="companySelected"
+                    :disabled="stocks.addDisabled"
+                    @click="addStocks"
                   >ADD</v-btn>
                 </v-flex>
               </v-layout>
@@ -126,8 +124,8 @@
             <v-container mt-4 mb-2 py-1>
               <v-layout row>
                 <v-select
-                  :items="digitalCurrencies"
-                  v-model="digitalCurrencyModel"
+                  :items="crypto.currencies"
+                  v-model="crypto.selectedCurrencies"
                   label="Digital currencies that you are interested in"
                   item-text="name"
                   item-value="symbol"
@@ -136,23 +134,23 @@
                   required
                   multiple
                   clearable
-                  :rules="digitalCurrencyRules"
-                  @change="digitalCurrencyFirstInput = false, digitalCurrencyButtonDisabled = false"
-                  @update:error="(err) => err ? digitalCurrencyButtonDisabled = err : null"
+                  :rules="cryptoRules"
+                  @change="crypto.firstInput = false,crypto.addDisabled = false"
+                  @update:error="(err) => err ? crypto.addDisabled = err : null"
                 ></v-select>
               </v-layout>
               <v-layout row>
                 <v-select
-                  :items="updateFrequencies"
-                  v-model="updateFrequencyModel"
+                  :items="crypto.frequencies"
+                  v-model="crypto.selectedFrequency"
                   label="How often would you like us to update values?"
-                  @input="replaceDigitalCurrencyPoints"
+                  @input="replaceCryptoPoints"
                 ></v-select>
               </v-layout>
               <v-layout row>
                 <v-select
-                  :items="views"
-                  v-model="viewModel"
+                  :items="crypto.views"
+                  v-model="crypto.selectedView"
                   item-text="name"
                   item-value="view"
                   label="How would you like to see values?"
@@ -174,10 +172,10 @@
                       slot="header"
                     >
                       <v-radio-group
-                        v-model="digitalCurrencyPointTypeModel"
+                        v-model="crypto.values"
                         label="What would you like to see?"
                         row
-                        @click.native="expandDigitalCurrencyPoints($event)"
+                        @click.native="expandCryptoPoints($event)"
                       >
                         <v-radio label="Values" value="values" ></v-radio>
                         <v-radio label="Volume" value="volume"></v-radio>
@@ -187,12 +185,12 @@
                     <v-container fluid py-0 my-0>
                       <v-layout row wrap px-3>
                         <v-flex
-                          v-for="(point, i) in digitalCurrencyPoints"
+                          v-for="(point, i) in crypto.points"
                           :key="i"
                           xs6 sm3
                         >
                           <v-checkbox
-                            v-model="digitalCurrencyPointsModel[point]"
+                            v-model="crypto.selectedPoints[point]"
                             :label="point"
                           ></v-checkbox>
                         </v-flex>
@@ -212,8 +210,8 @@
                 <v-flex xs5 sm4 md3 lg3 xl3>
                   <v-btn
                     :block="true"
-                    :disabled="digitalCurrencyButtonDisabled"
-                    @click="digitalCurrencySelected"
+                    :disabled="crypto.addDisabled"
+                    @click="addCrypto"
                   >ADD</v-btn>
                 </v-flex>
               </v-layout>
@@ -228,8 +226,8 @@
             <v-container mt-4 mb-2 py-1>
               <v-layout row>
                 <v-select
-                  :items="exchangeCurrencies"
-                  v-model="exchangeFromCurrencyModel"
+                  :items="exchange.currencies"
+                  v-model="exchange.from_currency"
                   label="From currency"
                   item-text="name"
                   item-value="symbol"
@@ -237,14 +235,14 @@
                   autocomplete
                   required
                   clearable
-                  @change="exchangeFromCurrencyFirstInput = false, exchangeCurrencyButtonDisabled = false"
-                  @update:error="(err) => err ? exchangeCurrencyButtonDisabled = err : null"
+                  @change="exchange.fromFirstInput = false, exchange.addDisabled = false"
+                  @update:error="(err) => err ? exchange.addDisabled = err : null"
                 ></v-select>
               </v-layout>
               <v-layout row>
                 <v-select
-                  :items="exchangeCurrencies"
-                  v-model="exchangeToCurrencyModel"
+                  :items="exchange.currencies"
+                  v-model="exchange.to_currency"
                   label="To currency"
                   item-text="name"
                   item-value="symbol"
@@ -252,8 +250,8 @@
                   autocomplete
                   required
                   clearable
-                  @change="exchangeToCurrencyFirstInput = false, exchangeCurrencyButtonDisabled = false"
-                  @update:error="(err) => err ? exchangeCurrencyButtonDisabled = err : null"
+                  @change="exchange.toFirstInput = false, exchange.addDisabled = false"
+                  @update:error="(err) => err ? exchange.addDisabled = err : null"
                 ></v-select>
               </v-layout>
               <v-layout row mt-3 justify-space-between>
@@ -266,8 +264,8 @@
                 <v-flex xs5 sm4 md3 lg3 xl3>
                   <v-btn
                     :block="true"
-                    :disabled="exchangeCurrencyButtonDisabled"
-                    @click="exchangeCurrencySelected"
+                    :disabled="exchange.addDisabled"
+                    @click="addExchange"
                   >ADD</v-btn>
                 </v-flex>
               </v-layout>
@@ -283,6 +281,7 @@
 
 <script>
 import * as _ from 'lodash';
+
 import {
   COMPANIES,
   DIGITAL_CURRENCIES,
@@ -294,7 +293,9 @@ import {
   FREQUENCY_TO_DC_FUNCTION
 } from 'Constants/data.constants';
 
+
 const POINTS = ['Open', 'Close', 'High', 'Low'].sort();
+
 
 export default {
   name: 'data-source-dialog',
@@ -308,37 +309,52 @@ export default {
     return {
       tabs: null,
       show: false,
-
-      companies: COMPANIES,
-      companyModel: [],
-      companyFirstInput: true,
-      companyButtonDisabled: true,
-      companyPointTypeModel: 'values',
-      companyPoints: POINTS,
-      companyPointsModel: _.fromPairs(_.map(POINTS, (e) => [e, true])),
-      companyPointsExpanded: true,
-
-      digitalCurrencies: DIGITAL_CURRENCIES,
-      digitalCurrencyModel: [],
-      digitalCurrencyFirstInput: true,
-      digitalCurrencyButtonDisabled: true,
-      digitalCurrencyPointTypeModel: 'values',
-      digitalCurrencyPoints: POINTS,
-      digitalCurrencyPointsModel: _.fromPairs(_.map(POINTS, (e) => [e, true])),
-      digitalCurrencyPointsExpanded: true,
-
-      exchangeCurrencies: _.concat(DIGITAL_CURRENCIES, PHYSICAL_CURRENCIES),
-      exchangeFromCurrencyModel: null,
-      exchangeToCurrencyModel: null,
-      exchangeFromCurrencyFirstInput: true,
-      exchangeToCurrencyFirstInput: true,
-      exchangeCurrencyButtonDisabled: true,
-
-      updateFrequencies: [UPDATE_FREQUENCIES.REALTIME, UPDATE_FREQUENCIES.DAILY, UPDATE_FREQUENCIES.WEEKLY, UPDATE_FREQUENCIES.MONTHLY],
-      updateFrequencyModel: UPDATE_FREQUENCIES.DAILY,
-
-      views: DATA_VIEWS,
-      viewModel: DATA_VIEWS[0],
+      stocks: {
+        companies: COMPANIES,
+        selectedCompanies: [],
+        firstInput: true,
+        values: 'values',
+        points: POINTS,
+        selectedPoints: _.fromPairs(_.map(POINTS, (e) => [e, true])),
+        pointsExpanded: true,
+        addDisabled: true,
+        frequencies: [
+          UPDATE_FREQUENCIES.REALTIME,
+          UPDATE_FREQUENCIES.DAILY,
+          UPDATE_FREQUENCIES.WEEKLY,
+          UPDATE_FREQUENCIES.MONTHLY
+        ],
+        selectedFrequency: UPDATE_FREQUENCIES.DAILY,
+        views: DATA_VIEWS,
+        selectedView: DATA_VIEWS[0],
+      },
+      crypto: {
+        currencies: DIGITAL_CURRENCIES,
+        selectedCurrencies: [],
+        firstInput: true,
+        addDisabled: true,
+        values: 'values',
+        points: POINTS,
+        selectedPoints: _.fromPairs(_.map(POINTS, (e) => [e, true])),
+        pointsExpanded: true,
+        frequencies: [
+          UPDATE_FREQUENCIES.REALTIME,
+          UPDATE_FREQUENCIES.DAILY,
+          UPDATE_FREQUENCIES.WEEKLY,
+          UPDATE_FREQUENCIES.MONTHLY
+        ],
+        selectedFrequency: UPDATE_FREQUENCIES.DAILY,
+        views: DATA_VIEWS,
+        selectedView: DATA_VIEWS[0],
+      },
+      exchange: {
+        currencies: _.concat(DIGITAL_CURRENCIES, PHYSICAL_CURRENCIES),
+        from_currency: null,
+        to_currency: null,
+        fromFirstInput: true,
+        toFirstInput: true,
+        addDisabled: true,
+      },
     };
   },
   watch: {
@@ -353,30 +369,54 @@ export default {
   },
   methods: {
     restoreDefaults() {
-      this.companyModel = [];
-      this.companyFirstInput = true;
-      this.compayButtonDisabled = true;
-      this.companyPointTypeModel = 'values';
-      this.companyPoints = POINTS;
-      this.companyPointsModel = _.fromPairs(_.map(POINTS, (e) => [e, true]));
-      this.companyPointsExpanded = true;
+      this.stocks = {
+        companies: COMPANIES,
+        selectedCompanies: [],
+        firstInput: true,
+        values: 'values',
+        points: POINTS,
+        selectedPoints: _.fromPairs(_.map(POINTS, (e) => [e, true])),
+        pointsExpanded: true,
+        addDisabled: true,
+        frequencies: [
+          UPDATE_FREQUENCIES.REALTIME,
+          UPDATE_FREQUENCIES.DAILY,
+          UPDATE_FREQUENCIES.WEEKLY,
+          UPDATE_FREQUENCIES.MONTHLY
+        ],
+        selectedFrequency: UPDATE_FREQUENCIES.DAILY,
+        views: DATA_VIEWS,
+        selectedView: DATA_VIEWS[0],
+      };
 
-      this.digitalCurrencyModel = [];
-      this.digitalCurrencyFirstInput = true;
-      this.digitalCurrencyButtonDisabled = true;
-      this.digitalCurrencyPoints = POINTS;
-      this.digitalCurrencyPointTypeModel = 'values';
-      this.digitalCurrencyPointsModel = _.fromPairs(_.map(POINTS, (e) => [e, true]));
-      this.digitalCurrencyPointsExpanded = true;
+      this.crypto = {
+        currencies: DIGITAL_CURRENCIES,
+        selectedCurrencies: [],
+        firstInput: true,
+        addDisabled: true,
+        values: 'values',
+        points: POINTS,
+        selectedPoints: _.fromPairs(_.map(POINTS, (e) => [e, true])),
+        pointsExpanded: true,
+        frequencies: [
+          UPDATE_FREQUENCIES.REALTIME,
+          UPDATE_FREQUENCIES.DAILY,
+          UPDATE_FREQUENCIES.WEEKLY,
+          UPDATE_FREQUENCIES.MONTHLY
+        ],
+        selectedFrequency: UPDATE_FREQUENCIES.DAILY,
+        views: DATA_VIEWS,
+        selectedView: DATA_VIEWS[0],
+      };
 
-      this.exchangeFromCurrencyModel = null;
-      this.exchangeToCurrencyModel = null;
-      this.exchangeFromCurrencyFirstInput = true;
-      this.exchangeToCurrencyFirstInput = true;
-      this.exchangeCurrencyButtonDisabled = true;
-
-      this.updateFrequencyModel = UPDATE_FREQUENCIES.DAILY;
-      this.viewModel = DATA_VIEWS[0];
+      this.exchange = {
+        currencies: _.concat(DIGITAL_CURRENCIES, PHYSICAL_CURRENCIES),
+        from_currency: null,
+        to_currency: null,
+        fromFirstInput: true,
+        toFirstInput: true,
+        addDisabled: true,
+      };
     },
 
     close() {
@@ -384,12 +424,20 @@ export default {
       this.$emit('closeDataSourceDialog');
     },
 
-    companySelected() {
-      const func = FREQUENCY_TO_STOCK_FUNCTION[this.updateFrequencyModel];
+    addStocks() {
+      const {
+        selectedCompanies,
+        selectedFrequency,
+        selectedView,
+        selectedPoints,
+        values
+      } = this.stocks;
+
+      const func = FREQUENCY_TO_STOCK_FUNCTION[selectedFrequency];
 
       const requests = [];
 
-      _.forEach(this.companyModel, (company) => {
+      _.forEach(selectedCompanies, (company) => {
         const request = {
           function: func,
           symbol: company.symbol,
@@ -404,47 +452,55 @@ export default {
 
       let points = [];
 
-      if (this.companyPointTypeModel === 'volume') {
+      if (values === 'volume') {
         points.push('Volume');
       } else {
-        points = _.filter(_.flatMap(this.companyPointsModel, (v, k) => {
+        points = _.filter(_.flatMap(selectedPoints, (v, k) => {
           return v ? k : null;
         }));
       }
 
       this.$emit('dataSourceSelected', {
         view: {
-          name: this.viewModel.view,
+          name: selectedView.view,
           points
         },
         requests
       });
     },
 
-    digitalCurrencySelected() {
-      const func = FREQUENCY_TO_DC_FUNCTION[this.updateFrequencyModel];
+    addCrypto() {
+      const {
+        selectedCurrencies,
+        selectedFrequency,
+        selectedView,
+        selectedPoints,
+        values
+      } = this.crypto;
+
+      const func = FREQUENCY_TO_DC_FUNCTION[selectedFrequency];
 
       const requests = [];
 
-      _.forEach(this.digitalCurrencyModel, (digitalCurrency) => {
+      _.forEach(selectedCurrencies, (currency) => {
         requests.push({
           function: func,
-          symbol: digitalCurrency.symbol,
+          symbol: currency.symbol,
           market: this.$store.getters.currencyValue,
         });
       });
 
       let points = [];
 
-      if (this.digitalCurrencyPointTypeModel === 'volume') {
+      if (values === 'volume') {
         points.push('Volume');
-      } else if (this.digitalCurrencyPointTypeModel === 'market_cap') {
+      } else if (values === 'market_cap') {
         points.push('Market Cap');
       } else {
         if (func === FUNCTIONS.DIGITAL_CURRENCY_INTRADAY) {
           points.push('Price');
         } else {
-          points = _.filter(_.flatMap(this.digitalCurrencyPointsModel, (v, k) => {
+          points = _.filter(_.flatMap(selectedPoints, (v, k) => {
             return v ? k : null;
           }));
         }
@@ -453,67 +509,89 @@ export default {
 
       this.$emit('dataSourceSelected', {
         view: {
-          name: this.viewModel.view,
+          name: selectedView.view,
           points
         },
         requests
       });
     },
 
-    exchangeCurrencySelected() {
+    addExchange() {
+      const { from_currency, to_currency } = this.exchange;
+
       console.log('Exchange currencies', {
-        view: this.viewModel.view,
+        view: 'big-number',
         source: {
           function: FUNCTIONS.CURRENCY_EXCHANGE_RATE,
-          from_currency: this.exchangeFromCurrencyModel.symbol,
-          to_currency: this.exchangeToCurrencyModel.symbol,
+          from_currency: from_currency.symbol,
+          to_currency: to_currency.symbol,
         },
       });
     },
+
     expandStockPoints(e) {
-      if (this.companyPointTypeModel === 'values' && this.companyPointsExpanded) {
+      const { values } = this.stocks;
+
+      if (values === 'values' && this.stocks.pointsExpanded) {
         e.stopPropagation();
-      } else if (this.companyPointTypeModel === 'values' && !this.companyPointsExpanded) {
-        this.companyPointsExpanded = true;
-      } else if (this.companyPointTypeModel === 'volume' && this.companyPointsExpanded) {
-        this.companyPointsExpanded = false;
+      } else if (values === 'values' && !this.stocks.pointsExpanded) {
+        this.stocks.pointsExpanded = true;
+      } else if (values === 'volume' && this.stocks.pointsExpanded) {
+        this.stocks.pointsExpanded = false;
       } else {
         e.stopPropagation();
       }
     },
-    expandDigitalCurrencyPoints(e) {
-      if (this.digitalCurrencyPointTypeModel === 'values' && this.digitalCurrencyPointsExpanded) {
+
+    expandCryptoPoints(e) {
+      const { values } = this.crypto;
+
+      if (values === 'values' && this.crypto.pointsExpanded) {
         e.stopPropagation();
-      } else if (this.digitalCurrencyPointTypeModel === 'values' && !this.digitalCurrencyPointsExpanded) {
-        this.digitalCurrencyPointsExpanded = true;
-      } else if (this.digitalCurrencyPointTypeModel === 'volume' && this.digitalCurrencyPointsExpanded) {
-        this.digitalCurrencyPointsExpanded = false;
-      } else if (this.digitalCurrencyPointTypeModel === 'volume' && !this.digitalCurrencyPointsExpanded) {
+      } else if (values === 'values' && !this.crypto.pointsExpanded) {
+        this.crypto.pointsExpanded = true;
+      } else if (values === 'volume' && this.crypto.pointsExpanded) {
+        this.crypto.pointsExpanded = false;
+      } else if (values === 'volume' && !this.crypto.pointsExpanded) {
         e.stopPropagation();
-      } else if (this.digitalCurrencyPointTypeModel === 'market_cap' && this.digitalCurrencyPointsExpanded) {
-        this.digitalCurrencyPointsExpanded = false;
+      } else if (values === 'market_cap' && this.crypto.pointsExpanded) {
+        this.crypto.pointsExpanded = false;
       } else {
         e.stopPropagation();
       }
     },
-    replaceDigitalCurrencyPoints() {
-      if (this.updateFrequencyModel === UPDATE_FREQUENCIES.REALTIME) {
-        console.log('Realtime');
-        this.digitalCurrencyPoints = [];
-        this.digitalCurrencyPointsModel = null;
+
+    replaceCryptoPoints() {
+      const { selectedFrequency } = this.crypto;
+
+      if (selectedFrequency === UPDATE_FREQUENCIES.REALTIME) {
+        this.crypto.points = [];
+        this.crypto.selectedPoints = null;
       } else {
-        console.log('Other');
-        this.digitalCurrencyPoints = POINTS;
-        this.digitalCurrencyPointsModel = _.fromPairs(_.map(POINTS, (e) => [e, true]));
+        this.crypto.points = POINTS;
+        this.crypto.selectedPoints = _.fromPairs(_.map(POINTS, (e) => [e, true]));
       }
     },
   },
   computed: {
     companyRules() {
-      return [() => this.companyFirstInput || this.companyModel.length > 0 || 'You must choose at least one'];
+      return [
+        () => {
+          return this.stocks.firstInput ||
+                this.stocks.selectedCompanies.length > 0 ||
+                'You must choose at least one';
+        },
+      ];
     },
-    digitalCurrencyRules() {
-      return [() => this.digitalCurrencyFirstInput || this.digitalCurrencyModel.length > 0 || 'You must choose at least one'];
+
+    cryptoRules() {
+      return [
+        () => {
+          return this.crypto.firstInput ||
+                this.crypto.selectedCurrencies.length > 0 ||
+                'You must choose at least one';
+        },
+      ];
     },
   },
 };

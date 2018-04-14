@@ -132,7 +132,6 @@ export default {
   extractData(params, response) {
     // extract only useful data
     let data = response.data[PROPERTY_FROM_FUNCTION[params.function]];
-
     // remap props
     data = this.mapProperties(params, data);
     return data;
