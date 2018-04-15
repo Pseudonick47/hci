@@ -1,20 +1,10 @@
 	<template>
 		<div>
 			<v-tooltip bottom>
-				<v-btn
-					medium
-					fab
-					color="grey"
-					dark
-					slot="activator"
-					@click="helpDialog = true"
-				>
-					<v-icon dark>help</v-icon>
-				</v-btn>
 				<span>Help</span>
 			</v-tooltip>
 			<v-dialog
-				v-model="helpDialog"
+				v-model="show"
 				max-width="800px"
 			>
 				<v-jumbotron color="blue accent-1">
@@ -27,8 +17,8 @@
 								fab
 								right
 								absolute
-								small
-								color="red"
+								flat
+								color="white"
 								@click="closeHelp"
 							>
 								<v-icon>
@@ -75,8 +65,8 @@
 							<v-layout row>
 								<v-btn
 									fab
-									small
-									color="primary"
+									flat
+									color="white"
 									@click="backOnHelpWindow"
 								>
 									<v-icon>
@@ -85,14 +75,14 @@
 								</v-btn>
 								<h3	class="display-1">Basic information</h3>
 								<v-btn
-									medium
-									color="red"
+									fab
+									flat
+									color="white"
 									@click="closeHelp"
 									right
 									absolute
 								>
-									Close help
-									<v-icon right>
+									<v-icon>
 										close
 									</v-icon>
 								</v-btn>
@@ -163,9 +153,9 @@
 						<v-layout column>
 							<v-layout row>
 								<v-btn
-									small
 									fab
-									color="primary"
+									flat
+									color="white"
 									@click="backOnHelpWindow"
 								>
 									<v-icon>
@@ -174,14 +164,14 @@
 								</v-btn>
 								<h3 class="display-1">Types of view</h3>
 								<v-btn
-									medium
+									fab
+									flat
 									right
 									absolute
-									color="red"
+									color="white"
 									@click="closeHelp"
 								>
-									Close help
-									<v-icon right>
+									<v-icon>
 										close
 									</v-icon>
 								</v-btn>
@@ -272,7 +262,7 @@
 	export default {
 		data() {
 			return {
-				helpDialog: false,
+				show: false,
 				page: 1,
 				basicCard: false,
 				typesViewCard: false,
@@ -282,24 +272,24 @@
 		},
 		methods: {
 			basicInformation() {
-				this.helpDialog = false;
+				this.show = false;
 				this.basicCard = true;
 			},
 			typesView() {
-				this.helpDialog = false;
+				this.show = false;
 				this.typesViewCard = true;
 			},
 			backOnHelpWindow() {
 				this.basicCard = false;
 				this.typesViewCard = false;
-				this.helpDialog = true;
+				this.show = true;
 				this.imageStep = 1;
 				this.viewStep = 1;
 			},
 			closeHelp() {
 				this.basicCard = false;
 				this.typesViewCard = false;
-				this.helpDialog = false;
+				this.show = false;
 				this.imageStep = 1;
 				this.viewStep = 1;
 			},

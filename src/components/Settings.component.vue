@@ -2,14 +2,8 @@
   <div wrapper>
       <v-dialog
         max-width="600"
-        v-model="settingsDialog"
-        persistent
+        v-model="show"
       >
-        <v-btn
-          color="grey"
-          dark
-          slot="activator"
-        >Settings</v-btn>
         <v-card>
           <v-toolbar color="light-blue lighten-2">
             <v-toolbar-title>General settings</v-toolbar-title>
@@ -55,15 +49,6 @@
               <v-list-tile-title>Dark theme</v-list-tile-title>
             </v-list-tile>
           </v-list>
-          <v-card>
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn
-                color="primary"
-                @click="settingsDialog = false"
-              >OK</v-btn>
-            </v-card-actions>
-          </v-card>
         </v-card>
       </v-dialog>
       <v-layout
@@ -132,9 +117,11 @@
 <script>
 
 export default {
+  name: 'settings',
   data() {
     return {
-      settingsDialog: false,
+      show: false,
+      // settingsDialog: false,
       currencyDialog: false
     };
   },

@@ -27,16 +27,19 @@
     <pie-chart
       v-else-if="view === 'pie-chart'"
       :data="data"
+      height="85%"
     ></pie-chart>
 
     <column-chart
       v-else-if="view === 'column-chart'"
       :data="data"
+      height="85%"
     ></column-chart>
 
     <bar-chart
       v-else-if="view === 'bar-chart'"
       :data="data"
+      height="85%"
     ></bar-chart>
 
     <scatter-chart
@@ -44,6 +47,7 @@
       :data="data"
       :xtitle="xTitle"
       :ytitle="yTitle"
+      height="85%"
     ></scatter-chart>
   </div>
 </template>

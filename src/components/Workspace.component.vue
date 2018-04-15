@@ -1,114 +1,6 @@
 <template>
   <div style="width:100%; height:100%">
     <div id="content">
-      <v-speed-dial
-        v-model="menu"
-        bottom
-        right
-        large
-        fixed
-        direction="top"
-        :open-on-hover="true"
-        transition="slide-y-reverse-transition"
-      >
-        <v-btn
-          slot="activator"
-          color="blue darken-2"
-          dark
-          fab
-          open-on-hover
-        >
-          <v-icon>settings</v-icon>
-        </v-btn>
-        <v-tooltip left>
-          <v-btn
-            fab
-            dark
-            small
-            color="red"
-            slot="activator"
-            @click="sureDeleteTabDialog = true"
-          >
-            <v-icon>delete</v-icon>
-          </v-btn>
-          <span>Delete tab</span>
-        </v-tooltip>
-        <v-tooltip left>
-          <v-btn
-            fab
-            dark
-            small
-            slot="activator"
-            color="green"
-            @click="renameDialog = true"
-          >
-            <v-icon>edit</v-icon>
-          </v-btn>
-          <span>Rename tab</span>
-        </v-tooltip>
-        <v-tooltip left>
-          <v-btn
-            fab
-            dark
-            small
-            color="indigo"
-            slot="activator"
-            @click="dataSourceDialog = true"
-          >
-            <v-icon>add</v-icon>
-          </v-btn>
-          <span>New component</span>
-        </v-tooltip>
-      </v-speed-dial>
-      <v-dialog
-        v-model="sureDeleteTabDialog"
-        persistent
-        max-width="300px"
-      >
-        <v-card>
-          <v-card-text>
-            Delete this tab?
-          </v-card-text>
-        </v-card>
-        <v-card-actions>
-          <v-btn @click="removeTab">yes</v-btn>
-          <v-spacer></v-spacer>
-          <v-btn @click="sureDeleteTabDialog = false">no</v-btn>
-        </v-card-actions>
-      </v-dialog>
-      <v-dialog
-        v-model="renameDialog"
-        persistent
-        max-width="300"
-      >
-        <v-card>
-            <v-card-title>
-              <span class="headline">New Tab Name</span>
-            </v-card-title>
-            <v-card-text>
-              <v-text-field
-                autofocus
-                ref="tabNameInput"
-                v-model="newTabName"
-                label="Tab name:"
-                required
-                @keyup.enter="renameTab"
-                @keyup.esc="renameDialog = false"
-              ></v-text-field>
-            </v-card-text>
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn @click="renameDialog = false">cancel</v-btn>
-              <v-btn @click="renameTab">ok</v-btn>
-            </v-card-actions>
-          </v-card>
-      </v-dialog>
-      <data-source-dialog
-        :model="dataSourceDialog"
-        @closeDataSourceDialog="dataSourceDialog = false"
-        @dataSourceSelected="addComponent"
-      >
-      </data-source-dialog>
       <grid-layout
         :layout="layout"
         :col-num="100"
@@ -132,7 +24,7 @@
             fab
             small
             color="red"
-            @click="sureDeleteComponentDialog = true"
+            @click="activeComponent = item.i, confirmDelete = true"
           >
             <v-icon dark>remove</v-icon>
           </v-btn>
@@ -145,6 +37,22 @@
         </grid-item>
       </grid-layout>
     </div>
+    <v-dialog
+      v-model="confirmDelete"
+      persistent
+      max-width="300px"
+    >
+      <v-card>
+        <v-card-text>
+          Delete this component?
+        </v-card-text>
+      </v-card>
+      <v-card-actions>
+        <v-btn @click="removeComponent">yes</v-btn>
+        <v-spacer></v-spacer>
+        <v-btn @click="confirmDelete = false">no</v-btn>
+      </v-card-actions>
+    </v-dialog>
   </div>
 </template>
 
@@ -155,7 +63,6 @@ import { GridLayout, GridItem } from 'vue-grid-layout';
 import * as _ from 'lodash';
 
 import DataFrame from 'Components/DataFrame.component';
-import DataSourceDialog from 'Components/DataSourceDialog.component';
 
 import DataController from 'Controllers/data.controller';
 
@@ -168,39 +75,26 @@ export default {
     GridLayout,
     GridItem,
     DataFrame,
-    DataSourceDialog,
   },
   props: {
     tabId: {
       required: true
     }
   },
-  watch: {
-    renameDialog() {
-      this.$nextTick(() => {
-        this.$refs.tabNameInput.focus();
-      });
-    }
+  data() {
+    return {
+      confirmDelete: false,
+      activeComponent: -1,
+    };
   },
-  data: () => ({
-    menu: false,
-    index: 20,
-    chartData: [],
-    renameDialog: false,
-    dataSourceDialog: false,
-    newTabName: '',
-    sureDeleteTabDialog: false,
-    sureDeleteComponentDialog: false,
-  }),
   computed: {
     ...mapGetters([
       'draggable',
       'resizable',
-      'defaultWindowHeight',
     ]),
     layout() {
       return this.$store.getters.layout(this.tabId);
-    }
+    },
   },
   methods: {
     addComponent(payload) {
@@ -212,20 +106,29 @@ export default {
       this.$store.commit('updateLayoutStorage');
     },
 
-    removeComponent(id) {
-      this.$store.commit('removeComponent', { tabId: this.tabId, id });
+    removeComponent() {
+      this.$store.commit('removeComponent', {
+        tabId: this.tabId,
+        id: this.activeComponent
+      });
+
       this.$store.commit('updateLayoutStorage');
+
+      this.confirmDelete = false;
     },
+
     removeTab() {
       this.$store.commit('removeTab', this.tabId);
     },
+
     renameTab() {
       this.$store.commit('renameTab', { tabId: this.tabId, name: this.newTabName });
       this.renameDialog = false;
     },
+
     getSources(requests) {
       return _.map(requests, DataUtil.computeSourceId);
-    }
+    },
   }
 };
 </script>
@@ -259,7 +162,7 @@ export default {
 }
 
 .vue-resizable-handle {
-  z-index: 5000;
+  z-index: 20;
   position: absolute;
   width: 20px;
   height: 20px;

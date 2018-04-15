@@ -132,6 +132,9 @@ export default {
   extractData(params, response) {
     // extract only useful data
     let data = response.data[PROPERTY_FROM_FUNCTION[params.function]];
+    if (!data) {
+      return {};
+    }
     // remap props
     data = this.mapProperties(params, data);
     return data;
@@ -145,6 +148,10 @@ export default {
    * @return {Object}           Collection of extracted properties.
    */
   extractProperty(collection, prop) {
+    if (_.isEmpty(collection)) {
+      return {};
+    }
+
     const p = _.snakeCase(prop);
     const data = {};
     _.forOwn(collection, (value, key) => {

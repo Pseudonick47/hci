@@ -421,7 +421,7 @@ export default {
 
     close() {
       this.restoreDefaults();
-      this.$emit('closeDataSourceDialog');
+      this.$emit('closeDialog');
     },
 
     addStocks() {

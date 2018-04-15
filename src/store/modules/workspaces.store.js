@@ -3,8 +3,7 @@ import Vue from 'vue';
 import DataController from 'Controllers/data.controller';
 
 const state = {
-  // tabs: { id: { componentId: 0, layout: [{chartData, chartType, x, y , w, h, i }], name, }, id: .... }
-  tabs: { '0': { componentId: 0, name: 'Tab 0', layout: [] } },
+  tabs: { '0': { componentId: 0, name: 'New Tab', layout: [] } },
   tabId: 0
 };
 
@@ -14,7 +13,6 @@ const getters = {
   },
 
   tabs: (state) => state.tabs,
-
   tab: (state) => (id) => state.tabs[id]
 };
 
@@ -61,10 +59,9 @@ const mutations = {
       view,
     });
   },
-
-  addTab(state, value) {
+  addTab(state) {
     state.tabId++;
-    const newTab = { componentId: 0, layout: [], name: value };
+    const newTab = { componentId: 0, layout: [], name: 'New Tab' };
     Vue.set(state.tabs, `${state.tabId}`, newTab);
   },
 
