@@ -285,7 +285,7 @@ export default {
 
       this.activeTab = `tab-${newTabId}`;
 
-      this.confirmDeletionDialog = false;
+      this.confirmDelete = false;
     },
     addComponent(payload) {
       this.$refs[`home-${this.activeTabId}`][0].addComponent(payload);
