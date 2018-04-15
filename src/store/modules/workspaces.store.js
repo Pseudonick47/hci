@@ -54,8 +54,8 @@ const mutations = {
     tab.layout.push({
       x: 0,
       y: 0,
-      w: 2,
-      h: 2,
+      w: 40,
+      h: 30,
       i: String(tab.componentId),
       requests,
       view,

@@ -137,7 +137,7 @@
             <v-icon dark>remove</v-icon>
           </v-btn>
           <data-frame
-            :view="item.view.name"
+            :view="item.view.name || ''"
             :sources="getSources(item.requests)"
             :points="item.view.points"
             class="hide-scrollbar-inner"

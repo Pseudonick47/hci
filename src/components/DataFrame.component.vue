@@ -19,6 +19,11 @@
       :data="data"
     ></exchange-view>
 
+   <big-number-view
+      v-if="view === 'big-number-view'"
+      :data="data"
+    ></big-number-view>
+
     <pie-chart
       v-else-if="view === 'pie-chart'"
       :data="data"
@@ -46,12 +51,14 @@
 <script>
 import TableView from 'Components/TableView.component';
 import ExchangeView from 'Components/ExchangeView.component';
+import BigNumberView from 'Components/BigNumber.component';
 
 export default {
   name: 'data-frame',
   components: {
     TableView,
     ExchangeView,
+    BigNumberView
   },
   props: {
     view: {
