@@ -13,8 +13,10 @@
 </template>
 
 <script>
+import * as _ from 'lodash';
+
 export default {
-  name: 'app-exchange',
+  name: 'exchange-view',
   props: {
     data: {
       required: true
@@ -22,13 +24,13 @@ export default {
   },
   computed: {
     exchangedAmount() {
-      return this.amount * 50;
+      return this.amount * _.toNumber(this.data[0].rate);
     },
     currencyFrom() {
-      return 'eur';
+      return this.data[0].from_currency;
     },
     currencyTo() {
-      return 'rsd';
+      return this.data[0].to_currency;
     }
   },
   data: () => ({

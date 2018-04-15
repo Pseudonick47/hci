@@ -51,7 +51,7 @@
             <v-list-tile
               ripple
               avatar
-              @click="$refs[`home-${activeTabId}`][0].addComponent()"
+              @click="showSourceDialog = true"
             >
               <v-list-tile-action>
                 <v-icon color="purple">add_circle</v-icon>
@@ -126,7 +126,7 @@
               fluid
               class="pa-0"
             >
-              <home :tabId="id" :ref="`home-${id}`"></home>
+              <workspace :tabId="id" :ref="`home-${id}`"></workspace>
             </v-container>
           </v-tab-item>
         </v-tabs-items>
@@ -139,7 +139,7 @@
         bottom
         right
         fab
-        @click="$refs[`home-${activeTabId}`][0].addComponent()"
+        @click="showSourceDialog = true"
       >
         <v-icon>add</v-icon>
       </v-btn>
@@ -193,6 +193,11 @@
       </v-card-actions>
     </v-dialog>
 
+    <data-source-dialog
+      :model="showSourceDialog"
+      @closeDialog="showSourceDialog = false"
+      @dataSourceSelected="addComponent"
+    ></data-source-dialog>
     <wizard></wizard>
     <settings ref="settings"></settings>
     <help ref="help"></help>
@@ -204,18 +209,20 @@ import * as _ from 'lodash';
 
 import { mapGetters } from 'vuex';
 
-import Settings from 'Components/Settings.component';
-import Home from 'Components/Home.component';
+import DataSourceDialog from 'Components/DataSourceDialog.component';
 import Help from 'Components/Help.component';
+import Settings from 'Components/Settings.component';
 import Wizard from 'Components/Wizard.component';
+import Workspace from 'Components/Workspace.component';
 
 export default {
   name: 'App',
   components: {
-    Settings,
-    Home,
+    DataSourceDialog,
     Help,
-    Wizard
+    Settings,
+    Wizard,
+    Workspace,
   },
   data() {
     return {
@@ -224,6 +231,7 @@ export default {
       newTabName: '',
       activeTab: 'tab-0',
       updateTabs: 'tabs-update-0',
+      showSourceDialog: false,
     };
   },
   computed: {
@@ -279,9 +287,9 @@ export default {
 
       this.confirmDeletionDialog = false;
     },
-    addComponent() {
-      this.$refs[`home-${this.activeTabId}`][0].addComponent();
-    }
+    addComponent(payload) {
+      this.$refs[`home-${this.activeTabId}`][0].addComponent(payload);
+    },
   }
 };
 </script>

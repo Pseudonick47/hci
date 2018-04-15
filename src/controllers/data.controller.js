@@ -4,10 +4,13 @@
  * @author Aleksandar Varga (aleksandar.varga@uns.ac.rs)
  */
 
+import * as _ from 'lodash';
 import store from 'Store';
-import { queue } from 'Util/queue.util';
-import DataUtil from 'Util/data.util';
+
 import { INTERVAL_FROM_FUNCTION } from 'Constants/data.constants';
+
+import DataUtil from 'Util/data.util';
+import { queue } from 'Util/queue.util';
 
 
 export default {
@@ -27,43 +30,49 @@ export default {
   },
 
   /**
-   * Registers new data source and starts a request loop associated with the
+   * Registers new data sources and starts a request loop associated with each
    * source if it doesn't already exist in the store and registers source
    * observer.
    *
-   * @param {Object} params Parameters used for data acquisition.
+   * @param {Object} requests API requests used for data acquisition.
    * @return {void}
    */
-  monitorSource(params) {
-    if (!DataUtil.validateParams(params)) {
-      return;
-    }
+  startMonitoring(requests) {
+    _.each(requests, (request) => {
+      if (!DataUtil.validateRequest(request)) {
+        return;
+      }
 
-    const id = DataUtil.computeId(params);
+      const id = DataUtil.computeSourceId(request);
 
-    if (!store.getters.hasSource(id)) {
-      // create new source and start its request loop
+      if (!store.getters.hasSource(id)) {
+        // create new source and start its request loop
 
-      store.commit('createSource', { id });
-
-      // initial request
-      queue.enqueue({
-        action: 'refreshSourceData',
-        payload: { id, params }
-      });
-
-      const intervalId = window.setInterval(() => {
-        queue.enqueue({
-          action: 'refreshSourceData',
-          payload: { id, params }
+        store.commit('createSource', {
+          id,
+          function: request.function,
+          symbol: request.symbol,
         });
-      }, INTERVAL_FROM_FUNCTION[params.function]);
 
-      // associate this request loop with the source
-      store.commit('setIntervalId', { id, intervalId });
-    }
+        // initial request
+        queue.enqueue({
+          action: 'updateSourceData',
+          payload: { id, request }
+        });
 
-    store.commit('addObserver', { id });
+        const interval = window.setInterval(() => {
+          queue.enqueue({
+            action: 'updateSourceData',
+            payload: { id, request }
+          });
+        }, INTERVAL_FROM_FUNCTION[request.function]);
+
+        // associate this request loop with the source
+        store.commit('setIntervalId', { id, interval });
+      }
+
+      store.commit('addObserver', { id });
+    });
   },
 
   /**
@@ -72,7 +81,7 @@ export default {
    * @param {Object} params Parameters used for data acquisition.
    * @return {void}
    */
-  stopSourceMonitoring(params) {
+  stopMonitoring(params) {
     const id = DataUtil.computeId(params);
     store.commit('removeObserver', { id });
   }

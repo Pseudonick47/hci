@@ -65,8 +65,8 @@
 							<v-layout row>
 								<v-btn
 									fab
-									small
-									color="primary"
+									flat
+									color="white"
 									@click="backOnHelpWindow"
 								>
 									<v-icon>
@@ -75,14 +75,14 @@
 								</v-btn>
 								<h3	class="display-1">Basic information</h3>
 								<v-btn
-									medium
-									color="red"
+									fab
+									flat
+									color="white"
 									@click="closeHelp"
 									right
 									absolute
 								>
-									Close help
-									<v-icon right>
+									<v-icon>
 										close
 									</v-icon>
 								</v-btn>

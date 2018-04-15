@@ -28,13 +28,12 @@
           >
             <v-icon dark>remove</v-icon>
           </v-btn>
-
-          <chart
-            :chartType="item.props.type"
-            :params="item.props.params"
-            :points="item.props.points"
+          <data-frame
+            :view="item.view.name"
+            :sources="getSources(item.requests)"
+            :points="item.view.points"
             class="hide-scrollbar-inner"
-          ></chart>
+          ></data-frame>
         </grid-item>
       </grid-layout>
     </div>
@@ -60,16 +59,22 @@
 <script>
 import { mapGetters } from 'vuex';
 import { GridLayout, GridItem } from 'vue-grid-layout';
-import Chart from 'Components/Chart.component';
+
+import * as _ from 'lodash';
+
+import DataFrame from 'Components/DataFrame.component';
+
 import DataController from 'Controllers/data.controller';
-import { FUNCTIONS } from 'Constants/data.constants';
+
+import DataUtil from 'Util/data.util';
+
 
 export default {
-  name: 'Home',
+  name: 'workspace',
   components: {
     GridLayout,
     GridItem,
-    Chart
+    DataFrame,
   },
   props: {
     tabId: {
@@ -92,28 +97,35 @@ export default {
     },
   },
   methods: {
-    addComponent() {
-      // ovde ide i modal za biranje tipa ili sta vec
-      DataController.monitorSource({
-        function: FUNCTIONS.TIME_SERIES_DAILY,
-        symbol: 'AMD',
-      });
+    addComponent(payload) {
+      const { view, requests } = payload;
 
-      this.$store.commit('addComponent', this.tabId);
+      DataController.startMonitoring(requests);
+
+      this.$store.commit('addComponent', { tabId: this.tabId, requests, view });
+      this.$store.commit('updateLayoutStorage');
     },
 
     removeComponent() {
-      DataController.stopSourceMonitoring({
-        function: FUNCTIONS.TIME_SERIES_DAILY,
-        symbol: 'AMD',
-      });
-
       this.$store.commit('removeComponent', {
         tabId: this.tabId,
         id: this.activeComponent
       });
 
-      this.confirmDelete = false;
+      this.$store.commit('updateLayoutStorage');
+    },
+
+    removeTab() {
+      this.$store.commit('removeTab', this.tabId);
+    },
+
+    renameTab() {
+      this.$store.commit('renameTab', { tabId: this.tabId, name: this.newTabName });
+      this.renameDialog = false;
+    },
+
+    getSources(requests) {
+      return _.map(requests, DataUtil.computeSourceId);
     },
   }
 };

@@ -9,6 +9,7 @@ import Vue from 'vue';
 
 import DataApiService from 'Api/data.service';
 import DataUtil from 'Util/data.util';
+import { FUNCTIONS } from '../../constants/data.constants';
 
 const state = {
   sources: {},
@@ -20,7 +21,7 @@ const getters = {
    *
    * @param {Object} state Store state.
    * @param {string} id    Source ID.
-   * @return {bool}       True if source exists, false otherwise.
+   * @return {bool}        True if source exists, false otherwise.
    */
   hasSource: (state) => (id) => _.has(state.sources, id),
 
@@ -28,17 +29,30 @@ const getters = {
    * Extracts data points of interest.
    *
    * @param {Object} state  Store state.
-   * @param {string} id     Source id.
-   * @param {Array}  params Array of parameters of interest.
-   * @return {Array}       Array of extracted points grouped by parameter.
+   * @param {Array} sources Array of source IDs;
+   * @param {Array}  points Array of data points of interest.
+   * @return {Array}        Array of extracted data grouped by sources and data
+   *                        points.
    */
-  points: (state) => (id, params) => {
+  data: (state) => (sources, points) => {
     const data = [];
-    _.forEach(params, (param) => {
-      data.push({
-        name: _.capitalize(param),
-        data: DataUtil.extractProperty(state.sources[id].data, param)
-      });
+    _.forEach(sources, (id) => {
+      const source = state.sources[id];
+
+      if (source.function === FUNCTIONS.CURRENCY_EXCHANGE_RATE) {
+        data.push({
+          from_currency: source.data.from_currency,
+          to_currency: source.data.to_currency,
+          rate: source.data.rate,
+        });
+      } else {
+        _.forEach(points, (point) => {
+          data.push({
+            name: _.startCase(source.symbol + ' ' + point),
+            data: DataUtil.extractProperty(source.data, point)
+          });
+        });
+      }
     });
     return data;
   },
@@ -53,7 +67,13 @@ const mutations = {
    * @return {void}
    */
   createSource(state, payload) {
-    const newSource = { data: {}, observers: 0 };
+    const newSource = {
+      data: {},
+      observers: 0,
+      symbol: payload.symbol,
+      function: payload.function,
+    };
+
     Vue.set(state.sources, payload.id, newSource);
   },
 
@@ -94,7 +114,7 @@ const mutations = {
   removeObserver(state, payload) {
     state.sources[payload.id].observers--;
     if (state.sources[payload.id].observers === 0) {
-      window.clearInterval(state.sources[payload.id].intervalId);
+      window.clearInterval(state.sources[payload.id].interval);
       Reflect.deleteProperty(state.sources, payload.id);
     }
   },
@@ -107,7 +127,7 @@ const mutations = {
    * @return {void}
    */
   setIntervalId(state, payload) {
-    state.sources[payload.id].intervalId = payload.intervalId;
+    state.sources[payload.id].interval = payload.interval;
   }
 };
 
@@ -120,11 +140,11 @@ const actions = {
    * @param {Object} payload Object with parameters.
    * @return {void}
    */
-  refreshSourceData({ commit }, payload) {
-    DataApiService.fetchData(payload.params).then((response) => {
+  updateSourceData({ commit }, payload) {
+    DataApiService.fetchData(payload.request).then((response) => {
       commit('updateSource', {
         id: payload.id,
-        data: DataUtil.extractData(payload.params, response),
+        data: DataUtil.extractData(payload.request, response),
       });
     });
   }
