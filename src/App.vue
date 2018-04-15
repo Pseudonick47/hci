@@ -34,7 +34,11 @@
           </v-btn>
           <span>New tab</span>
         </v-tooltip>
-        <v-menu open-on-hover bottom offset-y>
+        <v-menu
+          open-on-hover
+          bottom
+          offset-y
+        >
             <v-btn
               flat
               fab
@@ -52,7 +56,7 @@
               <v-list-tile-action>
                 <v-icon color="purple">add_circle</v-icon>
               </v-list-tile-action>
-              <v-list-tile-content>New View</v-list-tile-content>
+              <v-list-tile-content class="mr-3">New View</v-list-tile-content>
             </v-list-tile>
             <v-divider></v-divider>
             <v-list-tile
@@ -63,7 +67,7 @@
               <v-list-tile-action>
                 <v-icon color="green">add_circle</v-icon>
               </v-list-tile-action>
-              <v-list-tile-content>New Tab</v-list-tile-content>
+              <v-list-tile-content class="mr-3">New Tab</v-list-tile-content>
             </v-list-tile>
             <v-list-tile
               ripple
@@ -74,7 +78,7 @@
               <v-list-tile-action>
                 <v-icon color="red">remove_circle</v-icon>
               </v-list-tile-action>
-              <v-list-tile-content>Remove Tab</v-list-tile-content>
+              <v-list-tile-content class="mr-3">Remove Tab</v-list-tile-content>
             </v-list-tile>
             <v-list-tile
               ripple
@@ -84,7 +88,7 @@
               <v-list-tile-action>
                 <v-icon color="blue">create</v-icon>
               </v-list-tile-action>
-              <v-list-tile-content>Rename Tab</v-list-tile-content>
+              <v-list-tile-content class="mr-3">Rename Tab</v-list-tile-content>
             </v-list-tile>
             <v-divider></v-divider>
             <v-list-tile
@@ -95,7 +99,7 @@
               <v-list-tile-action>
                 <v-icon color="light-grey">help</v-icon>
               </v-list-tile-action>
-              <v-list-tile-content>Help</v-list-tile-content>
+              <v-list-tile-content class="mr-3">Help</v-list-tile-content>
             </v-list-tile>
             <v-list-tile
               ripple
@@ -105,7 +109,7 @@
               <v-list-tile-action>
                 <v-icon color="yellow">star</v-icon>
               </v-list-tile-action>
-              <v-list-tile-content>Preferences</v-list-tile-content>
+              <v-list-tile-content class="mr-3">Preferences</v-list-tile-content>
             </v-list-tile>
           </v-list>
         </v-menu>
