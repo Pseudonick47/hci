@@ -1,3 +1,4 @@
+
 <template>
   <v-dialog
     v-model="showWizard"
@@ -33,9 +34,6 @@
       </v-stepper-header>
       <v-stepper-items>
         <v-stepper-content step="1">
-          <v-card>
-            <br><br>
-          </v-card>
           <v-layout row>
             <v-card class="card-app-photo">
               <div class="wiz-div">
@@ -87,7 +85,7 @@
           </v-footer>
         </v-stepper-content>
         <v-stepper-content step="2">
-          <v-card class="card">
+          <v-card class="app-card">
             <div id="left">
               <p class="mini-title">Graph</p>
               <p><img src="./../assets/graph.png"></p>
@@ -105,7 +103,7 @@
             </div>
           </v-card>
           <v-card height="20px"></v-card>
-          <v-card class="card">
+          <v-card class="app-card">
             <div id="left">
               <p class="mini-title">Bar chart</p>
               <p><img src="./../assets/bar-chart.jpg"></p>
@@ -140,29 +138,31 @@
           </v-footer>
         </v-stepper-content>
         <v-stepper-content step="3">
-          <v-card class="card">
-            <p class="layoutChosen">Layout chosen: {{ layout }}</p>
-            <div
-              id="left-half"
-              v-ripple
-              @click="layout = 'default-layout'"
-            >
-              <p class="mini-title">Default layout</p>
-              <hr>
-              <p height="5px"></p>
-              <p><img src="./../assets/default-layout.jpg"></p>
-              <p>Can I help you? Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce facilisis, nulla tristique lobortis imperdiet, libero ipsum consequat ligula, non congue nisl augue nec turpis. Mauris rhoncus tristique arcu nec consequat.</p>
-            </div>
-            <div
-              id="right-half"
-              v-ripple
-              @click="layout = 'advanced-layout'"
-            >
-              <p class="mini-title">Advanced layout</p>
-              <hr>
-              <p height="5px"></p>
-              <p><img src="./../assets/advanced-layout.png"></p>
-              <p>Can I help you? Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce facilisis, nulla tristique lobortis imperdiet, libero ipsum consequat ligula, non congue nisl augue nec turpis. Mauris rhoncus tristique arcu nec consequat.</p>
+          <v-card>
+            <!-- <p class="layoutChosen">Layout chosen: {{ layout }}</p> -->
+            <div class="layout-options-wrapper">
+              <div
+                id="left-half"
+                v-ripple
+                @click="selectLayout('default-layout')"
+              >
+                <p class="mini-title">Default layout</p>
+                <hr>
+                <p height="5px"></p>
+                <p><img src="./../assets/default-layout.jpg"></p>
+                <p>Can I help you? Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce facilisis, nulla tristique lobortis imperdiet, libero ipsum consequat ligula, non congue nisl augue nec turpis. Mauris rhoncus tristique arcu nec consequat.</p>
+              </div>
+              <div
+                id="right-half"
+                v-ripple
+                @click="selectLayout('advanced-layout')"
+              >
+                <p class="mini-title">Advanced layout</p>
+                <hr>
+                <p height="5px"></p>
+                <p><img src="./../assets/advanced-layout.png"></p>
+                <p>Can I help you? Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce facilisis, nulla tristique lobortis imperdiet, libero ipsum consequat ligula, non congue nisl augue nec turpis. Mauris rhoncus tristique arcu nec consequat.</p>
+              </div>
             </div>
           </v-card>
           <v-card height="20px"></v-card>
@@ -194,8 +194,8 @@
           </v-footer>
         </v-stepper-content>
         <v-stepper-content step="4">
-          <v-layout row>
-            <v-card>
+          <v-layout row class="layout-options-wrapper">
+            <v-card class="flex-item-equal">
               <p class="mini-title">Companies</p>
               <hr>
               <p height="5px"></p>
@@ -211,7 +211,7 @@
                 </template>
               </div>
             </v-card>
-            <v-card>
+            <v-card class="flex-item-equal">
               <p class="mini-title">Currencies</p>
               <hr>
               <p height="5px"></p>
@@ -290,6 +290,12 @@ export default {
     };
   },
   methods: {
+    selectLayout(layout) {
+      if (layout === 'advanced-layout') {
+        return this.closeWizard();
+      }
+      this.step = 4;
+    },
     closeWizard() {
       this.showWizard = false;
       StorageController.markAsVisited();
@@ -327,7 +333,12 @@ export default {
   border: 10px outset white;
 }
 
+.layout-options-wrapper {
+  display: flex;
+}
+
 .container {
+  /* display: flex; */
   border: 1px outset white;
   border-radius: 25px;
   width:300px;
@@ -364,7 +375,7 @@ export default {
 }
 
 #left, #middle, #right {
-  width: 30%;
+  flex: 1;
 }
 
 #left-half, #right-half {
@@ -396,9 +407,20 @@ div img {
   width: 300px;
 }
 
+.flex-item-equal {
+  flex: 1;
+}
+
+/* Style only for certain cards */
+.app-card {
+  display: flex;
+  /* width: 100%; */
+  /* height: 100%; */
+}
+
+/*  Additional style for each v-card element. It has 'card' class by default */
 .card {
-  width: 100%;
-  height: 100%;
+  padding: 20px 5px 10px 5px;
 }
 
 .card-app-photo {
