@@ -113,6 +113,8 @@ export default {
       });
 
       this.$store.commit('updateLayoutStorage');
+
+      this.confirmDelete = false;
     },
 
     removeTab() {
