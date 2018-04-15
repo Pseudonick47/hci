@@ -7,17 +7,143 @@
 
 const API_KEY = 'P7S43A98HP26MCVF';
 
+const COMPANIES = [
+    {
+        name: 'Advanced Micro Devices, Inc.',
+        symbol: 'AMD',
+    },
+    {
+        name: 'Intel Corporation',
+        symbol: 'INTC',
+    },
+    {
+        name: 'Apple Inc.',
+        symbol: 'AAPL',
+    },
+    {
+        name: 'Microsoft Corporation',
+        symbol: 'MSFT',
+    },
+    {
+        name: 'Alphabet Inc.',
+        symbol: 'GOOG',
+    },
+];
+
+const DIGITAL_CURRENCIES = [
+    {
+        name: 'Bitcoin',
+        symbol: 'BTC',
+    },
+    {
+        name: 'Ethereum',
+        symbol: 'ETH',
+    },
+    {
+        name: 'Ripple',
+        symbol: 'XRP',
+    },
+    {
+        name: 'Bitcoin Cash',
+        symbol: 'BCH',
+    },
+    {
+        name: 'Litecoin',
+        symbol: 'LTC',
+    },
+];
+
+const PHYSICAL_CURRENCIES = [
+    {
+        name: 'United States Dollar',
+        symbol: 'USD',
+    },
+    {
+        name: 'Euro',
+        symbol: 'EUR',
+    },
+    {
+        name: 'Serbian Dinar',
+        symbol: 'RSD',
+    },
+    {
+        name: 'Australian Dollar',
+        symbol: 'AUD',
+    },
+    {
+        name: 'Japanese yen',
+        symbol: 'JPY',
+    },
+    {
+        name: 'British Pound Sterling',
+        symbol: 'GBP',
+    },
+    {
+        name: 'Swiss Franc',
+        symbol: 'CHF',
+    },
+];
+
+const DATA_VIEWS = [
+    {
+      name: 'Line chart',
+      view: 'line-chart',
+    },
+    {
+      name: 'Pie chart',
+      view: 'pie-chart',
+    },
+    {
+      name: 'Column chart',
+      view: 'column-chart',
+    },
+    {
+      name: 'Bar chart',
+      view: 'bar-chart',
+    },
+    {
+      name: 'Scatter chart',
+      view: 'scatter-chart',
+    },
+    {
+      name: 'Table',
+      view: 'table-view',
+    },
+];
+
 const FUNCTIONS = {
     TIME_SERIES_INTRADAY: 'TIME_SERIES_INTRADAY',
     TIME_SERIES_DAILY: 'TIME_SERIES_DAILY',
-    TIME_SERIES_WEEKLY: ' TIME_SERIES_WEEKLY',
-    TIME_SERIES_MONTHLY: ' TIME_SERIES_MONTHLY',
+    TIME_SERIES_WEEKLY: 'TIME_SERIES_WEEKLY',
+    TIME_SERIES_MONTHLY: 'TIME_SERIES_MONTHLY',
     CURRENCY_EXCHANGE_RATE: 'CURRENCY_EXCHANGE_RATE',
     DIGITAL_CURRENCY_INTRADAY: 'DIGITAL_CURRENCY_INTRADAY',
     DIGITAL_CURRENCY_DAILY: 'DIGITAL_CURRENCY_DAILY',
     DIGITAL_CURRENCY_WEEKLY: 'DIGITAL_CURRENCY_WEEKLY',
     DIGITAL_CURRENCY_MONTHLY: 'DIGITAL_CURRENCY_MONTHLY',
 };
+
+const UPDATE_FREQUENCIES = {
+    REALTIME: 'Real-time (approx. 1 min)',
+    DAILY: 'Daily',
+    WEEKLY: 'Weekly',
+    MONTHLY: 'Monthly',
+};
+
+const FREQUENCY_TO_STOCK_FUNCTION = {};
+
+FREQUENCY_TO_STOCK_FUNCTION[UPDATE_FREQUENCIES.REALTIME] = FUNCTIONS.TIME_SERIES_INTRADAY;
+FREQUENCY_TO_STOCK_FUNCTION[UPDATE_FREQUENCIES.DAILY] = FUNCTIONS.TIME_SERIES_DAILY;
+FREQUENCY_TO_STOCK_FUNCTION[UPDATE_FREQUENCIES.WEEKLY] = FUNCTIONS.TIME_SERIES_WEEKLY;
+FREQUENCY_TO_STOCK_FUNCTION[UPDATE_FREQUENCIES.MONTHLY] = FUNCTIONS.TIME_SERIES_MONTHLY;
+
+const FREQUENCY_TO_DC_FUNCTION = {};
+
+FREQUENCY_TO_DC_FUNCTION[UPDATE_FREQUENCIES.REALTIME] = FUNCTIONS.DIGITAL_CURRENCY_INTRADAY;
+FREQUENCY_TO_DC_FUNCTION[UPDATE_FREQUENCIES.DAILY] = FUNCTIONS.DIGITAL_CURRENCY_DAILY;
+FREQUENCY_TO_DC_FUNCTION[UPDATE_FREQUENCIES.WEEKLY] = FUNCTIONS.DIGITAL_CURRENCY_WEEKLY;
+FREQUENCY_TO_DC_FUNCTION[UPDATE_FREQUENCIES.MONTHLY] = FUNCTIONS.DIGITAL_CURRENCY_MONTHLY;
+
 
 const PARAMETERS = {
     FUNCTION: 'function',
@@ -45,8 +171,8 @@ const PROPERTY_FROM_FUNCTION = {};
 
 PROPERTY_FROM_FUNCTION[FUNCTIONS.TIME_SERIES_INTRADAY] = 'Time Series (1min)';
 PROPERTY_FROM_FUNCTION[FUNCTIONS.TIME_SERIES_DAILY] = 'Time Series (Daily)';
-PROPERTY_FROM_FUNCTION[FUNCTIONS.TIME_SERIES_WEEKLY] = ' Weekly Time Series';
-PROPERTY_FROM_FUNCTION[FUNCTIONS.TIME_SERIES_MONTHLY] = ' Monthly Time Series';
+PROPERTY_FROM_FUNCTION[FUNCTIONS.TIME_SERIES_WEEKLY] = 'Weekly Time Series';
+PROPERTY_FROM_FUNCTION[FUNCTIONS.TIME_SERIES_MONTHLY] = 'Monthly Time Series';
 PROPERTY_FROM_FUNCTION[FUNCTIONS.CURRENCY_EXCHANGE_RATE] = 'Realtime Currency Exchange Rate';
 PROPERTY_FROM_FUNCTION[FUNCTIONS.DIGITAL_CURRENCY_INTRADAY] = 'Time Series (Digital Currency Intraday)';
 PROPERTY_FROM_FUNCTION[FUNCTIONS.DIGITAL_CURRENCY_DAILY] = 'Time Series (Digital Currency Daily)';
@@ -98,7 +224,7 @@ const CRYPTO_POINTS = {
     HIGH: 'high',
     LOW: 'low',
     VOLUME: 'volume',
-    MARKET_CAP: 'market cap',
+    MARKET_CAP: 'market_cap',
     PRICE: 'price',
 };
 
@@ -149,7 +275,14 @@ MAP_PROPERTIES[FUNCTIONS.DIGITAL_CURRENCY_MONTHLY] = PROPERTIES_DIGITAL_CURRENCY
 
 export {
     API_KEY,
+    COMPANIES,
+    DIGITAL_CURRENCIES,
+    PHYSICAL_CURRENCIES,
+    DATA_VIEWS,
     FUNCTIONS,
+    UPDATE_FREQUENCIES,
+    FREQUENCY_TO_STOCK_FUNCTION,
+    FREQUENCY_TO_DC_FUNCTION,
     PARAMETERS,
     REQUIRED_PARAMS,
     PROPERTY_FROM_FUNCTION,

@@ -72,7 +72,7 @@
               fluid
               class="pa-0"
             >
-              <home :tabId="id"></home>
+              <workspace :tabId="id"></workspace>
             </v-container>
           </v-tab-item>
         </v-tabs-items>
@@ -85,18 +85,19 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import Settings from 'Components/Settings.component';
-import Home from 'Components/Home.component';
+
 import Help from 'Components/Help.component';
+import Settings from 'Components/Settings.component';
 import Wizard from 'Components/Wizard.component';
+import Workspace from 'Components/Workspace.component';
 
 export default {
   name: 'App',
   components: {
-    Settings,
-    Home,
     Help,
-    Wizard
+    Settings,
+    Wizard,
+    Workspace,
   },
   data() {
     return {

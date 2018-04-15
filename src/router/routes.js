@@ -1,5 +1,5 @@
 
-import Home from 'Components/Home.component';
+import Workspace from 'Components/Workspace.component';
 import Login from 'Components/Login.component';
 import Register from 'Components/Register.component';
 
@@ -7,7 +7,7 @@ export const routes = [
   {
     path: '/',
     name: 'home',
-    component: Home,
+    component: Workspace,
   },
   {
     path: '/login',

@@ -53,7 +53,7 @@
             small
             color="indigo"
             slot="activator"
-            @click="addComponent"
+            @click="dataSourceDialog = true"
           >
             <v-icon>add</v-icon>
           </v-btn>
@@ -103,6 +103,12 @@
             </v-card-actions>
           </v-card>
       </v-dialog>
+      <data-source-dialog
+        :model="dataSourceDialog"
+        @closeDataSourceDialog="dataSourceDialog = false"
+        @dataSourceSelected="addComponent"
+      >
+      </data-source-dialog>
       <grid-layout
         :layout="layout"
         :col-num="100"
@@ -130,28 +136,12 @@
           >
             <v-icon dark>remove</v-icon>
           </v-btn>
-          <v-dialog
-            v-model="sureDeleteComponentDialog"
-            persistent
-            max-width="300px"
-          >
-            <v-card>
-              <v-card-text>
-                Delete this component?
-              </v-card-text>
-            </v-card>
-            <v-card-actions>
-              <v-btn @click="removeComponent(item.i)">yes</v-btn>
-              <v-spacer></v-spacer>
-              <v-btn @click="sureDeleteComponentDialog = false">no</v-btn>
-            </v-card-actions>
-          </v-dialog>
-          <chart
-            :chartType="item.props.type"
-            :params="item.props.params"
-            :points="item.props.points"
+          <data-frame
+            :view="item.view.name"
+            :sources="getSources(item.requests)"
+            :points="item.view.points"
             class="hide-scrollbar-inner"
-          ></chart>
+          ></data-frame>
         </grid-item>
       </grid-layout>
     </div>
@@ -161,16 +151,24 @@
 <script>
 import { mapGetters } from 'vuex';
 import { GridLayout, GridItem } from 'vue-grid-layout';
-import Chart from 'Components/Chart.component';
+
+import * as _ from 'lodash';
+
+import DataFrame from 'Components/DataFrame.component';
+import DataSourceDialog from 'Components/DataSourceDialog.component';
+
 import DataController from 'Controllers/data.controller';
-import { FUNCTIONS } from 'Constants/data.constants';
+
+import DataUtil from 'Util/data.util';
+
 
 export default {
-  name: 'Home',
+  name: 'workspace',
   components: {
     GridLayout,
     GridItem,
-    Chart
+    DataFrame,
+    DataSourceDialog,
   },
   props: {
     tabId: {
@@ -189,9 +187,10 @@ export default {
     index: 20,
     chartData: [],
     renameDialog: false,
+    dataSourceDialog: false,
+    newTabName: '',
     sureDeleteTabDialog: false,
     sureDeleteComponentDialog: false,
-    newTabName: ''
   }),
   computed: {
     ...mapGetters([
@@ -204,22 +203,18 @@ export default {
     }
   },
   methods: {
-    addComponent() {
-      // ovde ide i modal za biranje tipa ili sta vec
-      DataController.monitorSource({
-        function: FUNCTIONS.TIME_SERIES_DAILY,
-        symbol: 'AMD',
-      });
+    addComponent(payload) {
+      const { view, requests } = payload;
 
-      this.$store.commit('addComponent', this.tabId);
+      DataController.startMonitoring(requests);
+
+      this.$store.commit('addComponent', { tabId: this.tabId, requests, view });
+      this.$store.commit('updateLayoutStorage');
     },
-    removeComponent(id) {
-      DataController.stopSourceMonitoring({
-        function: FUNCTIONS.TIME_SERIES_DAILY,
-        symbol: 'AMD',
-      });
 
+    removeComponent(id) {
       this.$store.commit('removeComponent', { tabId: this.tabId, id });
+      this.$store.commit('updateLayoutStorage');
     },
     removeTab() {
       this.$store.commit('removeTab', this.tabId);
@@ -227,6 +222,9 @@ export default {
     renameTab() {
       this.$store.commit('renameTab', { tabId: this.tabId, name: this.newTabName });
       this.renameDialog = false;
+    },
+    getSources(requests) {
+      return _.map(requests, DataUtil.computeSourceId);
     }
   }
 };
