@@ -6,6 +6,11 @@
       :points="points"
     ></app-table>
 
+    <app-exchange
+      v-if="chartType === 'exchange'"
+      :data="data"
+    ></app-exchange>
+
       <line-chart
         v-if="chartType === 'line'"
         :download="true"
@@ -40,11 +45,13 @@
 <script>
 import DataUtil from 'Util/data.util';
 import AppTable from 'Components/Table.component';
+import AppExchange from 'Components/Exchange.component';
 
 export default {
   name: 'chart',
   components: {
-    AppTable
+    AppTable,
+    AppExchange
   },
   props: {
     chartType: {

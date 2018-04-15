@@ -3,8 +3,8 @@
     <div id="content">
       <grid-layout
         :layout="layout"
-        :col-num="8"
-        :row-height="100"
+        :col-num="100"
+        :row-height="1"
         :is-draggable="draggable"
         :is-resizable="resizable"
         :vertical-compact="true"
