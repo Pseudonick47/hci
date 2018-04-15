@@ -98,15 +98,6 @@
 								</div>
 								<div v-else-if="imageStep == 2">
 									<img
-										src="./../assets/app-part3.png"
-										style="float:left;margin:10px"
-									>
-									<p>
-										Lorem ipsum dolor sit amet, pri veniam forensibus id. Vis maluisset molestiae id, ad semper lobortis cum. At impetus detraxit incorrupte usu, repudiare assueverit ex eum, ne nam essent vocent admodum.
-									</p>
-								</div>
-								<div v-else-if="imageStep == 3">
-									<img
 										src="./../assets/app-part1.png"
 										style="float:left;margin:10px"
 										height="260px"
@@ -188,7 +179,7 @@
 							</div>
 							<div v-else-if="viewStep == 2">
 								<img
-									src="./../assets/table.jpg"
+									src="./../assets/table.png"
 									height="260px"
 									style="float:left;margin:10px"
 								>
@@ -294,7 +285,7 @@
 				this.viewStep = 1;
 			},
 			nextImage() {
-				if (this.imageStep === 4) {
+				if (this.imageStep === 3) {
 					this.imageStep = 1;
 				} else {
 					this.imageStep++;
@@ -302,7 +293,7 @@
 			},
 			previousImage() {
 				if (this.imageStep === 1) {
-					this.imageStep = 4;
+					this.imageStep = 3;
 				} else {
 					this.imageStep--;
 				}

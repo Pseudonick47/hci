@@ -88,17 +88,29 @@
           <v-card class="app-card">
             <div id="left">
               <p class="mini-title">Graph</p>
-              <p><img src="./../assets/graph.png"></p>
+              <p>
+                <img
+                  src="./../assets/graph.png"
+                  height="220px"
+                  width="350px"
+                >
+              </p>
               <p>Can I help you? Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce facilisis, nulla tristique lobortis imperdiet, libero ipsum consequat ligula, non congue nisl augue nec turpis. Mauris rhoncus tristique arcu nec consequat.</p>
             </div>
             <div id="middle">
               <p class="mini-title">Table</p>
-              <p><img src="./../assets/table.jpg"></p>
+              <p>
+                <img
+                  src="./../assets/table.png"
+                  height="220px"
+                  width="350px"
+                >
+              </p>
               <p>Can I help you? Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce facilisis, nulla tristique lobortis imperdiet, libero ipsum consequat ligula, non congue nisl augue nec turpis. Mauris rhoncus tristique arcu nec consequat.</p>
             </div>
             <div id="right">
               <p class="mini-title">Pie chart</p>
-              <p><img src="./../assets/pie-chart.png"></p>
+              <p><img src="./../assets/pie-chart.png" width="350px"></p>
               <p>Can I help you? Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce facilisis, nulla tristique lobortis imperdiet, libero ipsum consequat ligula, non congue nisl augue nec turpis. Mauris rhoncus tristique arcu nec consequat.</p>
             </div>
           </v-card>
@@ -106,17 +118,32 @@
           <v-card class="app-card">
             <div id="left">
               <p class="mini-title">Bar chart</p>
-              <p><img src="./../assets/bar-chart.jpg"></p>
+              <p>
+                <img
+                  src="./../assets/bar-chart.jpg"
+                  width="350px"
+                >
+              </p>
               <p>Can I help you? Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce facilisis, nulla tristique lobortis imperdiet, libero ipsum consequat ligula, non congue nisl augue nec turpis. Mauris rhoncus tristique arcu nec consequat.</p>
             </div>
             <div id="middle">
               <p class="mini-title">Column chart</p>
-              <p><img src="./../assets/column-chart.png"></p>
+              <p>
+                <img
+                  src="./../assets/column-chart.png"
+                  width="350px"
+                >
+              </p>
               <p>Can I help you? Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce facilisis, nulla tristique lobortis imperdiet, libero ipsum consequat ligula, non congue nisl augue nec turpis. Mauris rhoncus tristique arcu nec consequat.</p>
             </div>
             <div id="right">
               <p class="mini-title">Scatter chart</p>
-              <p><img src="./../assets/scatter-chart.jpg"></p>
+              <p>
+                <img
+                  src="./../assets/scatter-chart.jpg"
+                  width="350px"
+                >
+              </p>
               <p>Can I help you? Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce facilisis, nulla tristique lobortis imperdiet, libero ipsum consequat ligula, non congue nisl augue nec turpis. Mauris rhoncus tristique arcu nec consequat.</p>
             </div>
           </v-card>
@@ -149,7 +176,13 @@
                 <p class="mini-title">Default layout</p>
                 <hr>
                 <p height="5px"></p>
-                <p><img src="./../assets/default-layout.jpg"></p>
+                <p>
+                  <img
+                    src="./../assets/default-layout.jpg"
+                    height="300px"
+                    width="500px"
+                  >
+                </p>
                 <p>Can I help you? Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce facilisis, nulla tristique lobortis imperdiet, libero ipsum consequat ligula, non congue nisl augue nec turpis. Mauris rhoncus tristique arcu nec consequat.</p>
               </div>
               <div
@@ -160,7 +193,13 @@
                 <p class="mini-title">Advanced layout</p>
                 <hr>
                 <p height="5px"></p>
-                <p><img src="./../assets/advanced-layout.png"></p>
+                <p>
+                  <img
+                    src="./../assets/advanced-layout.png"
+                    height="300px"
+                    width="350px"
+                  >
+                </p>
                 <p>Can I help you? Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce facilisis, nulla tristique lobortis imperdiet, libero ipsum consequat ligula, non congue nisl augue nec turpis. Mauris rhoncus tristique arcu nec consequat.</p>
               </div>
             </div>
@@ -404,7 +443,6 @@ p.wiz-info {
 
 div img {
   align-content: bottom;
-  width: 300px;
 }
 
 .flex-item-equal {
