@@ -55,7 +55,7 @@
 <script>
 import TableView from 'Components/TableView.component';
 import ExchangeView from 'Components/ExchangeView.component';
-import BigNumberView from 'Components/BigNumber.component';
+import BigNumberView from 'Components/BigNumberView.component';
 
 export default {
   name: 'data-frame',

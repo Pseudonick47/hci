@@ -86,29 +86,29 @@ const PHYSICAL_CURRENCIES = [
 
 const DATA_VIEWS = [
     {
-      name: 'Line chart',
-      view: 'line-chart',
+        name: 'Line chart',
+        view: 'line-chart',
     },
     {
-      name: 'Pie chart',
-      view: 'pie-chart',
+        name: 'Column chart',
+         view: 'column-chart',
     },
     {
-      name: 'Column chart',
-      view: 'column-chart',
+        name: 'Bar chart',
+        view: 'bar-chart',
     },
     {
-      name: 'Bar chart',
-      view: 'bar-chart',
+        name: 'Scatter chart',
+        view: 'scatter-chart',
     },
     {
-      name: 'Scatter chart',
-      view: 'scatter-chart',
+        name: 'Table',
+        view: 'table-view',
     },
     {
-      name: 'Table',
-      view: 'table-view',
-    },
+        name: 'Trend',
+        view: 'big-number-view'
+    }
 ];
 
 const FUNCTIONS = {
