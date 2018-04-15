@@ -134,7 +134,6 @@ export default {
       });
     },
     renameNewTab() {
-      console.log(this.tabs);
       this.dialog = false;
       this.$store.commit('addTab', this.newTabName);
     }
