@@ -9,6 +9,7 @@ import Vue from 'vue';
 
 import DataApiService from 'Api/data.service';
 import DataUtil from 'Util/data.util';
+import { FUNCTIONS } from '../../constants/data.constants';
 
 const state = {
   sources: {},
@@ -37,12 +38,21 @@ const getters = {
     const data = [];
     _.forEach(sources, (id) => {
       const source = state.sources[id];
-      _.forEach(points, (point) => {
+
+      if (source.function === FUNCTIONS.CURRENCY_EXCHANGE_RATE) {
         data.push({
-          name: _.startCase(source.symbol + ' ' + point),
-          data: DataUtil.extractProperty(source.data, point)
+          from_currency: source.data.from_currency,
+          to_currency: source.data.to_currency,
+          rate: source.data.rate,
         });
-      });
+      } else {
+        _.forEach(points, (point) => {
+          data.push({
+            name: _.startCase(source.symbol + ' ' + point),
+            data: DataUtil.extractProperty(source.data, point)
+          });
+        });
+      }
     });
     return data;
   },

@@ -50,6 +50,8 @@
                 v-model="newTabName"
                 label="Tab name:"
                 required
+                @keyup.enter="renameNewTab"
+                @keyup.esc="dialog = false"
               ></v-text-field>
             </v-card-text>
             <v-card-actions>

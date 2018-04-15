@@ -27,7 +27,7 @@
             small
             color="red"
             slot="activator"
-            @click="removeTab"
+            @click="sureDeleteTabDialog = true"
           >
             <v-icon>delete</v-icon>
           </v-btn>
@@ -61,6 +61,22 @@
         </v-tooltip>
       </v-speed-dial>
       <v-dialog
+        v-model="sureDeleteTabDialog"
+        persistent
+        max-width="300px"
+      >
+        <v-card>
+          <v-card-text>
+            Delete this tab?
+          </v-card-text>
+        </v-card>
+        <v-card-actions>
+          <v-btn @click="removeTab">yes</v-btn>
+          <v-spacer></v-spacer>
+          <v-btn @click="sureDeleteTabDialog = false">no</v-btn>
+        </v-card-actions>
+      </v-dialog>
+      <v-dialog
         v-model="renameDialog"
         persistent
         max-width="300"
@@ -76,6 +92,8 @@
                 v-model="newTabName"
                 label="Tab name:"
                 required
+                @keyup.enter="renameTab"
+                @keyup.esc="renameDialog = false"
               ></v-text-field>
             </v-card-text>
             <v-card-actions>
@@ -93,8 +111,8 @@
       </data-source-dialog>
       <grid-layout
         :layout="layout"
-        :col-num="8"
-        :row-height="100"
+        :col-num="100"
+        :row-height="1"
         :is-draggable="draggable"
         :is-resizable="resizable"
         :vertical-compact="true"
@@ -114,7 +132,7 @@
             fab
             small
             color="red"
-            @click="removeComponent(item.i)"
+            @click="sureDeleteComponentDialog = true"
           >
             <v-icon dark>remove</v-icon>
           </v-btn>
@@ -170,7 +188,9 @@ export default {
     chartData: [],
     renameDialog: false,
     dataSourceDialog: false,
-    newTabName: ''
+    newTabName: '',
+    sureDeleteTabDialog: false,
+    sureDeleteComponentDialog: false,
   }),
   computed: {
     ...mapGetters([

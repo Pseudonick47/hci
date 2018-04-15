@@ -519,13 +519,19 @@ export default {
     addExchange() {
       const { from_currency, to_currency } = this.exchange;
 
-      console.log('Exchange currencies', {
-        view: 'big-number',
-        source: {
-          function: FUNCTIONS.CURRENCY_EXCHANGE_RATE,
-          from_currency: from_currency.symbol,
-          to_currency: to_currency.symbol,
+      this.$emit('dataSourceSelected', {
+        view: {
+          name: 'exchange-view',
+          points: ['From Currency', 'To Currency', 'Rate'],
         },
+        requests: [
+          {
+            symbol: '',
+            function: FUNCTIONS.CURRENCY_EXCHANGE_RATE,
+            from_currency: from_currency.symbol,
+            to_currency: to_currency.symbol,
+          },
+        ],
       });
     },
 

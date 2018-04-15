@@ -14,6 +14,11 @@
       height="85%"
     ></line-chart>
 
+    <exchange-view
+      v-if="view === 'exchange-view'"
+      :data="data"
+    ></exchange-view>
+
     <pie-chart
       v-else-if="view === 'pie-chart'"
       :data="data"
@@ -39,13 +44,14 @@
 </template>
 
 <script>
-
 import TableView from 'Components/TableView.component';
+import ExchangeView from 'Components/ExchangeView.component';
 
 export default {
   name: 'data-frame',
   components: {
-    TableView
+    TableView,
+    ExchangeView,
   },
   props: {
     view: {
