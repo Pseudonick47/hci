@@ -119,6 +119,16 @@ export default {
 
     return processed;
   },
+  /**
+   * Returns only specified number of latest data points.
+   *
+   * @param {Object} data Acquired data to slice.
+   * @param {Number} num  Number of data points to return.
+   * @return {Object}     Reduced data object.
+   */
+  sliceExcessData(data, num) {
+    return _.fromPairs(_.slice(_.sortBy(_.entries(data), [0]), -num));
+  },
 
   /**
    * Extracts only useful data from Alpha Vantage response.
@@ -135,6 +145,8 @@ export default {
     if (!data) {
       return {};
     }
+    // take only last 50 points
+    data = this.sliceExcessData(data);
     // remap props
     data = this.mapProperties(params, data);
     return data;
@@ -159,5 +171,4 @@ export default {
     });
     return data;
   },
-
 };

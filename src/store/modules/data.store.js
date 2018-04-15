@@ -128,6 +128,29 @@ const mutations = {
    */
   setIntervalId(state, payload) {
     state.sources[payload.id].interval = payload.interval;
+  },
+
+  /**
+   * Saves data to local storage.
+   *
+   * @param {Object} state   Store state.
+   * @return {void}
+   */
+  cacheData(state) {
+    localStorage.setItem('sources', JSON.stringify(state.sources));
+  },
+
+  /**
+   * Loads data from local storage.
+   *
+   * @param {Object} state   Store state.
+   * @return {void}
+   */
+  loadData(state) {
+    const sources = JSON.parse(localStorage.getItem('sources'));
+    if (!_.isEmpty(sources)) {
+      state.sources = sources;
+    }
   }
 };
 
@@ -146,6 +169,8 @@ const actions = {
         id: payload.id,
         data: DataUtil.extractData(payload.request, response),
       });
+
+      commit('cacheData');
     });
   }
 };

@@ -15,6 +15,14 @@ import { queue } from 'Util/queue.util';
 
 export default {
   /**
+   * Initializes data sources from local storage.
+   *
+   * @return {void}
+   */
+  populateDataStore() {
+    store.commit('loadData');
+  },
+  /**
    * Starts a loop that periodically looks for new requests and dispatches an
    * action to fulfil the request.
    *

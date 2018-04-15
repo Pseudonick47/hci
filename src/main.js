@@ -18,6 +18,7 @@ Vue.prototype.router = router;
 
 StorageController.initStore();
 StorageController.keepLocalStorageSynced();
+DataController.populateDataStore();
 DataController.startRequestLoop();
 
 /* eslint-disable no-new */
