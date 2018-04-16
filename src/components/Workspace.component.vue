@@ -14,6 +14,8 @@
           v-for="item in layout"
           :key="item.i"
           class="hide-scrollbar-outer"
+          @mouseout.native="hideRemoveIcon(item)"
+          @mouseover.native="showRemoveIcon(item)"
           :x="item.x"
           :y="item.y"
           :w="item.w"
@@ -21,14 +23,19 @@
           :i="item.i"
         >
           <v-btn
+            absolute
+            v-show="hoveredComponentId === item.i"
             fab
             small
             color="red"
+            class="mt-1 ml-1"
             @click="activeComponent = item.i, confirmDelete = true"
           >
             <v-icon dark>remove</v-icon>
           </v-btn>
           <data-frame
+            @mouseover.native="showRemoveIcon(item)"
+            @mouseout.native="hideRemoveIcon(item)"
             :view="item.view.name || ''"
             :sources="getSources(item.requests)"
             :points="item.view.points"
@@ -85,6 +92,7 @@ export default {
     return {
       confirmDelete: false,
       activeComponent: -1,
+      hoveredComponentId: -1
     };
   },
   computed: {
@@ -97,6 +105,14 @@ export default {
     },
   },
   methods: {
+    showRemoveIcon(item) {
+      this.hoveredComponentId = item.i;
+    },
+    hideRemoveIcon(item) {
+      setTimeout(() => {
+        this.hoveredComponentId = -1;
+      }, 2000);
+    },
     addComponent(payload) {
       const { view, requests } = payload;
 
