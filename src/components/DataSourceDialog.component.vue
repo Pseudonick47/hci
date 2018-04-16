@@ -60,22 +60,29 @@
 
               <v-layout row>
                 <v-expansion-panel
-                  class="elevation-0"
+                  class="elevation-0 pa-0"
                   expand
                   popup
+                  @click.native.prevent.stop
                 >
                   <v-expansion-panel-content
-                    :value="true"
+                    :value="stocks.pointsExpanded"
+                    class="pa-0"
                     hide-actions
+                    @click.native.prevent.stop
                   >
                     <div
+                      class="pa-0"
                       slot="header"
+                      @click.native.prevent.stop
                     >
                       <v-radio-group
                         v-model="stocks.values"
                         label="What would you like to see?"
                         row
-                        @click.native="expandStockPoints($event)"
+                        class="px-3"
+                        @change="expandStockPoints"
+                        @click.native.prevent.stop
                       >
                         <v-radio label="Values" value="values" ></v-radio>
                         <v-radio label="Volume" value="volume"></v-radio>
@@ -161,22 +168,29 @@
 
               <v-layout row>
                 <v-expansion-panel
-                  class="elevation-0"
+                  class="elevation-0 pa-0"
                   expand
                   popup
+                  @click.native.prevent.stop
                 >
                   <v-expansion-panel-content
-                    :value="true"
+                    :value="crypto.pointsExpanded"
+                    class="pa-0"
                     hide-actions
+                    @click.native.prevent.stop
                   >
                     <div
                       slot="header"
+                      class="pa-0"
+                      @click.native.prevent.stop
                     >
                       <v-radio-group
                         v-model="crypto.values"
                         label="What would you like to see?"
                         row
-                        @click.native="expandCryptoPoints($event)"
+                        class="px-3"
+                        @change="expandCryptoPoints"
+                        @click.native.prevent.stop
                       >
                         <v-radio label="Values" value="values" ></v-radio>
                         <v-radio label="Volume" value="volume"></v-radio>
@@ -533,35 +547,21 @@ export default {
       });
     },
 
-    expandStockPoints(e) {
-      const { values } = this.stocks;
-
-      if (values === 'values' && this.stocks.pointsExpanded) {
-        e.stopPropagation();
-      } else if (values === 'values' && !this.stocks.pointsExpanded) {
+    expandStockPoints(val) {
+      if (val === 'values') {
         this.stocks.pointsExpanded = true;
-      } else if (values === 'volume' && this.stocks.pointsExpanded) {
-        this.stocks.pointsExpanded = false;
       } else {
-        e.stopPropagation();
+        this.stocks.pointsExpanded = false;
       }
     },
 
-    expandCryptoPoints(e) {
-      const { values } = this.crypto;
-
-      if (values === 'values' && this.crypto.pointsExpanded) {
-        e.stopPropagation();
-      } else if (values === 'values' && !this.crypto.pointsExpanded) {
+    expandCryptoPoints(val) {
+      if (val === 'values') {
         this.crypto.pointsExpanded = true;
-      } else if (values === 'volume' && this.crypto.pointsExpanded) {
-        this.crypto.pointsExpanded = false;
-      } else if (values === 'volume' && !this.crypto.pointsExpanded) {
-        e.stopPropagation();
-      } else if (values === 'market_cap' && this.crypto.pointsExpanded) {
+      } else if (val === 'volume') {
         this.crypto.pointsExpanded = false;
       } else {
-        e.stopPropagation();
+        this.crypto.pointsExpanded = false;
       }
     },
 
@@ -600,3 +600,9 @@ export default {
   },
 };
 </script>
+<style>
+.expansion-panel__header {
+  padding: 0 !important;
+}
+</style>
+
