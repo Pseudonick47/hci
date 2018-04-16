@@ -3,7 +3,7 @@ import Vue from 'vue';
 import DataController from 'Controllers/data.controller';
 
 const state = {
-  tabs: { '0': { componentId: 0, name: 'New Tab', layout: [] } },
+  tabs: { '0': { componentId: 0, name: 'Tab 0', layout: [] } },
   tabId: 0
 };
 
@@ -61,12 +61,13 @@ const mutations = {
   },
   addTab(state) {
     state.tabId++;
-    const newTab = { componentId: 0, layout: [], name: 'New Tab' };
+    const newTab = { componentId: 0, layout: [], name: 'tab'+state.tabId };
     Vue.set(state.tabs, `${state.tabId}`, newTab);
   },
 
   removeTab(state, tabId) {
     Vue.delete(state.tabs, tabId);
+    state.tabId--;
   },
 
   renameTab(state, data) {
