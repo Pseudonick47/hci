@@ -38,7 +38,6 @@ export default {
       _.each(val, (el) => {
         this.current[el.name] = el.data[_.last(_.keys(el.data).sort())];
       });
-      console.log(this.current);
     }
   },
   methods: {

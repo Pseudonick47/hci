@@ -496,17 +496,13 @@ export default {
         points.push('Volume');
       } else if (values === 'market_cap') {
         points.push('Market Cap');
-      } else {
-        if (func === FUNCTIONS.DIGITAL_CURRENCY_INTRADAY) {
+      } else if (func === FUNCTIONS.DIGITAL_CURRENCY_INTRADAY) {
           points.push('Price');
         } else {
           points = _.filter(_.flatMap(selectedPoints, (v, k) => {
             return v ? k : null;
           }));
         }
-        // linter...
-        console.log('');
-      }
 
       this.$emit('dataSourceSelected', {
         view: {
