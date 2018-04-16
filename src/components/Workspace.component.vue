@@ -14,7 +14,7 @@
           v-for="item in layout"
           :key="item.i"
           class="hide-scrollbar-outer"
-          @mouseout.native="hideRemoveIcon(item)"
+          @mouseout.native="hideRemoveIcon"
           @mouseover.native="showRemoveIcon(item)"
           :x="item.x"
           :y="item.y"
@@ -35,7 +35,7 @@
           </v-btn>
           <data-frame
             @mouseover.native="showRemoveIcon(item)"
-            @mouseout.native="hideRemoveIcon(item)"
+            @mouseout.native="hideRemoveIcon"
             :view="item.view.name || ''"
             :sources="getSources(item.requests)"
             :points="item.view.points"
@@ -108,7 +108,7 @@ export default {
     showRemoveIcon(item) {
       this.hoveredComponentId = item.i;
     },
-    hideRemoveIcon(item) {
+    hideRemoveIcon() {
       setTimeout(() => {
         this.hoveredComponentId = -1;
       }, 2000);
