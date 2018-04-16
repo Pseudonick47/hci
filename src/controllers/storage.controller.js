@@ -22,5 +22,9 @@ export default {
 
   markAsVisited() {
     localStorage.setItem('isVisited', true);
+  },
+
+  clearStorage() {
+    localStorage.clear();
   }
 };

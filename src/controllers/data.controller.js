@@ -7,7 +7,7 @@
 import * as _ from 'lodash';
 import store from 'Store';
 
-import { INTERVAL_FROM_FUNCTION } from 'Constants/data.constants';
+import { INTERVAL_FROM_FUNCTION, FUNCTIONS } from 'Constants/data.constants';
 
 import DataUtil from 'Util/data.util';
 import { queue } from 'Util/queue.util';
@@ -35,6 +35,28 @@ export default {
         store.dispatch(task.action, task.payload);
       }
     }, 1000);
+  },
+
+  requestExchangeRate() {
+    const request = {
+      function: FUNCTIONS.CURRENCY_EXCHANGE_RATE,
+      from_currency: 'USD',
+      to_currency: store.getters.currencyValue,
+    };
+
+    queue.enqueue({
+      action: 'updateExchangeRate',
+      payload: { request },
+    });
+
+    window.setInterval(() => {
+      request.to_currency = store.getters.currencyValue;
+
+      queue.enqueue({
+        action: 'updateExchangeRate',
+        payload: { request }
+      });
+    }, INTERVAL_FROM_FUNCTION[request.function]);
   },
 
   /**

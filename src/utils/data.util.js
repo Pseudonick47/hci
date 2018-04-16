@@ -152,6 +152,20 @@ export default {
     return data;
   },
 
+  recalculateValues(data, rate) {
+    const new_data = {};
+
+    _.forOwn(data, (value, key) => {
+      new_data[key] = {};
+
+      _.forOwn(value, (v, k) => {
+        new_data[key][k] = v * rate;
+      });
+    });
+
+    return new_data;
+  },
+
   /**
    * Reduces every object from a collection to a single property of interest.
    *

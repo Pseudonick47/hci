@@ -16,7 +16,7 @@
           :key="id"
           :href="'#tab-' + id"
         >
-            {{ tab.name }}
+          {{ tab.name }}
         </v-tab>
         <v-layout row justify-space-between mr-2>
         <v-tooltip
@@ -198,7 +198,9 @@
       @closeDialog="showSourceDialog = false"
       @dataSourceSelected="addComponent"
     ></data-source-dialog>
-    <wizard></wizard>
+    <wizard
+      @dataSourceSelected="addComponents"
+    ></wizard>
     <settings ref="settings"></settings>
     <help ref="help"></help>
   </v-app>
@@ -232,6 +234,7 @@ export default {
       activeTab: 'tab-0',
       updateTabs: 'tabs-update-0',
       showSourceDialog: false,
+      enableTabRenaming: false,
     };
   },
   computed: {
@@ -290,6 +293,11 @@ export default {
     addComponent(payload) {
       this.$refs[`home-${this.activeTabId}`][0].addComponent(payload);
     },
+    addComponents(payload) {
+      _.each(payload, (component) => {
+        this.$refs[`home-${this.activeTabId}`][0].addComponent(component);
+      });
+    }
   }
 };
 </script>

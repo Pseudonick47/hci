@@ -20,6 +20,7 @@ StorageController.initStore();
 StorageController.keepLocalStorageSynced();
 DataController.populateDataStore();
 DataController.startRequestLoop();
+DataController.requestExchangeRate();
 
 /* eslint-disable no-new */
 new Vue({

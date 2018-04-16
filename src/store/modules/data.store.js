@@ -13,6 +13,7 @@ import { FUNCTIONS } from '../../constants/data.constants';
 
 const state = {
   sources: {},
+  exchange_rate: 1,
 };
 
 const getters = {
@@ -24,6 +25,8 @@ const getters = {
    * @return {bool}        True if source exists, false otherwise.
    */
   hasSource: (state) => (id) => _.has(state.sources, id),
+
+  exchangeRate: (state) => state.exchange_rate,
 
   /**
    * Extracts data points of interest.
@@ -119,6 +122,10 @@ const mutations = {
     }
   },
 
+  setExchangeRate(state, payload) {
+    state.exchange_rate = _.toNumber(payload.rate);
+  },
+
   /**
    * Associates request loop with data source.
    *
@@ -138,6 +145,7 @@ const mutations = {
    */
   cacheData(state) {
     localStorage.setItem('sources', JSON.stringify(state.sources));
+    localStorage.setItem('exchange_rate', JSON.stringify(state.exchange_rate));
   },
 
   /**
@@ -148,8 +156,15 @@ const mutations = {
    */
   loadData(state) {
     const sources = JSON.parse(localStorage.getItem('sources'));
-    if (!_.isEmpty(sources)) {
+
+    if (!_.isNull(sources)) {
       state.sources = sources;
+    }
+
+    const exchange_rate = JSON.parse(localStorage.getItem('exchange_rate'));
+
+    if (!_.isNull(exchange_rate)) {
+      state.exchange_rate = _.toNumber(exchange_rate);
     }
   }
 };
@@ -163,14 +178,24 @@ const actions = {
    * @param {Object} payload Object with parameters.
    * @return {void}
    */
-  updateSourceData({ commit }, payload) {
+  updateSourceData({ commit, getters }, payload) {
     DataApiService.fetchData(payload.request).then((response) => {
+      let data = DataUtil.extractData(payload.request, response);
+
+      data = DataUtil.recalculateValues(data, getters.exchangeRate);
+
       commit('updateSource', {
         id: payload.id,
-        data: DataUtil.extractData(payload.request, response),
+        data
       });
 
       commit('cacheData');
+    });
+  },
+
+  updateExchangeRate(context, payload) {
+    DataApiService.fetchData(payload.request).then((response) => {
+      context.commit('setExchangeRate', DataUtil.extractData(payload.request, response));
     });
   }
 };

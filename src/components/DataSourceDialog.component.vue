@@ -4,12 +4,13 @@
       <v-card>
         <v-card-title class="headline">What should we present to you?</v-card-title>
         <v-tabs
+          dark
           v-model="tabs"
           fixed-tabs
           centered
           show-arrows
+          tab-slider="cyan"
         >
-          <v-tabs-slider></v-tabs-slider>
           <v-tab href="#tabs-stocks" class="primary--text">Stocks</v-tab>
           <v-tab href="#tabs-digital-currencies" class="primary--text">Digital Currencies</v-tab>
           <v-tab href="#tabs-currency-exchange-rate" class="primary--text">Exchange rate</v-tab>

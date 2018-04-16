@@ -229,8 +229,8 @@
               <p class="list-label">Select companies:</p>
               <div class="container">
                 <v-select
-                  :items="stocks.companies"
-                  v-model="stocks.selectedCompanies"
+                  :items="companies"
+                  v-model="selectedCompanies"
                   label="Companies that you are interested in"
                   item-text="name"
                   item-value="symbol"
@@ -239,9 +239,6 @@
                   required
                   multiple
                   clearable
-                  :rules="companyRules"
-                  @change="stocks.firstInput = false,stocks.addDisabled = false"
-                  @update:error="(err) => err ? stocks.addDisabled = err : null"
                 ></v-select>
               </div>
             </v-card>
@@ -252,8 +249,8 @@
               <p class="list-label">Select currencies:</p>
               <div class="container">
                 <v-select
-                  :items="crypto.currencies"
-                  v-model="crypto.selectedCurrencies"
+                  :items="currencies"
+                  v-model="selectedCurrencies"
                   label="Digital currencies that you are interested in"
                   item-text="name"
                   item-value="symbol"
@@ -262,9 +259,6 @@
                   required
                   multiple
                   clearable
-                  :rules="cryptoRules"
-                  @change="crypto.firstInput = false,crypto.addDisabled = false"
-                  @update:error="(err) => err ? crypto.addDisabled = err : null"
                 ></v-select>
               </div>
             </v-card>
@@ -281,7 +275,7 @@
           <v-footer>
             <v-btn
               color="success"
-              @click="closeWizard"
+              @click="addComponents"
               right
               absolute
             >
@@ -304,15 +298,14 @@
 
 <script>
 import * as _ from 'lodash';
+
 import StorageController from 'Controllers/storage.controller';
+
 import {
   COMPANIES,
   DIGITAL_CURRENCIES,
-  DATA_VIEWS,
-  UPDATE_FREQUENCIES
+  FUNCTIONS,
 } from 'Constants/data.constants';
-
-const POINTS = ['Open', 'Close', 'High', 'Low'].sort();
 
 export default {
   name: 'Wizard',
@@ -322,62 +315,71 @@ export default {
       alert: false,
       step: 1,
       layout: 'default-layout',
+      companies: COMPANIES,
+      currencies: DIGITAL_CURRENCIES,
       selectedCompanies: [],
       selectedCurrencies: [],
-      stocks: {
-        companies: COMPANIES,
-        selectedCompanies: [],
-        firstInput: true,
-        values: 'values',
-        points: POINTS,
-        selectedPoints: _.fromPairs(_.map(POINTS, (e) => [e, true])),
-        pointsExpanded: true,
-        addDisabled: true,
-        frequencies: [
-          UPDATE_FREQUENCIES.REALTIME,
-          UPDATE_FREQUENCIES.DAILY,
-          UPDATE_FREQUENCIES.WEEKLY,
-          UPDATE_FREQUENCIES.MONTHLY
-        ],
-        selectedFrequency: UPDATE_FREQUENCIES.DAILY,
-        views: DATA_VIEWS,
-        selectedView: DATA_VIEWS[0],
-      },
-      crypto: {
-        currencies: DIGITAL_CURRENCIES,
-        selectedCurrencies: [],
-        firstInput: true,
-        addDisabled: true,
-        values: 'values',
-        points: POINTS,
-        selectedPoints: _.fromPairs(_.map(POINTS, (e) => [e, true])),
-        pointsExpanded: true,
-        frequencies: [
-          UPDATE_FREQUENCIES.REALTIME,
-          UPDATE_FREQUENCIES.DAILY,
-          UPDATE_FREQUENCIES.WEEKLY,
-          UPDATE_FREQUENCIES.MONTHLY
-        ],
-        selectedFrequency: UPDATE_FREQUENCIES.DAILY,
-        views: DATA_VIEWS,
-        selectedView: DATA_VIEWS[0],
-      },
     };
   },
   methods: {
+    addComponents() {
+      const components = [];
+
+      _.forEach(this.selectedCompanies, (company) => {
+        components.push({
+          view: {
+            name: 'line-chart',
+            points: ['Open', 'Close'],
+          },
+          requests: [
+            {
+              function: FUNCTIONS.TIME_SERIES_DAILY,
+              symbol: company.symbol,
+            },
+          ],
+        });
+      });
+
+      const market = this.$store.getters.currencyValue;
+
+      _.forEach(this.selectedCurrencies, (currency) => {
+        components.push({
+          view: {
+            name: 'line-chart',
+            points: ['Open', 'Close'],
+          },
+          requests: [
+            {
+              function: FUNCTIONS.DIGITAL_CURRENCY_DAILY,
+              symbol: currency.symbol,
+              market,
+            },
+          ],
+        });
+      });
+
+
+      this.$emit('dataSourceSelected', components);
+
+      this.closeWizard();
+    },
+
     selectLayout(layout) {
       if (layout === 'advanced-layout') {
         return this.closeWizard();
       }
       this.step = 4;
     },
+
     closeWizard() {
       this.showWizard = false;
       StorageController.markAsVisited();
     },
+
     alertMessage(value) {
       this.alert = value;
     },
+
     companiesCurrenciesStep() {
       if (this.layout === 'default-layout') {
         this.step = 4;

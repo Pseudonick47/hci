@@ -61,7 +61,7 @@ const mutations = {
   },
   addTab(state) {
     state.tabId++;
-    const newTab = { componentId: 0, layout: [], name: 'tab'+state.tabId };
+    const newTab = { componentId: 0, layout: [], name: 'Tab ' + state.tabId };
     Vue.set(state.tabs, `${state.tabId}`, newTab);
   },
 

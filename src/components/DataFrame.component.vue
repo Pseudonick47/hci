@@ -8,7 +8,6 @@
 
     <line-chart
       v-if="view === 'line-chart'"
-      :download="true"
       :data="data"
       legend="bottom"
       height="85%"
