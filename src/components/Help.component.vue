@@ -93,7 +93,7 @@
 										style="float:left;margin:10px"
 									>
 									<p>
-										Lorem ipsum dolor sit amet, pri veniam forensibus id. Vis maluisset molestiae id, ad semper lobortis cum. At impetus detraxit incorrupte usu, repudiare assueverit ex eum, ne nam essent vocent admodum.
+										Add new tab
 									</p>
 								</div>
 								<div v-else-if="imageStep == 2">
@@ -103,7 +103,7 @@
 										height="260px"
 									>
 									<p>
-										Lorem ipsum dolor sit amet, pri veniam forensibus id. Vis maluisset molestiae id, ad semper lobortis cum. At impetus detraxit incorrupte usu, repudiare assueverit ex eum, ne nam essent vocent admodum.
+										Remove view-component
 									</p>
 								</div>
 								<div v-else>
@@ -113,7 +113,7 @@
 										height="260px"
 									>
 									<p>
-										Lorem ipsum dolor sit amet, pri veniam forensibus id. Vis maluisset molestiae id, ad semper lobortis cum. At impetus detraxit incorrupte usu, repudiare assueverit ex eum, ne nam essent vocent admodum.
+										More options: New View-component, New Tab, Remove Tab, Rename tab, Help, Preferences
 									</p>
 								</div>
 							<v-footer>
@@ -174,7 +174,7 @@
 									style="float:left;margin:10px"
 								>
 								<p>
-									Lorem ipsum dolor sit amet, pri veniam forensibus id. Vis maluisset molestiae id, ad semper lobortis cum. At impetus detraxit incorrupte usu, repudiare assueverit ex eum, ne nam essent vocent admodum.
+									Graph
 								</p>
 							</div>
 							<div v-else-if="viewStep == 2">
@@ -184,17 +184,17 @@
 									style="float:left;margin:10px"
 								>
 								<p>
-									Lorem ipsum dolor sit amet, pri veniam forensibus id. Vis maluisset molestiae id, ad semper lobortis cum. At impetus detraxit incorrupte usu, repudiare assueverit ex eum, ne nam essent vocent admodum.
+									Table
 								</p>
 							</div>
 							<div v-else-if="viewStep == 3">
 								<img
-									src="./../assets/pie-chart.png"
+									src="./../assets/trend.png"
 									height="260px"
 									style="float:left;margin:10px"
 								>
 								<p>
-									Lorem ipsum dolor sit amet, pri veniam forensibus id. Vis maluisset molestiae id, ad semper lobortis cum. At impetus detraxit incorrupte usu, repudiare assueverit ex eum, ne nam essent vocent admodum.
+									Trend
 								</p>
 							</div>
 							<div v-else-if="viewStep == 4">
@@ -204,7 +204,7 @@
 									style="float:left;margin:10px"
 								>
 								<p>
-									Lorem ipsum dolor sit amet, pri veniam forensibus id. Vis maluisset molestiae id, ad semper lobortis cum. At impetus detraxit incorrupte usu, repudiare assueverit ex eum, ne nam essent vocent admodum.
+									Bar chart
 								</p>
 							</div>
 							<div v-else-if="viewStep == 5">
@@ -214,7 +214,7 @@
 									style="float:left;margin:10px"
 								>
 								<p>
-									Lorem ipsum dolor sit amet, pri veniam forensibus id. Vis maluisset molestiae id, ad semper lobortis cum. At impetus detraxit incorrupte usu, repudiare assueverit ex eum, ne nam essent vocent admodum.
+									Column chart
 								</p>
 							</div>
 							<div v-else>
@@ -224,7 +224,7 @@
 									style="float:left;margin:10px"
 								>
 								<p>
-									Lorem ipsum dolor sit amet, pri veniam forensibus id. Vis maluisset molestiae id, ad semper lobortis cum. At impetus detraxit incorrupte usu, repudiare assueverit ex eum, ne nam essent vocent admodum.
+									Scatter chart
 								</p>
 							</div>
 							<v-footer>
@@ -315,3 +315,11 @@
 		}
 	};
 	</script>
+
+<style scoped>
+
+p {
+	font-size: 30px;
+}
+
+</style>

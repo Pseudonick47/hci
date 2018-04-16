@@ -39,22 +39,10 @@
               <div class="wiz-div">
                 <img
                 class="wiz-img"
-                src="./../assets/app.png"
-                >
+                src="./../assets/app.png">
               </div>
             </v-card>
-            <v-card class="card-app-info">
-              <p class="wiz-info">
-                <br><br>
-                <b>General settings</b> - Here you can change theme, currency, resize/drag option for components etc.
-                <br><br>
-                <b>Help</b> - If you need any help(basic information, types of view...), you can click on question mark!
-              </p>
-            </v-card>
           </v-layout>
-          <v-card>
-            <br><br>
-          </v-card>
           <v-footer>
             <v-btn
               @mouseover="alertMessage(true)"
@@ -95,7 +83,7 @@
                   width="350px"
                 >
               </p>
-              <p>Can I help you? Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce facilisis, nulla tristique lobortis imperdiet, libero ipsum consequat ligula, non congue nisl augue nec turpis. Mauris rhoncus tristique arcu nec consequat.</p>
+              <p></p>
             </div>
             <div id="middle">
               <p class="mini-title">Table</p>
@@ -106,12 +94,12 @@
                   width="350px"
                 >
               </p>
-              <p>Can I help you? Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce facilisis, nulla tristique lobortis imperdiet, libero ipsum consequat ligula, non congue nisl augue nec turpis. Mauris rhoncus tristique arcu nec consequat.</p>
+              <p></p>
             </div>
             <div id="right">
-              <p class="mini-title">Pie chart</p>
-              <p><img src="./../assets/pie-chart.png" width="350px"></p>
-              <p>Can I help you? Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce facilisis, nulla tristique lobortis imperdiet, libero ipsum consequat ligula, non congue nisl augue nec turpis. Mauris rhoncus tristique arcu nec consequat.</p>
+              <p class="mini-title">Trend</p>
+              <p><img src="./../assets/trend.png" width="350px"></p>
+              <p></p>
             </div>
           </v-card>
           <v-card height="20px"></v-card>
@@ -124,7 +112,7 @@
                   width="350px"
                 >
               </p>
-              <p>Can I help you? Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce facilisis, nulla tristique lobortis imperdiet, libero ipsum consequat ligula, non congue nisl augue nec turpis. Mauris rhoncus tristique arcu nec consequat.</p>
+              <p></p>
             </div>
             <div id="middle">
               <p class="mini-title">Column chart</p>
@@ -134,7 +122,7 @@
                   width="350px"
                 >
               </p>
-              <p>Can I help you? Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce facilisis, nulla tristique lobortis imperdiet, libero ipsum consequat ligula, non congue nisl augue nec turpis. Mauris rhoncus tristique arcu nec consequat.</p>
+              <p></p>
             </div>
             <div id="right">
               <p class="mini-title">Scatter chart</p>
@@ -144,7 +132,7 @@
                   width="350px"
                 >
               </p>
-              <p>Can I help you? Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce facilisis, nulla tristique lobortis imperdiet, libero ipsum consequat ligula, non congue nisl augue nec turpis. Mauris rhoncus tristique arcu nec consequat.</p>
+              <p></p>
             </div>
           </v-card>
           <v-footer>
@@ -183,7 +171,7 @@
                     width="500px"
                   >
                 </p>
-                <p>Can I help you? Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce facilisis, nulla tristique lobortis imperdiet, libero ipsum consequat ligula, non congue nisl augue nec turpis. Mauris rhoncus tristique arcu nec consequat.</p>
+                <p>We will display predefined view-components with the data of the companies and currencies you have selected.</p>
               </div>
               <div
                 id="right-half"
@@ -200,7 +188,7 @@
                     width="350px"
                   >
                 </p>
-                <p>Can I help you? Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce facilisis, nulla tristique lobortis imperdiet, libero ipsum consequat ligula, non congue nisl augue nec turpis. Mauris rhoncus tristique arcu nec consequat.</p>
+                <p>You choose companies and currencies you want to see, as well as the way data is displayed, when you add new view-component.</p>
               </div>
             </div>
           </v-card>
@@ -238,16 +226,23 @@
               <p class="mini-title">Companies</p>
               <hr>
               <p height="5px"></p>
-              <p class="list-label">Select currencies:</p>
+              <p class="list-label">Select companies:</p>
               <div class="container">
-                <template v-for="company in companies">
-                  <v-checkbox
-                    :key="company.id"
-                    :label='company.name'
-                    v-model="selectedCompanies"
-                    :value='company.id'
-                  ></v-checkbox>
-                </template>
+                <v-select
+                  :items="stocks.companies"
+                  v-model="stocks.selectedCompanies"
+                  label="Companies that you are interested in"
+                  item-text="name"
+                  item-value="symbol"
+                  return-object
+                  autocomplete
+                  required
+                  multiple
+                  clearable
+                  :rules="companyRules"
+                  @change="stocks.firstInput = false,stocks.addDisabled = false"
+                  @update:error="(err) => err ? stocks.addDisabled = err : null"
+                ></v-select>
               </div>
             </v-card>
             <v-card class="flex-item-equal">
@@ -256,14 +251,21 @@
               <p height="5px"></p>
               <p class="list-label">Select currencies:</p>
               <div class="container">
-                <template v-for="currency in currencies">
-                  <v-checkbox
-                    :key="currency.id"
-                    :label='currency.name'
-                    v-model="selectedCurrencies"
-                    :value='currency.id'
-                  ></v-checkbox>
-                </template>
+                <v-select
+                  :items="crypto.currencies"
+                  v-model="crypto.selectedCurrencies"
+                  label="Digital currencies that you are interested in"
+                  item-text="name"
+                  item-value="symbol"
+                  return-object
+                  autocomplete
+                  required
+                  multiple
+                  clearable
+                  :rules="cryptoRules"
+                  @change="crypto.firstInput = false,crypto.addDisabled = false"
+                  @update:error="(err) => err ? crypto.addDisabled = err : null"
+                ></v-select>
               </div>
             </v-card>
           </v-layout>
@@ -301,7 +303,16 @@
 </template>
 
 <script>
+import * as _ from 'lodash';
 import StorageController from 'Controllers/storage.controller';
+import {
+  COMPANIES,
+  DIGITAL_CURRENCIES,
+  DATA_VIEWS,
+  UPDATE_FREQUENCIES
+} from 'Constants/data.constants';
+
+const POINTS = ['Open', 'Close', 'High', 'Low'].sort();
 
 export default {
   name: 'Wizard',
@@ -313,19 +324,44 @@ export default {
       layout: 'default-layout',
       selectedCompanies: [],
       selectedCurrencies: [],
-      companies: [
-        { name: 'Facebook', id: 'FB' },
-        { name: 'Microsoft', id: 'MSFT' }
-      ],
-      currencies: [
-        { name: 'Euro(EUR)', id: 'EUR' },
-        { name: 'United States dollar(USD)', id: 'USD' },
-        { name: 'Serbian dinar(RSD)', id: 'RSD' },
-        { name: 'Australian dollar(AUD)', id: 'AUD' },
-        { name: 'Japanese yen(JPY)', id: 'JPY' },
-        { name: 'Pound sterling(GBP)', id: 'GBP' },
-        { name: 'Swiss franc(CHF)', id: 'CHF' }
-      ]
+      stocks: {
+        companies: COMPANIES,
+        selectedCompanies: [],
+        firstInput: true,
+        values: 'values',
+        points: POINTS,
+        selectedPoints: _.fromPairs(_.map(POINTS, (e) => [e, true])),
+        pointsExpanded: true,
+        addDisabled: true,
+        frequencies: [
+          UPDATE_FREQUENCIES.REALTIME,
+          UPDATE_FREQUENCIES.DAILY,
+          UPDATE_FREQUENCIES.WEEKLY,
+          UPDATE_FREQUENCIES.MONTHLY
+        ],
+        selectedFrequency: UPDATE_FREQUENCIES.DAILY,
+        views: DATA_VIEWS,
+        selectedView: DATA_VIEWS[0],
+      },
+      crypto: {
+        currencies: DIGITAL_CURRENCIES,
+        selectedCurrencies: [],
+        firstInput: true,
+        addDisabled: true,
+        values: 'values',
+        points: POINTS,
+        selectedPoints: _.fromPairs(_.map(POINTS, (e) => [e, true])),
+        pointsExpanded: true,
+        frequencies: [
+          UPDATE_FREQUENCIES.REALTIME,
+          UPDATE_FREQUENCIES.DAILY,
+          UPDATE_FREQUENCIES.WEEKLY,
+          UPDATE_FREQUENCIES.MONTHLY
+        ],
+        selectedFrequency: UPDATE_FREQUENCIES.DAILY,
+        views: DATA_VIEWS,
+        selectedView: DATA_VIEWS[0],
+      },
     };
   },
   methods: {
@@ -381,7 +417,7 @@ export default {
   border: 1px outset white;
   border-radius: 25px;
   width:300px;
-  height: 400px;
+  height: 200px;
   overflow-y: scroll;
 }
 
